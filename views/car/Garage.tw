@@ -1,5 +1,24 @@
 :: Garage [Place]
 <h1 class="ptitle">GARAGE</h1>
+<br />
+    <fieldset>
+        <legend>
+            Stats
+        </legend>
+        <table>
+            <tr>
+                <td>Damaged:</td><td><<=$player?.car?.damaged ?? 100>>%</td>
+            </tr>
+            <tr>
+                <td>Fuel:</td><td><<=$player?.car?.fuel ?? 0>>%</td>
+            </tr>
+            <tr>
+                <td>Parts missing:</td><td><<=$player?.car?.parts ?? 5>></td>
+            </tr>
+        </table>
+    </fieldset>
+    <br />
+    <<warning 'End of content'>>
 <br /><br />
 <<link 'Leave'>>
     <<goto 'Wood cabin'>>
@@ -8,6 +27,9 @@
     <<set $player.quests.garage_first = true>>
     <<goto 'Car - first event'>>
 <</if>>
-<<if setup.percentageChance(20)>>
-    <<goto 'Car - repair fuck'>>
+<<if !($locationEvents.garage ?? false)>>
+    <<if setup.percentageChance(10) >>
+        <<set $locationEvents.garage = true>>
+        <<goto 'Car - repair fuck'>>
+    <</if>>
 <</if>>
