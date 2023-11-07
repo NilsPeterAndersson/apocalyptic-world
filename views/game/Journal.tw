@@ -165,10 +165,16 @@
 				Meet Dom in streets
 			<</if>>
 		<<elseif !$characters.dom.quests.quest4>>
-			<<if ($characters.dom.quests.quest3_end_day + 10) > $game.day>>
+			<<if ($characters.dom.quests.quest3_end_day + 10) >= $game.day>>
 				Wait few days
 			<<else>>
 				Go to the nightclub
+			<</if>>
+		<<elseif !$characters.dom.quests.quest5>>
+			<<if ($characters.dom.quests.quest4_end_day + 10) >= $game.day>>
+				Wait few days
+			<<else>>
+				Go to the streets
 			<</if>>
 		<<else>>
 			That's all for now
@@ -211,6 +217,12 @@
 			Wait few days
 		<<elseif !($game.location.lab ?? false)>>
 			Build lab for her from workbench
+		<<elseif ($game.location.lab ?? false) && !$characters.laura.quests.breeder_trait>>
+			<<if  ($characters.laura.quests.lastTestDay + 20) < $game.day>>
+				Meet her at greenhouse
+			<<else>>
+				Wait some days
+			<</if>>
 		<<else>>
 			That's all for now
 		<</if>>
