@@ -97,12 +97,17 @@
 					<<set _actionsPath = _defaultActionsPath>>
 					<<set _subActionsPath = ''>>
 				<</if>>
-				<<actionImageOutput ` _actionsPath + '/' + _morphs[_imageI] + '/' + _subActionsPath + _location  + '/'+ $args[1] + '/' + either(_actions[_morphs[_imageI]][_location][$args[1]])`>>
+				<<set _image = either(_actions[_morphs[_imageI]][_location][$args[1]])>>
+
+				<<if _image.includes('/')>>
+					<<actionImageOutput `'packs/' + _image`>>
+				<<else>>
+					<<actionImageOutput ` _actionsPath + '/' + _morphs[_imageI] + '/' + _subActionsPath + _location  + '/'+ $args[1] + '/' + _image`>>
+				<</if>>
 				<<set _imageImageFound = true>>
 				<<break>>
 			<</if>>
 		<</for>>
-		
 
 		<<if !_imageImageFound>>
 			<<for _imageI to 0; _imageI < _morphs.length; _imageI++>>
@@ -114,7 +119,13 @@
 						<<set _actionsPath = _defaultActionsPath>>
 						<<set _subActionsPath = ''>>
 					<</if>>
-						<<actionImageOutput `_actionsPath + '/' + _morphs[_imageI] + _subActionsPath + '/default/'+ $args[1] + '/' + either(setup.actions[_morphs[_imageI]]['default'][$args[1]])`>>
+						<<set _image = either(setup.actions[_morphs[_imageI]]['default'][$args[1]])>>
+
+						<<if _image.includes('/')>>
+							<<actionImageOutput `'packs/' + _image`>>
+						<<else>>
+							<<actionImageOutput `_actionsPath + '/' + _morphs[_imageI] + _subActionsPath + '/default/'+ $args[1] + '/' + _image`>>
+						<</if>>
 					<<break>>
 				<</if>>	
 			<</for>>
@@ -174,7 +185,7 @@
 	<<if typeof setup.actions !== 'undefined'>>
 		<<set _dreamImg = setup.ImagePath+'actions/female/' + _sleepAction.place  + '/' + _sleepAction.type  + '/' + either(setup.actions.female[_sleepAction.place][_sleepAction.type])>>
 	<<else>>
-		<<set _dreamImg = setup.ImagePath+'actions/female/default/' + _sleepAction.type  + '/' + either(setup.actions.female.default[_sleepAction.type])>>
+		<<set _dreamImg = 'actions/female/default/' + _sleepAction.type  + '/' + either(setup.actions.female.default[_sleepAction.type])>>
 	<</if>>
 
 	<<actionImageOutput _dreamImg>>
@@ -185,11 +196,9 @@
 	<<if ['mp4', 'webm'].includes(_extension)>>
 		<<set _videoType = 'video/' + _extension>>
 		<<set _url to $args[0]>>
-		<video controls autoplay loop>
-  			<source @src="_url" @type="_videoType">
-		</video>
+		<<video _url>>
 	<<else>>
-		[img[$args[0]]]
+		<<image $args[0]>>
 	<</if>>
 <</widget>>
 
