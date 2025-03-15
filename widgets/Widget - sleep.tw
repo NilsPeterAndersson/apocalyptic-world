@@ -199,6 +199,15 @@
 				<</if>>
 				<<run setup.sleepMessages.addJob($slaves[_i].name + ' managed to grow <strong>' + _foodGive + '</strong> food in the garden', 'garden')>>
 			<</if>>
+			<<if setup.percentageChance(10)>>
+				<<set _totals.wood++>>
+				<<if _isStorageAvailable>>
+					<<pickup $storage 'wood' 1>>
+				<<else>>
+					<<pickup $backpack 'wood' 1>>
+				<</if>>
+				<<run setup.sleepMessages.addJob($slaves[_i].name + ' managed to grow a small fruit tree while working in the garden. <strong class="iitem">+1 wood</strong>', 'garden')>>
+			<</if>>
 		<</if>>
 		<<if _npc.assignedTo == 'milk_barn' && !_dayOff>>
 			<<if typeof _npc.milkingDay === 'undefined'>>
@@ -366,6 +375,11 @@
 				<<run delete $slaves[_i].rest>>
 			<</if>>
 		<</if>>
+
+		// Birthday
+		<<if _npc.birthDate.getDate() == $gameDate.getDate() && _npc.birthDate.getMonth() == $gameDate.getMonth()>>
+			<<run setup.sleepMessages.add('Your slave, <strong>' + _npc.name + '</strong> has a birthday today (turning: <strong>' + setup.getAge(_npc) + '</strong>)! Favorite gift(s): <strong>' + (_npc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
+		<</if>>
 	<</capture>>
 <</for>>
 
@@ -475,6 +489,15 @@
 					<<pickup $backpack 'food' _foodGive>>
 				<</if>>
 				<<run setup.sleepMessages.addJob($guests[_guestI].name + ' managed to grow <strong>' + _foodGive + '</strong> food in the garden.', 'garden')>>
+			<</if>>
+			<<if setup.percentageChance(10)>>
+				<<set _totals.wood++>>
+				<<if _isStorageAvailable>>
+					<<pickup $storage 'wood' 1>>
+				<<else>>
+					<<pickup $backpack 'wood' 1>>
+				<</if>>
+				<<run setup.sleepMessages.addJob($guests[_guestI].name + ' managed to grow a small fruit tree while working in the garden. <strong class="iitem">+1 wood</strong>', 'garden')>>
 			<</if>>
 		<</if>>
 		
@@ -619,6 +642,15 @@
 			  <</if>>
 			  <<run setup.sleepMessages.addJob(_npc.name + ' managed to collect <strong>' + _giveCount + ' ' + Item.get(_randomItem).name + '</strong> while scavenging.', 'scavenging')>>
 			<</if>>
+			<<if setup.percentageChance(10) || (setup.isNewMoon() && setup.percentageChance(20))>>
+				<<set _totals.glowing_mushroom++>>
+				<<if _isStorageAvailable>>
+					<<pickup $storage 'glowing_mushroom' 1>>
+				<<else>>
+					<<pickup $backpack 'glowing_mushroom' 1>>
+				<</if>>
+				<<run setup.sleepMessages.addJob($guests[_guestI].name + ' managed to find a mushroom among the debris while scavenging. <strong class="iitem">+1 glowing mushroom</strong>', 'scavenging')>>
+			<</if>>
 		<</if>>
 		
 		<<if $guests[_guestI].assignedTo === 'mistress' && !_isSick>>
@@ -643,7 +675,7 @@
 			<<set _hunterItem = 'food'>>
 			<<set _giveCount = randomInteger(2,5)>>
 
-			<<if setup.percentageChance(20)>>
+			<<if setup.percentageChance(20) || (setup.isFullMoon() && setup.percentageChance(40))>>
 				<<set _hunterItem = 'pelt_wolf'>>
 				<<set _giveCount = randomInteger(1,2)>>
 			<</if>>
@@ -789,6 +821,11 @@
 				<<run delete $guests[_guestI].rest>>
 			<</if>>
 		<</if>>
+
+		// Birthday
+		<<if _npc.birthDate.getDate() == $gameDate.getDate() && _npc.birthDate.getMonth() == $gameDate.getMonth()>>
+			<<run setup.sleepMessages.add('Your guest, <strong>' + _npc.name + '</strong> has a birthday today (turning: <strong>' + setup.getAge(_npc) + '</strong>)! Favorite gift(s): <strong>' + (_npc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
+		<</if>>
 	<</capture>>
 <</for>>
 
@@ -821,6 +858,11 @@
 			<<run $guests.push($nursery[_nurseryI])>>
 			<<set $nursery.splice(_nurseryI, 1)>>
 			<<set _nurseryI-->>
+		<</if>>
+
+		// Birthday
+		<<if _npc.birthDate.getDate() == $gameDate.getDate() && _npc.birthDate.getMonth() == $gameDate.getMonth()>>
+			<<run setup.sleepMessages.add('In the Nursery, <strong>' + _npc.name + '</strong> has a birthday today (turning: <strong>' + setup.getAge(_npc) + '</strong>)! Favorite gift(s): <strong>' + (_npc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
 		<</if>>
 	<</capture>>
 <</for>>
