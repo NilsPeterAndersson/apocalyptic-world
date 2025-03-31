@@ -4,12 +4,12 @@
 	GUEST HOUSE
 </h1>
 <div id="characters-in-location">
-	<<if ($charactersInLocation['guesthouse'] ?? []).includes('isabel')>>
+	<<if (_charactersInLocation['guesthouse'] ?? []).includes('isabel')>>
 		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/isabel.png"]]</div>'>>
 			<<goto 'Isabel room'>>
 		<</link>>
 	<</if>>
-	<<if ($charactersInLocation['guesthouse'] ?? []).includes('octavia')>>
+	<<if (_charactersInLocation['guesthouse'] ?? []).includes('octavia')>>
 		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/octavia/avatar.png"]]</div>'>>
 			<<goto 'Octavia room'>>
 		<</link>>
@@ -229,6 +229,11 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 			}>>
 			<<goto 'Guesthouse [Event] - take virginity'>>
 		<</if>>
+	<<elseif setup.commonValues([_guestsLikesGirls, _hornyGuests, _guests18yoMen]).length > 0 && setup.percentageChance(5)>>
+		<<set $tmpEvent = [setup.commonValues([_guests18yoWomen]), setup.commonValues([_guestsLikesGirls, _hornyGuests, _guests18yoMen])]>>
+		<<set $locationEvents.guesthouse = true>>
+		<<unset $randEvent>>
+		<<goto 'Guesthouse [Event] - male on female forced'>>
 	<</if>>
 <</if>>
 

@@ -10,7 +10,141 @@
 </ul></div></div>
 
 at css some explanation for icons //--> 
-<div class="tab"><input type="radio" id="v052" name="rd" checked="checked">
+
+<div class="tab"><input type="radio" id="v056" name="rd" checked="checked">
+<label class="tab-label" for="v056"><span class="glyph vc-icon-top">&#57862;</span> 0.56 <span class="glyph vc-icon-top">&#57748;</span> 2 <span class="glyph vc-icon-top">&#57751;</span> 14 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+  <li>Octavia date choose. No option to go back.</li>
+  <li>Katrina Jade pack error</li>
+</ul>
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+  <li>Octavia date choose. No option to go back.</li>
+  <li>Katrina Jade pack error</li>
+  <li>Event - Fight won (existing) - Option to have sex</li>
+  <li>Event [Gipsy family] (existing) - Options to capture or invite (contr. Illusion-XIII)</li>
+  <li>Event [Laura] - Examination scene</li>
+  <li>Event [Dom] - Dom's question</li>
+  <li>Event [Dom] - Champagne bloodbath</li>
+  <li>Girl pack - Rikki Six</li>
+  <li>Event [Underground city streets] - Another option when hiring hooker</li>
+  <li>Event [Blair] - Midnight hottub</li>
+  <li>Event [Sex] - If cum on face, sometimes cleanup scene</li>
+  <li>Event [Bounty hunter] - Bribe</li>
+  <li>Event [Laura] - Breast implants</li>
+  <li>Lab - NPC breasts surgery</li>
+  <li>Decreased save slots from 8 to 4 (Performance reasons)</li>
+  <li>Event [Shower] - Threesome (For supporters)</li>
+</ul>
+</div></div>
+
+
+
+<div class="tab"><input type="radio" id="v055" name="rd">
+<label class="tab-label" for="v055"><span class="glyph vc-icon-top">&#57862;</span> 0.55 <span class="glyph vc-icon-top">&#57748;</span> 2 <span class="glyph vc-icon-top">&#57751;</span> 18 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+    <li>Random actionImage errors and not showing pictures sometimes</li>
+    <li>All guest on guest interactions if packs enabled didn't show proper images with extended packs</li>
+</ul>
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+    <li>Blackjack. Will remember last bet (Won't need to change it after each hand)</li>
+    <li>Cheatmenu: Added option to add revolver bullets (x10) (For supporters)</li>
+    <li>Sex [Moddable] - Added new option for mod, for gender+race+hair+color.</li>
+    <li>MC stats. Added goodwill stats. (No use for it yet)</li>
+    <li>Cheatmenu: Added option to add food (x10)</li>
+    <li>Group workouts and milking will update lastInteractionDay</li>
+    <li>Underground people market. Added visible strength</li>
+    <li>Cheatmenu [NPC edit] - Option to change gender (For supporters)</li>
+    <li>New race: Indian</li>
+    <li>Sex - Pussy and anal will have additional insert scenes.</li>
+    <li>Sex - MC horny increase will take into account NPC beauty.</li>
+    <li>Random food drop while gardening or scavenging (contr. Illusion-XIII)</li>
+    <li>Morning messages will show birthdays (contr. Illusion-XIII)</li>
+    <li>New pack: Katrina Jade (contr. smokrader)</li>
+    <li>Guest move to basement images now moddable (basement/move) + added male images</li>
+    <li>New item: Energy drink (Restores energy)</li>
+    <li>Variables cleanup. Theoretically increases performance but not visibly</li>
+    <li>Event [Laura] - Morning sample (existing). Pretend to sleep option (For supporters)</li>
+</ul>
+</div></div>
+
+
+<div class="tab"><input type="radio" id="v054" name="rd">
+<label class="tab-label" for="v054"><span class="glyph vc-icon-top">&#57862;</span> 0.54 <span class="glyph vc-icon-top">&#57748;</span> 5 <span class="glyph vc-icon-top">&#57751;</span> 11 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+    <li>Event [NPC] - pregnancy potion (tmpGirl undefined error and giving trait)</li>
+    <li>Event [NPC] - nightclub dressing up image missing</li>
+    <li>Morning dream images not showing decker extended pack images</li>
+    <li>Fighter club didn't take into account time. Could use 24/7</li>
+    <li>Blackjack table didn't take into account time. Could use 24/7</li>
+</ul>
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+    <li>Event [Race stadium] - First race</li>
+    <li>Event [Bounty hunter] (existing) - Allow to invite mother and daughter to live in settlement</li>
+    <li>Event [Sex] - Transfemales will use different images in massage. (contr decker-666)</li>
+    <li>Event [Garage] - Modification talk</li>
+    <li>Event [Basement] - Mistress party introduction (existing) Changed amount of people needed from 10 to 6.</li>
+    <li>Event [Guest house] - Males forcing himself on women</li>
+    <li>Event [Dom] - Return to underground city plan</li>
+    <li>Event [Dom] - Return to underground city</li>
+    <li>Event [Isabel] - Storage talk</li>
+    <li>New location: Underground office (WIP)</li>
+    <li>Event [Car explore] - Fun ride (For supporters)</li>
+</ul>
+</div></div>
+
+
+
+<div class="tab"><input type="radio" id="v053" name="rd">
+<label class="tab-label" for="v053"><span class="glyph vc-icon-top">&#57862;</span> 0.53 <span class="glyph vc-icon-top">&#57748;</span> 6 <span class="glyph vc-icon-top">&#57751;</span> 20 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+    <li>Typos</li>
+    <li>Assign to quarry error</li>
+    <li>Event [Travel] - Underground city - girl ambush error if lost the fight</li>
+    <li>Event [Explore] - Lost child stats fix</li>
+    <li>Changelog </div> didn't allow to open previous changelogs</li>
+    <li>Milking images missing</li>
+</ul>
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+    <li>Nightclub - Dressing up images now moddable (Also added for trans)</li>
+    <li>Pregnancy speed potion reduced from 100 days to 30 days.</li>
+    <li>Fast travel - Added cabin location</li>
+    <li>Hospital - Trans working image</li>
+    <li>Sex - Pussy fisting option (contr. decker-666)</li>
+    <li>Sex - Trans orgasm images (contr. decker-666)</li>
+    <li>Dreams - Available to turn on for specific genders (contr. decker-666)</li>
+    <li>Cheatmenu - Increase max energy (For supporters)</li>
+    <li>Vincent breast milk and use girl links have caps added.</li>
+    <li>Fighting - NPCs with fighter trait will be stronger in random fights (not only cage fight)</li>
+    <li>Basement people market - Now in buy available males and transfemales</li>
+    <li>Underground shop - Added option to buy glass.</li>
+    <li>Journal - Help - Added work schedules</li>
+    <li>Sex - Female Latina separate default images</li>
+    <li>NPC Customize - Option to add notes to each NPC (Will show in lists)</li>
+    <li>Packs - Added decker pack as extended and in base game (With new updates won't need to update actions.js)</li>
+    <li>Fight - Added option for companions to use crossbow</li>
+    <li>NPC fight cage - Added images for transfemales too</li>
+    <li>Event [Car explore] - Gypsy family (For supporters)</li>
+</ul>
+</div></div>
+
+
+<div class="tab"><input type="radio" id="v052" name="rd">
 <label class="tab-label" for="v052"><span class="glyph vc-icon-top">&#57862;</span> 0.52 <span class="glyph vc-icon-top">&#57748;</span> 6 <span class="glyph vc-icon-top">&#57751;</span> 13 <span class="vc-top-fill"></span></label>
 <div class="tab-content">
 <h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>

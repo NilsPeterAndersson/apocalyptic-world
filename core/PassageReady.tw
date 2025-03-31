@@ -1,5 +1,5 @@
 :: PassageReady
-<<set $suppCode = 'Patreon0.52'>>
+<<set $suppCode = 'Patreon0.56'>>
 <<if $player.energy > $player.maxEnergy>>
 	<<set $player.energy = $player.maxEnergy>>
 <</if>>
@@ -10,13 +10,16 @@
 <<updatemeter '$hungerBar' `$player.hunger / $player.maxHunger`>>
 <<updatemeter '$hornyBar' `$player.horny / 100`>>  
 
-<<set $charactersInLocation = {
+<<set _charactersInLocation = {
 	kitchen: [],
 	bedroom: [],
 	church: [],
 	farm: [],
 	lab: [],
-	guesthouse: []
+	guesthouse: [],
+	underground_office: [],
+	hottub: [],
+	bathhouse: []
 }>>
 <<set 
 	$game.avatars = {},
@@ -24,39 +27,49 @@
 	$game.avatars.rodger = 'people/rodger/avatar.png',
 	$game.avatars.laura = 'people/laura/avatar.jpg',
 	$game.avatars.isabel = 'people/isabel.png',
-	$game.avatars.octavia = 'people/octavia/avatar.png'
+	$game.avatars.octavia = 'people/octavia/avatar.png',
+	$game.avatars.dom = 'people/dom/avatar.png'
 
 >>
 
 <<if isMetChar('blair') && $characters.blair.quests.cabinType > 0>>
-  <<if timeBetween('08:00', '09:00')>>
-	  <<run $charactersInLocation['kitchen'].push('blair')>>
-  <</if>>
-  <<if timeBetween('22:00', '08:00')>>
-	  <<run $charactersInLocation['bedroom'].push('blair')>>
-  <</if>>
-  
-  <<if timeBetween('12:00', '14:00')>>
-	  <<run $charactersInLocation['farm'].push('blair')>>
-  <</if>>
+  	<<if timeBetween('08:00', '09:00')>>
+		<<run _charactersInLocation['kitchen'].push('blair')>>
+  	<</if>>  
+  	<<if timeBetween('12:00', '14:00')>>
+		<<run _charactersInLocation['farm'].push('blair')>>
+  	<</if>>
+  	<<if timeBetween('23:00', '01:00') && [4, 7].includes(($gameDate.getDay() || 7)) && ($game.location?.hottub ?? false)>>
+		<<run _charactersInLocation['bathhouse'].push('blair')>>
+		<<run _charactersInLocation['hottub'].push('blair')>>
+	<<elseif timeBetween('22:00', '08:00')>>
+		<<run _charactersInLocation['bedroom'].push('blair')>>
+  	<</if>>
 <</if>>
 
 <<if isMetChar('rodger')>>
-	<<run $charactersInLocation['church'].push('rodger')>>
+	<<run _charactersInLocation['church'].push('rodger')>>
 <</if>>
 
 <<if isMetChar('laura') && $characters.laura.quests.living>>
 	<<if timeBetween('08:00', '11:00') || timeBetween('14:00', '20:00')>>
-		<<run $charactersInLocation['lab'].push('laura')>>
-		<<run $charactersInLocation['guesthouse'].push('laura')>>
+		<<run _charactersInLocation['lab'].push('laura')>>
+		<<run _charactersInLocation['guesthouse'].push('laura')>>
 	<</if>>
 <</if>>
 
 <<if isMetChar('dom') && isMetChar('isabel') && $characters.isabel.quests.saved && !$characters.isabel.quests.dom_return>>
-	<<run $charactersInLocation['guesthouse'].push('isabel')>>
+	<<run _charactersInLocation['guesthouse'].push('isabel')>>
 <</if>>
 <<if isMetChar('octavia') && $characters.octavia.quests.next_move>>
-	<<run $charactersInLocation['guesthouse'].push('octavia')>>
+	<<run _charactersInLocation['guesthouse'].push('octavia')>>
+<</if>>
+
+<<if isMetChar('dom') && $characters.dom?.quests?.return_city_done>>
+	<<if !$characters.dom?.quests?.dead>>
+		<<run _charactersInLocation['underground_office'].push('dom')>>
+	<</if>>
+	<<run _charactersInLocation['underground_office'].push('isabel')>>
 <</if>>
 
 <<if isMetChar('blair') && !$game.debugBlair>>

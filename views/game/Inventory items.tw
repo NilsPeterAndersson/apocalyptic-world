@@ -372,15 +372,19 @@
 <</item>>
 <<item "stone" "Stone">>
 	<<unique>>
-	<<permanent>>
 	<<tags 'crafting' 'no_use'>>
 	<<description>>
 	Base building and crafting
 <</item>>
 <<item "coal" "Coal">>
 	<<unique>>
-	<<permanent>>
 	<<tags 'crafting' 'no_use'>>
 	<<description>>
 	To heat homes
 <</item>>
+<<consumable "energy_drink" "Energy drink">>
+	<<energy 10>>
+	<<description>>
+	Restore energy
+	<<tags 'fabric' 'potion'>>
+<</consumable>>

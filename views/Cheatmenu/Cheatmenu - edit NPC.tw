@@ -64,6 +64,17 @@
             <<numberbox "_anal" $tmpGirl.anal>>
         </td>
     </tr>
+    <tr>
+        <td>
+            Gender:
+        </td>
+        <td>
+            <<set _gender = $tmpGirl.gender>>
+            <label><<radiobutton "_gender" 0 autocheck>> Female</label>
+            <label><<radiobutton "_gender" 1 autocheck>> Male</label>
+            <label><<radiobutton "_gender" 2 autocheck>> Transfemale</label>
+        </td>
+    </tr>
     <<if [0,2].includes($tmpGirl.gender)>>
         <tr>
             <td>
@@ -87,6 +98,7 @@
             <label><<radiobutton "_race" "black" autocheck>> Black</label>
             <label><<radiobutton "_race" "asian" autocheck>> Asian</label>
             <label><<radiobutton "_race" "latina" autocheck>> Latina</label>
+            <label><<radiobutton "_race" "indian" autocheck>> Indian</label>
         </td>
     </tr>
     <tr>
@@ -195,6 +207,7 @@
     <<set $tmpGirl.eyes = _eyes>>
     <<set $tmpGirl.hair = _hair>>
     <<set $tmpGirl.sub = _sub>>
+    <<set $tmpGirl.gender = _gender>>
     <<set $tmpGirl.relationship = _relationship>>
     <<set $tmpGirl.traits = []>>
     <<for _traitKey, _enabled range _traits>>

@@ -4,6 +4,7 @@
 <</widget>>
 
 <<widget actionImage>>
+	<<set _imageImageFound = false>>
 	<<if typeof setup.actions === 'undefined'>>
 		<<set _actionsFallback = recall('actions')>>
 		<<if _actionsFallback>>
@@ -39,6 +40,10 @@
 		<</if>>
 		
 		<<set _genderDesc = setup.genderPath($args[0])>>
+		<<if _args[3]>>
+			<<set _genderDesc = _args[3]>>
+		<</if>>
+		<<run console.log(_genderDesc)>>
 		<<set _race = '.' + $args[0].race>>
 		<<set _hair = '.' + $args[0].hair + 'hair'>>
 		<<set _breasts = '.breasts-' + $args[0].breasts>>
@@ -69,6 +74,7 @@
 		_genderDesc + _race + _ageDesc,
 		_genderDesc + _race + _hair,
 		_genderDesc + _race + _breasts,
+		_genderDesc + _race + _hair + _breasts,
 		_genderDesc + _race,
 		_genderDesc + _hair + _ageDesc + _pregnancyDesc,		
 		_genderDesc + _ageDesc + _pregnancyDesc,		
@@ -156,7 +162,7 @@
 				<<print _actionText[$args[1]]['v'].replace('%name%', $args[0].name)>>
 			<<else>>
 				<<if $args[0].gender || $args[1].includes('threesome')>>
-					<<if _actionText[setup.genderPath($args[0])][$args[1]] !== undefined>>
+					<<if typeof _actionText[setup.genderPath($args[0])][$args[1]] !== 'undefined'>>
 						<<set _name2 = ''>>
 						<<if typeof $tmpGirl2 !== 'undefined'>>
 							<<set _name2 = $tmpGirl2.name>>
@@ -231,14 +237,22 @@
 		type: either(_actions)
 	}>>
 	<<if typeof setup.actions !== 'undefined'>>
-		<<set _dreamImg = 'actions/' + _gender + '/' + _sleepAction.place  + '/' + _sleepAction.type  + '/' + either(setup.actions[_gender][_sleepAction.place][_sleepAction.type])>>
+		<<set _image = either(setup.actions[_gender][_sleepAction.place][_sleepAction.type])>>
+		<<set _dreamImg = 'actions/' + _gender + '/' + _sleepAction.place  + '/' + _sleepAction.type  + '/' + _image>>
+		<<if _image.includes('/')>>
+			<<set _dreamImg = 'packs/' + _image>>
+		<</if>>
 	<<else>>
-		<<set _dreamImg = 'actions/' + _gender +'/default/' + _sleepAction.type  + '/' + either(setup.actions[_gender].default[_sleepAction.type])>>
+		<<set _image = either(setup.actions[_gender].default[_sleepAction.type])>>
+		<<set _dreamImg = 'actions/' + _gender +'/default/' + _sleepAction.type  + '/' + _image>>
+		<<if _image.includes('/')>>
+			<<set _dreamImg = 'packs/' + _image>>
+		<</if>>
 	<</if>>
 
-	<<actionImageOutput _dreamImg>>
+	<<actionImageOutput _dreamImg _image.includes('/')>>
 	<br />
-	<<print _dreamText>>
+	<<print _dreamText>> 
 <</widget>>
 
 <<widget actionImageOutput>>

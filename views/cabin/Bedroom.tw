@@ -19,8 +19,7 @@
 		<<set $tmpGirlCapture to false>> 
 		<<set $tmpGirlInvite to false>>
 		<<set $guestId = _girlGuest[0]>>
-		<<run delete $slaveId>>
-		<<run delete $charId>>
+		<<unset $slaveId, $charId, $childId>>
 		<<set $tmpGirlViewBack = 'NPC view - guest'>>
 		<<goto 'NPC view - guest'>>
 	<</link>>
@@ -28,7 +27,7 @@
 <</if>>
 
 
-<<if $charactersInLocation['bedroom'].includes('blair') && timeBetween('22:00','23:59')>>
+<<if _charactersInLocation['bedroom'].includes('blair') && timeBetween('22:00','23:59')>>
 	<<link 'Talk with Blair'>>
 		<<goto 'Blair - bedroom talk'>>
 	<</link>>

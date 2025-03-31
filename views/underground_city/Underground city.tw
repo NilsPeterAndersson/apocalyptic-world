@@ -20,6 +20,10 @@
   
   <<set _isDisabled = (!timeBetween('08:00', '20:00') ? 30 : 0.5)>>
   <<grid underground shop 'Underground shop' 'Shop' 0 _isDisabled>>
+
+  <<if (($game.location.underground_office ?? false))>>	
+  	<<grid underground underground_office 'Underground city office' 'Office' 0 1>>
+  <</if>>
 </div> 
 <br /><br />
 [[Leave|Outside]]
@@ -34,16 +38,20 @@
 	<<goto 'Dom - isabel riot'>>
 <<elseif isMetChar('isabel') && $characters.isabel.quests.saved && !$characters.isabel.quests.chaos>>
 	<<goto 'Dom - Underground city chaos'>>
+<<elseif isMetChar('dom') && $characters.isabel?.quests?.dom_return && !$characters.dom?.quests?.return_city1 && ($characters.isabel.quests.dom_return_day + 15) < $game.day>>
+	<<goto 'Dom - Return to underground city plan'>>
+<<elseif isMetChar('dom') && $characters.dom?.quests?.return_city1 && !$characters.dom?.quests?.return_city_done && $characters.dom?.quests?.return_city1_day < $game.day>>
+	<<goto 'Dom - Return to underground city execute'>>
 <<else>>
 	<<if !$locationEvents.underground>>
-		<<set $randomNumber = randomInteger(0, 100)>>
-		<<if $randomNumber <= 5>>
+		<<set _randomNumber = randomInteger(0, 100)>>
+		<<if _randomNumber <= 5>>
 			<<set $locationEvents.underground = true>>
 			<<goto 'Underground city - random event #2'>>
-		<<elseif $randomNumber <= 15>>
+		<<elseif _randomNumber <= 15>>
 			<<set $locationEvents.underground = true>>
 			<<goto 'Underground city event - 2 girls bj'>>
-		<<elseif $randomNumber <= 18>>
+		<<elseif _randomNumber <= 18>>
 			<<set $locationEvents.underground = true>>
 			<<goto 'Underground city - kids ball #3'>>
 		<<elseif $game.day > 100 && setup.percentageChance(1)>>

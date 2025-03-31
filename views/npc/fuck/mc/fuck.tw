@@ -18,12 +18,16 @@
     <</if>>
     <<set _maxMcHorny = (_sexActions[$sexAction]?.maxMcHorny ?? null)>>
     <<if (_maxMcHorny === null || $player.horny < _maxMcHorny)>>
-        <<horny _hornyGained>>
+        <<set _hornyIncrease = setup.sex.calcHornyIncrease(($tmpGirl.beauty ?? 100), _hornyGained)>>
+        <<horny _hornyIncrease>>
     <</if>>
 	<<set _showSex = true>>
 
     <<if $sexAction === 'anal'>>
         <<include 'Mc fuck anal'>>
+    <</if>>
+    <<if $sexAction === 'pussy'>>
+        <<include 'Mc fuck pussy'>>
     <</if>>
     <<if !_canFuck && ['bj','handjob'].includes($sexAction)>>
         <<include 'MC fuck flaccid'>>
@@ -93,7 +97,7 @@
             >>
         <</if>>
     <</if>>
-    <<if $sexAction === 'pussy'>>
+    <<if $sexAction === 'pussy' || $sexAction === 'pussy_fisting'>>
         <<set $tmpGirl.virgin = false>>
     <</if>>
 
@@ -101,6 +105,9 @@
 
 	<<if $sexAction == 'cum_in_pussy'>>
         <<include 'Mc fuck cum in pussy'>>
+	<</if>>
+    <<if $sexAction == 'cum_on_face' && setup.percentageChance(30) && !$sexForced>>
+        <<include 'Mc fuck cum on face'>>
 	<</if>>
 
     <<include 'Mc fuck - use lube'>>
