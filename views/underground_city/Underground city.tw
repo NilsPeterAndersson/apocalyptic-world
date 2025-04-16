@@ -1,25 +1,29 @@
 :: Underground city [Place bg-underground] {"position":"1814,1223","size":"100,100"}
 <h1 class="ptitle">UNDERGROUND CITY</h1>
 <div class="menu-grid">
-   <<set $isDisabled = (!timeBetween('08:00', '18:00') ? 30 : 1)>>
-  <<grid underground cage 'Fight cage' 'Fight cage' 0 $isDisabled>>
-  <<set $isDisabled = (!timeBetween('08:00', '04:00') ? 30 : 1)>>
-  <<grid underground nightclub 'Nightclub' 'Nightclub' 0 $isDisabled>>
+   <<set _isDisabled = (!timeBetween('08:00', '18:00') ? 30 : 0.5)>>
+  <<grid underground cage 'Fight cage' 'Fight cage' 0 _isDisabled>>
+  <<set _isDisabled = (!timeBetween('08:00', '04:00') ? 30 : 0.5)>>
+  <<grid underground nightclub 'Nightclub' 'Nightclub' 0 _isDisabled>>
   <<if ($game.location.streets ?? false)>>
-    <<set $isDisabled = (!timeBetween('08:00', '04:00') ? 30 : 1)>>
-  	<<grid underground streets 'Streets' 'Streets' 0 $isDisabled>>
+    <<set _isDisabled = (!timeBetween('08:00', '04:00') ? 30 : 0.5)>>
+  	<<grid underground streets 'Streets' 'Streets' 0 _isDisabled>>
   <</if>>
   <<if ($game.location.bar ?? false)>>
-      <<set $isDisabled = (!timeBetween('08:00', '02:00') ? 30 : 1)>>
-  	<<grid underground bar 'Bar' 'Bar' 0 $isDisabled>>
+      <<set _isDisabled = (!timeBetween('08:00', '02:00') ? 30 : 0.5)>>
+  	<<grid underground bar 'Bar' 'Bar' 0 _isDisabled>>
   <</if>>
   <<if (($game.location.slave_market ?? false))>>	
-  	<<set $isDisabled = (!timeBetween('13:30', '19:00') ? 30 : 1)>>
-  	<<grid underground slave_market 'Slave market' 'Slave market' 0 $isDisabled>>
+  	<<set _isDisabled = (!timeBetween('13:30', '19:00') ? 30 : 0.5)>>
+  	<<grid underground slave_market 'Slave market' 'Slave market' 0 _isDisabled>>
   <</if>>
   
-  <<set $isDisabled = (!timeBetween('08:00', '20:00') ? 30 : 1)>>
-  <<grid underground shop 'Underground shop' 'Shop' 0 $isDisabled>>
+  <<set _isDisabled = (!timeBetween('08:00', '20:00') ? 30 : 0.5)>>
+  <<grid underground shop 'Underground shop' 'Shop' 0 _isDisabled>>
+
+  <<if (($game.location.underground_office ?? false))>>	
+  	<<grid underground underground_office 'Underground city office' 'Office' 0 1>>
+  <</if>>
 </div> 
 <br /><br />
 [[Leave|Outside]]
@@ -27,18 +31,31 @@
 <<if !($game.location.streets ?? false) && isMetChar('blair') && ($characters.blair.quests.metOnDay + 3) < $game.day>>
 	<<set $game.location.streets = true>>
 	<<goto 'Underground city - wanted poster'>>
+<<elseif isMetChar('negan') && $characters.dom.quests.quest5 && $characters.negan.quests.quest2 && !$characters.dom.quests.quest6 && $backpack.count('fuel') >= 15>>
+	<<set $characters.dom.quests.quest6>>
+	<<goto 'Dom - quest #6 isabel fuel'>>
+<<elseif isMetChar('dom') && $characters.dom.quests.isabel_beg && ($characters.dom.quests.isabel_beg_day + 5) <= $game.day && !$characters.dom.quests.isabel_beg_fuel && $backpack.count('fuel') >= 10>>
+	<<goto 'Dom - isabel riot'>>
+<<elseif isMetChar('isabel') && $characters.isabel.quests.saved && !$characters.isabel.quests.chaos>>
+	<<goto 'Dom - Underground city chaos'>>
+<<elseif isMetChar('dom') && $characters.isabel?.quests?.dom_return && !$characters.dom?.quests?.return_city1 && ($characters.isabel.quests.dom_return_day + 15) < $game.day>>
+	<<goto 'Dom - Return to underground city plan'>>
+<<elseif isMetChar('dom') && $characters.dom?.quests?.return_city1 && !$characters.dom?.quests?.return_city_done && $characters.dom?.quests?.return_city1_day < $game.day>>
+	<<goto 'Dom - Return to underground city execute'>>
 <<else>>
 	<<if !$locationEvents.underground>>
-		<<set $randomNumber = randomInteger(0, 100)>>
-		<<if $randomNumber <= 5>>
+		<<set _randomNumber = randomInteger(0, 100)>>
+		<<if _randomNumber <= 5>>
 			<<set $locationEvents.underground = true>>
 			<<goto 'Underground city - random event #2'>>
-		<<elseif $randomNumber <= 15>>
+		<<elseif _randomNumber <= 15>>
 			<<set $locationEvents.underground = true>>
 			<<goto 'Underground city event - 2 girls bj'>>
-		<<elseif $randomNumber <= 18>>
+		<<elseif _randomNumber <= 18>>
 			<<set $locationEvents.underground = true>>
 			<<goto 'Underground city - kids ball #3'>>
+		<<elseif $game.day > 100 && setup.percentageChance(1)>>
+			<<goto 'Underground city - girl ambush'>>
 		<</if>>
 	<</if>>
 <</if>>

@@ -1,0 +1,104 @@
+:: Settlement management - automatization [automatization include]
+
+<h1>House rules for settlers</h1>
+<br/>You are the boss of this place. You set the rules and the settlers obey (probably)
+<br/>Things in storage only collects dust so it's better to distribute to settlers that need them. Like bows for hunters, axes to woodcutter & knives to nearly everyone.
+<br/><br/>
+<<set $automatization ??= {}>>
+<<set $auto_help ??= false>>
+<table class="mc-stats-table">
+    <<for _dummy, _autoId range Object.keys(setup.automatization.rule)>>
+        <<capture _autoId, _auto>>
+            
+            <<set _auto = setup.automatization.rule[_autoId] >>
+            <tr>
+                <<if !['buttplug','streetworker'].includes(_autoId)>>
+                    <<set $automatization[_autoId] ??= false>>
+                    <td><label><<checkbox '$automatization[_autoId]' false true autocheck>>_auto.name</label></td>
+                    <td><<=_auto.description>></td>
+
+                <<elseif ['buttplug'].includes(_autoId)>>
+                    <<set $automatization.buttplug = ($automatization.buttplug ?? false) || ($automatization.buttplugGender ?? []).includes(true)>>
+                    <<set _start = $automatization.buttplug>>
+                    <<set $automatization.buttplugGender ??= [_start, _start, _start, _start, _start]>>
+
+                    <td valign="top">&nbsp;_auto.name
+                    </td>
+                    <td><<=_auto.description>><br/>
+
+                        <table>
+                            <tr>
+                                <td>
+                                    <<button "All buttplug rotation OFF">>
+                                        <<set $automatization.buttplug = false>>
+                                        <<for _i, _val range $automatization.buttplugGender>>
+                                            <<set $automatization.buttplugGender[_i] = false>>
+                                        <</for>>
+                                        <<goto 'Settlement management'>>
+                                    <</button>>
+                                </td>
+                                <td>
+                                    <<button "All buttplug rotation ON">>
+                                        <<set $automatization.buttplug = true>>
+                                        <<for _i, _val range $automatization.buttplugGender>>
+                                            <<set $automatization.buttplugGender[_i] = true>>
+                                        <</for>>
+                                        <<goto 'Settlement management'>>
+                                    <</button>>
+                                </td>
+                                <td>Or buttplug rotation by gender:
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div id="bp_gender"  style="display: block">
+                            <<for _i = 0; _i < setup.automatization.buttplugGender.length; _i++>>
+                                <<capture _i>>
+                                    <label><<checkbox '$automatization.buttplugGender[_i]' false true autocheck>><<=setup.automatization.buttplugGender[_i]>></label><br/>
+                                <</capture>>
+                            <</for>>
+                        </div>
+                    </td>
+
+                <<elseif ['streetworker'].includes(_autoId)>>
+                    /* convert old false/true to a number */
+                    <<set $automatization.streetworker ??= 0>>
+                    <<set $automatization.streetworker = $automatization.streetworker > 1 ? $automatization.streetworker : $automatization.streetworker ? 1 : 0>>
+                    <td valign="top">&nbsp;_auto.name</td>
+                    <td>
+                        <<=_auto.description>><br/>
+
+                        <<for _key, _text range setup.automatization.sexworkerDayOffText>>
+                                <<if _key === 'off'>>
+                                    <<set _level = 0>>
+                                <<else>>
+                                    <<set _level++>> 
+                                <</if>>
+                                <label>
+                                    <<radiobutton "$automatization.streetworker" _level autocheck>>
+                                    <<for _happy range setup.automatization.sexworker_levels[_key] >>
+                                            <<happyIcon _happy>>
+                                    <</for>>
+                                    <<=_text>>
+                                </label><br/>
+                        <</for>>
+                    </td>
+                <</if>>
+            </tr>
+            <<if $auto_help>>
+                <tr>
+                    <td></td>
+                    <td>_auto.help</td>
+                </tr>
+            <</if>>
+        <</capture>>
+    <</for>>
+</table>
+
+<br/><br/>
+<<set _text = $auto_help ? 'Less info' : 'More info'>>
+<<link _text >>
+    <<set $auto_help = !$auto_help>>
+    <<goto 'Settlement management'>>
+<</link>>
+             

@@ -1,9 +1,12 @@
 :: Basement [Place bg-basement] {"position":"1202,389","size":"100,100"}
-<<set $workingInGarden = 0>>
-<<set $workingOnStreets = 0>>
-<<set $showSlavesCount = 0>>
+<<set _workingInGarden = 0>>
+<<set _workingOnStreets = 0>>
+<<set _showSlavesCount = 0>>
 
-<h1 class="ptitle">BASEMENT</h1>
+<h1 class="ptitle">
+	<<backButton 'Wood cabin'>>
+	BASEMENT
+</h1>
 <h3>Slaves</h3>
 <<set _basementLimitShow = ($basementLimit - $slaves.length)>>
 <<if _basementLimitShow < 0>>
@@ -13,18 +16,29 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 
 <<set _isSlaveInBasement = false>>
 <<set _suicidalSlaves = []>>
+<<set _lowSubmissionSlaves = []>>
+<<set _slavesInBasement = []>>
+<<set _isHeatWave = $weather?.heatWave ?? false>>
+<<set _isSandStorm = $weather?.sandStorm ?? false>>
+
 <<for _i to 0; _i lt $slaves.length; _i++>>
-	<<if $slaves[_i].assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick>>
-		<<set $workingInGarden++>>
+	<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
+	<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
+	<<set _dayOff = _isSick || _isRest>>
+	<<set _isHeatWave = $weather?.heatWave ?? false>>
+	<<set _isSandStorm = $weather?.sandStorm ?? false>>
+
+	<<if $slaves[_i].assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick && !_isHeatWave>>
+		<<set _workingInGarden++>>
 		<<continue>>
 	<</if>>
-	<<if $slaves[_i].assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_isSick>>
-		<<set $workingOnStreets++>>
+	<<if $slaves[_i].assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_dayOff && !_isSandStorm>>
+		<<set _workingOnStreets++>>
 		<<continue>>
 	<</if>>
+	<<set _showSlavesCount++>>
 	<<set _isSlaveInBasement = true>>
 <</for>>
-<<set $cellSlaveIds = []>>
 <<set _hornySlaveId = null>>
 <<if $slaves.length < 1>>
 	<div style="margin-top: 20px;">
@@ -34,68 +48,119 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	<<set _girlGuest = setup.getPersonsForLocation($guests, 'mistress')>>
 	<<if _girlGuest.length > 0 && timeBetween('12:00', '22:00') && typeof _girlGuest.sick === 'undefined' && _isSlaveInBasement>>
 		<<set $tmpGirl = $guests[_girlGuest[0]]>>
-		<<set $tmpGirl.location = 'basement'>>
+		<<set $tmpGirl.location = 'mistress'>>
 		<center>
-			<<actionImage $tmpGirl mistress>>
-		</center> 
+			<<actionImage $tmpGirl basement>>
+		</center>
+
 		<<=setup.displayName($tmpGirl)>> is whipping one of your slaves<br /><br />
 		<<set _girlGuestLink = 'Approach ' + $tmpGirl.name>>
 		<<link `_girlGuestLink`>>
-			<<set $tmpGirlViewBack = 'Girl view - guest'>>
+			<<set $tmpGirlViewBack = 'NPC view - guest'>>
 			<<set $tmpGirlBack = 'Basement'>>
 			<<set $tmpGirlCapture to false>>
+			<<set $tmpGirlInvite to false>>
 			<<set $tmpGirl.rape to false>>
 			<<set $guestId = _girlGuest[0]>>
-			<<run delete $slaveId>>
-			<<run delete $charId>>
-			<<goto 'Girl view - guest'>>
+			<<unset $slaveId, $charId, $childId>>
+			<<goto 'NPC view - guest'>>
 		<</link>>
+		<<set _mistressId = _girlGuest[0]>>
 	<</if>>
 
-	<table id="slaves">
+	<<if _mistressId && $player.quests.slave_party>>
+		<<if setup.cabinInventory.count('food') >= 20 && setup.cabinInventory.count('champagne') > 0 && timeBetween('15:00', '22:00') && (setup.getAvailablePersons18yo($slaves)[0] ?? []).length >= 4>>
+			<<link 'Throw a party'>>
+				<<goto 'Basement - slave party'>>
+			<</link>>
+			<<linkdesc>>
+			-20 food, -1 champagne
+			<</linkdesc>>
+		<<else>>
+			<div class="link-internal" style="background: #ccc">
+				Throw a party
+			</div>
+			<<linkdesc>>
+				20 food, 1 champagne and time between 15:00 - 22:00 and at least 4 women as slaves.
+			<</linkdesc>>
+		<</if>>
+	<</if>>
+	<<if (setup.getAvailablePersons18yo($slaves)[0] ?? []).length >= 3>>
+		<<if timeBetween('18:00','20:30') && $player.energy >= 40>>
+			<<link 'Group workout with slaves'>>
+				<<energy -40>>
+				<<addmins 90>>
+				<<goto 'Group workout - slaves'>>
+			<</link>>
+		<<else>>
+			<div class="link-internal" style="background: #ccc">
+				Group workout with slaves
+			</div>
+			<<linkdesc>>
+				Time between 19:00 - 20:30. Energy 40
+			<</linkdesc>>
+		<</if>>
+	<</if>>
+
+	<table id="slaves" class="npc-list">
 	<<for _i to 0; _i lt $slaves.length; _i++>>
 		<<capture _i>>
 		<<set _isSick = (typeof $slaves[_i].sick !== 'undefined')>>
+		<<set _isRest = (typeof $slaves[_i].rest !== 'undefined')>>
+		<<set _dayOff = _isSick || _isRest>>
 		<<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
-		<<if $slaves[_i].assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick>>
-			<<set $workingInGarden++>>
+		<<set _customColorStyle = ''>>
+		<<if typeof $slaves[_i].color !== 'undefined' >>
+			<<set _customColorStyle = ' npc-color color-' + $slaves[_i].color >>
+		<</if>>
+		<<if $slaves[_i].assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick && !_isHeatWave>>
+			<<set _workingInGarden++>>
 			<<continue>>
 		<</if>>
-		<<if $slaves[_i].assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_isSick>>
-			<<set $workingOnStreets++>>
+		<<if $slaves[_i].assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_dayOff && !_isSandStorm>>
+			<<set _workingOnStreets++>>
 			<<continue>>
 		<</if>>
+		<<if $slaves[_i].assignedTo === 'milk_barn' and timeBetween('12:00', '18:00') && !_dayOff>>
+			<<continue>>
+		<</if>>
+
 		<<if $slaves[_i].horny > 70 && !_hornySlaveId>>
 			<<set _hornySlaveId = _i>>
 		<</if>>
 		<<set $showSlavesCount++>>
-		<<set $cellSlaveIds.push(_i)>>
 		<<if $slaves[_i].happy < -70>>
 			<<run _suicidalSlaves.push(_i)>>
 		<</if>>
-		<tr>
-			<td style="width: 300px">
+		<<if $slaves[_i].sub < 50>>
+			<<run _lowSubmissionSlaves.push(_i)>>
+		<</if>>
+		<<run _slavesInBasement.push(_i)>>
+		<tr class="item">
+			<td style="min-width: 25%">
 				<<if setup.getAge($slaves[_i]) < 18>>
-					<span @class="''+_genderClass+''">
+					<span @class="_genderClass" @style="_customColorStyle">
 						<<link $slaves[_i].name>>
 							<<set $slaveId = _i>>
-							<<run delete $guestId, $charId>>
+							<<unset $guestId, $charId, $childId>>
 							<<set $tmpGirl = $slaves[_i]>>
 							<<set $tmpGirlBack = 'Basement'>>
+							<<set $tmpGirlViewBack = 'Child view'>>
 							<<goto 'Child view'>>
 						<</link>>
 					</span>
 				<<else>>
-					<span @class="''+_genderClass+''">
+					<span @class="_genderClass + _customColorStyle">
 					  <<link $slaves[_i].name>>
 						<<set $tmpGirl to $slaves[_i]>>
 						<<set $tmpGirl.location = 'basement'>>
 						<<set $tmpGirlBack = 'Basement'>>
-						<<set $tmpGirlCapture to false>>
 						<<set $tmpGirl.rape to false>>
-						<<set $tmpGirlViewBack = (!$slaves[_i].gender ? 'Girl' : 'Guy') + ' view'>>
+						<<set $tmpGirlCapture to false>>
+						<<set $tmpGirlInvite to false>>
+						<<set $tmpGirlViewBack = 'NPC view'>>
 						<<set $slaveId = _i>>
-						
+
 						<<if !$slaves[_i].gender && !($slaves[_i].quests ?? {}).firstBasementVisit>>
 							<<if typeof $slaves[_i].quests === 'undefined'>>
 								<<set $slaves[_i].quests = {}>>
@@ -108,55 +173,26 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 					  <</link>>
 					</span>
 				  <</if>>
-				  
-				  <<if $slaves[_i].pregnancy >= 7>>
-					(pregnant <<=$slaves[_i].pregnancy>> days)
-				  <</if>>
-				  
-				  <<if _isSick>>
-				  	(sick)
-				  <</if>>
+				  <<=setup.npcListInfo($slaves[_i], _isSick, _isRest)>>
 			</td>
 			<td>
-				<<if [0,2].includes($slaves[_i].gender) && setup.getAge($slaves[_i]) >= 17>>
-						Beauty score: <<=$slaves[_i].beauty>>
-				<</if>>
-			</td>
-			<td>
-				Age: <<=setup.getAge($slaves[_i])>>
-			</td>
-			<td>
-				<<if $slaves[_i].assignedTo>>
-					(<<=$slaves[_i].assignedTo>>)
-				<</if>>
-			</td>
-			<td>
-				<<link 'Release'>>
-					  <<dialog 'Release'>>
-						  Are you sure you want to release <<=setup.pronounceWho($slaves[_i])>>?
-						  <br />
-						  <<link 'Yes'>>
-							  <<set $tmpGirl = $slaves[_i]>>
-							  <<set $slaveId = _i>>
-							  <<dialogclose>>
-							  <<goto 'Basement - release slave'>>
-						  <</link>>	
-					  <</dialog>>
-				  <</link>>
+				<<npcListView $slaves[_i] _i 'slave'>>
 			</td>
 			<td>
 				<<link 'Kill'>>
+					/* rescue npc inventory first */
 					<<dialog 'Kill'>>
 						Are you sure you want to kill <<=setup.pronounceWho($slaves[_i])>>?
 						<br />
 						<<link 'Yes' 'Basement'>>
-							<<run $slaves.splice(_i, 1)>>
+							<<assignedTo $slaves[_i] 'none'>>
+							<<slaveRemove _i>>
 							<<dialogclose>>
 							<<set $player.reputation++>>
 							<<set $player.goodwill-->>
 							<<statsAdd 'slaves_killed'>>
 							<<statsAdd 'people_killed'>>
-						<</link>>	
+						<</link>>
 					<</dialog>>
 				<</link>>
 			</td>
@@ -166,32 +202,49 @@ Free rooms left: <strong><<=_basementLimitShow>></strong>
 	</table>
 <</if>>
 
-<<if !$showSlavesCount && $workingInGarden>>
-	<<if($game.location.greenhouse ?? false)>>
-		<<set $workingPlace = 'greenhouse'>>
-	<<else>>
-		<<set $workingPlace = 'garden'>>
-	<</if>>
+<<if !_showSlavesCount && _workingInGarden>>
 	All your slaves are at assigned jobs...
 <</if>>
 <br /><br />
 
-<<if $showSlavesCount &&  !$locationEvents.basement>>
-	<<set $randomNumber = randomInteger(1, 10)>>
-	<<if $randomNumber === 0>>
-		<<set $eventSlaveId = Math.floor(Math.random()*$cellSlaveIds.length);>>
-		<<if $slaves[$eventSlaveId].sub < 50 && setup.getAge($slaves[$eventSlaveId]) > 17 && !$slaves[$eventSlaveId].gender>>
+<<if _showSlavesCount &&  !$locationEvents.basement>>
+	<<set _randomNumber = randomInteger(1, 10)>>
+	<<if _randomNumber === 0 && _lowSubmissionSlaves.length>>
+		<<set $eventSlaveId = setup.getRandomElement(_lowSubmissionSlaves)>>
+		<<if setup.getAge($slaves[$eventSlaveId]) >= 18 && !$slaves[$eventSlaveId].gender>>
 			<<set $locationEvents.basement = true>>
-			<<goto 'Basement event - try escape'>>
+			<<set $tmpEvent = {
+				id: $eventSlaveId
+			}>>
+			<<if setup.percentageChance(50)>>
+				<<goto 'Basement event - try escape'>>
+			<<else>>
+				<<goto 'Basement event - try escape 2'>>
+			<</if>>
 		<</if>>
-	<<elseif $randomNumber === 1 && _hornySlaveId && setup.getAge($slaves[_hornySlaveId]) > 17 && !$slaves[_hornySlaveId].gender>>
+	<<elseif _randomNumber === 1 && _hornySlaveId && setup.getAge($slaves[_hornySlaveId]) > 17 && !$slaves[_hornySlaveId].gender && !$slaves[_hornySlaveId].virgin>>
 		<<set $hornySlaveId = _hornySlaveId>>
 		<<set $locationEvents.basement = true>>
 		<<goto 'Basement event - horny slave'>>
-	<<elseif _suicidalSlaves.length && setup.percentageChance(60)>>
+	<<elseif _suicidalSlaves.length && setup.percentageChance(setup.suicideChance($slaves[_suicidalSlaves[0]]))>>
 		<<set $slaveId = _suicidalSlaves[0]>>
 		<<set $locationEvents.basement = true>>
 		<<goto 'Basement - slave hangman'>>
+	<<elseif typeof _mistressId !== 'undefined' && $guests[_mistressId].relationship >= 90 && !$player.quests.slave_party && $slaves.length >= 6 && $guests.length >= 6>>
+		<<set $guestId = _mistressId>>
+		<<set $locationEvents.basement = true>>
+		<<goto 'Basement - slave party introduction'>>
+	<<elseif setup.percentageChance(5)>>
+		<<set _guestsLikesGirls = setup.commonValues([setup.getAvailablePersons18yo($guests)[1] ?? [], setup.propertyMatchIndexes($guests, 'likesGirls')])>>
+		<<set _slavesForFuck = setup.commonValues([setup.getAvailablePersons18yo($slaves)[0] ?? [], _slavesInBasement])>>
+		<<if _slavesForFuck.length && _guestsLikesGirls.length>>
+			<<set $locationEvents.basement = true>>
+			<<set $tmpEvent = {
+				guestId: setup.getRandomElement(_guestsLikesGirls),
+				slaveId: setup.getRandomElement(_slavesForFuck)
+			}>>
+			<<goto 'Basement - guest asks to fuck slave'>>
+		<</if>>
 	<</if>>
 <</if>>
 [[Back|Wood cabin]]

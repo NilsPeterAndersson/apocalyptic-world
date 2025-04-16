@@ -1,0 +1,18 @@
+:: NPC customize - buttplug remove [girlview no-redirect]
+<h1 class="ptitle">BUTTPLUG</h1>
+<br />
+<<set $tmpGirl.buttplug = false>>
+<<pickup $backpack 'buttplug' 1>>
+<br /><br />
+<<if !$tmpGirl.gender>>
+	<center>
+		[img[setup.ImagePath+'game/misc/customize/buttplug_remove.webp']]
+	</center>
+<</if>>
+<br /><br />
+<<=setup.displayName($tmpGirl)>> gets down in doggy and spread <<=setup.pronounceWhos($tmpGirl)>> ass. You slowly grab the buttplug and slowly pull it out of <<=setup.pronounceWho($tmpGirl)>>. 
+<br /><br />
+<<addmins 10>>
+<<link 'Back'>>
+	<<goto 'NPC customize'>>
+<</link>>

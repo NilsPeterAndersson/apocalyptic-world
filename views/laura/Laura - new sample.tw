@@ -22,7 +22,7 @@ As usual, she approaches this matter very professionally. She takes your dick an
     <<addmins 30>>
         <<horny_reset>>
         <center>
-			[img[setup.ImagePath+'people/laura/sample_cum.webp']]
+            <<image 'people/laura/sample_cum.webp'>>
 		</center>
 		<br /><br />
 		Before you cum she puts another sample cup in front of your dick and collects all cum you shoot out. 
@@ -31,7 +31,7 @@ As usual, she approaches this matter very professionally. She takes your dick an
             Thanks! Be safe out there.
         <</laura>>
         <br /><br />
-        <<if $characters.laura.relationship < 50>>
+        <<if $characters.laura.relationship < 40>>
             <strong>Reputation with Laura increased by 1</strong>
             <<set $characters.laura.relationship++>>
         <</if>>

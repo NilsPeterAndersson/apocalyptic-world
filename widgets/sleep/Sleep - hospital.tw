@@ -1,0 +1,53 @@
+:: Sleep - hospital [widget]
+
+<<widget sleepHospital>>
+    <<set _girlGuest = setup.getPersonsForLocation($guests, 'hospital')>>
+    <<set _doctor = $guests[_girlGuest[0]]>>
+
+    <<for _pregnancyHappening range $pregnancysHappeningHospital>>
+        <<if _pregnancyHappening.type === 'slave'>>
+	        <<set _mother = $slaves[_pregnancyHappening.id]>>
+        <<elseif _pregnancyHappening.type === 'character'>>
+	        <<set _mother = $characters[_pregnancyHappening.id]>>
+        <<else>>
+	        <<set _mother = $guests[_pregnancyHappening.id]>>
+        <</if>>
+
+        /* without hospital max chance of success = 95% so hospital should also reach that, see childbirth.tw */
+        <<set _chanceOfFail = 10>>
+        <<if (_mother.traits ?? []).includes('breeder')>>
+            <<set _chanceOfFail -= 5>>
+        <</if>>
+        <<if setup.percentageChance(_chanceOfFail)>>
+            <<run delete _mother.pregnancy>>
+            <<set _mother.happy -= 80>>
+            <<run setup.sleepMessages.add(setup.displayName(_mother) + ' went into labor. Unfortunately they were not successful and baby died.')>>
+        <<else>>
+            <<set _childsCount = 1>>
+            <<if setup.percentageChance(10)>>
+                <<set _childsCount++>>
+            <</if>>
+
+            <<set _childNames = []>>
+
+            <<for _childI = 0; _childI < _childsCount; _childI++>>
+                <<set _childGender = randomInteger(0,1)>>
+                <<newchild _childGender _mother>>
+                <<set _child = $newChild>>
+                <<if ($game.location.nursery ?? false)>>
+                    <<run $nursery.push(_child)>>
+                <<elseif ($game.location.guesthouse ?? false)>>
+                    <<run $guests.push(_child)>>
+                <<else>>
+                    <<run $slaves.push(_child)>>
+                <</if>>
+                <<run _childNames.push(setup.displayName(_child))>>
+            <</for>>
+
+            <<set _textDesc = _childNames.length > 1 ? '<strong>twins</strong>. ' : ''>>
+        
+            <<run setup.sleepMessages.add(setup.displayName(_mother) + ' went into labor. She went to the hospital and gave birth to ' + _textDesc + _childNames.join(', ') + '.', 'hospital')>>
+        <</if>>
+        <<unset $pregnancyHappening,  $pregnancysHappeningHospital>>
+    <</for>>
+<</widget>>

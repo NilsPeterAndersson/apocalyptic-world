@@ -1,5 +1,6 @@
 :: Explore event: Waterfall won {"position":"6205,580","size":"100,100"}
 <h1 class="ptitle">FOREST</h1>
+<<set $player.stats.waterfall.wins++>>
 <br /><br />
 <center>
 	[img[setup.ImagePath+'places/explore/waterfall_swim.webp']]
@@ -11,10 +12,10 @@ In front of the girls' eyes, the guys have fallen to the ground, and shock appea
 <<set 
 	$tmpGirl.birthDate = setup.getBirthDate(19),
 	$tmpGirl.beauty = 99,
-	$tmpGirl.traits = setup.getRandomTraits(3),
+	$tmpGirl.traits = setup.getRandomTraits($tmpGirl, 3),
 	$tmpGirl.race = 'white'
 >>
-<<run delete $slaveId, delete $guestId, delete $charId>>
+<<unset $slaveId, $guestId, $charId>>
 
 <<include 'NPC info'>>
 <br />
@@ -35,7 +36,7 @@ Her eyes are filled with a pleading, puppy-like expression, as she hopes for you
 	<<video 'explore/waterfall1'>>
 	<br /><br />
 	<<anongirl>>
-		Okey! I'll do what you want but after that I am gommmmmhmhhhmhmh
+		Okay! I'll do what you want but after that I am gommmmmhmhhhmhmh
 	<</anongirl>>
 	<br />
 	Instead of letting her suck your hard cock, you catch her by surprise and fuck her mouth instead
@@ -68,6 +69,7 @@ Her eyes are filled with a pleading, puppy-like expression, as she hopes for you
 <<if (($game.location.basement ?? false) && $slaves.length < $basementLimit)>>
 	<<link 'Capture her'>>
 		<<run $slaves.push($tmpGirl)>>
+		<<statsAdd 'people_captured'>>
 		<<goto 'Basement'>>
 	<</link>>
 <</if>>

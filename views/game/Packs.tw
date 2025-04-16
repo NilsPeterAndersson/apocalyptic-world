@@ -1,0 +1,43 @@
+:: Packs 
+<h1 class="ptitle">PACKS</h1>
+<div id="info">
+    <a href="https://apocalyptic-world.com/wiki_packs_custom.html" target="_blank">WIKI</a> how to create new packs.
+</div>
+<table>
+    <<set $packs ??= {}>>
+    <<for _packKey, _pack range setup.packs>>
+        <<capture _packKey, _pack>>
+            <<set $packs[_packKey] ??= false>>
+            <tr>
+                <td>
+                    <<checkbox '$packs[_packKey]' false true autocheck>>
+                </td>
+                <td>
+                    <<= _pack.name>> 
+                </td>
+                <td>
+                    <div>
+                        <<= _pack.download>>
+                    </div>
+                    <div class="pack-description">
+                        <<= _pack.description>>
+                    </div>
+                </td>
+            </tr>
+        <</capture>>
+    <</for>>
+</table>
+<br /><br />
+<<link 'Leave'>>
+    <<if $game.introFinished>>
+        <<goto 'Outside'>>
+    <<else>>
+        <<goto 'Welcome intro'>>
+    <</if>>
+<</link>>
+
+<style>
+    .pack-description {
+        font-size: 10px;
+    }
+</style>

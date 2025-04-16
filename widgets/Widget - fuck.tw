@@ -1,0 +1,11 @@
+:: Widget - fuck [widget]
+
+<<widget fuck>>
+        <<if $tmpGirl.horny > 79>>
+                <<set $tmpGirl.horny = 79>>
+        <</if>>
+        <<set $sexCanForce = true>>
+        <<set $sexStats = {}>>
+        <<set $fuck = {}>>
+        <<goto 'Mc fuck'>>
+<</widget>>

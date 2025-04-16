@@ -1,0 +1,263 @@
+:: Bedrom - auto_morning  [automatization include]
+
+/* a little automation if settings allow it */
+<<set $automatization ??= {}>>
+<<set _ruleDup          = $automatization.dup ?? false>>
+<<set _ruleJob          = $automatization.job ?? false>>
+<<set _ruleHunter       = $automatization.hunter ?? false>>
+<<set _ruleStreetworker = $automatization.streetworker ?? 0>>
+<<set _ruleButtplug     = ($automatization.buttplug ?? false) || ($automatization.buttplugGender ?? []).includes(true)>>
+<<set _ruleCondom       = $automatization.condom ?? false>>
+<<set _ruleDumbbell     = $automatization.dumbbell ?? false>>
+<<set _ruleBPgender     = $automatization.buttplugGender ?? [_ruleButtplug, _ruleButtplug, _ruleButtplug, _ruleButtplug, _ruleButtplug]>>
+
+<<set _bellstrength = {
+    dumbbell:    {min:  0, max: 30}, 
+    kettlebell:  {min: 30, max: 50}, 
+    dumbestbell: {min: 50, max: 60}, 
+}>>
+
+<<if _ruleDup || _ruleJob || _ruleHunter || _ruleStreetworker || _ruleButtplug ||  _ruleCondom || _ruleDumbbell>>
+    <<set _outputAutoList ??= []>>
+    <<set _isStorageAvailable = ($game.location.shop ?? false)>>
+    <<set _npcs = $slaves.concat($guests)>> 
+    <<set _want = {}>>
+    <<set _companions = new Map(), _companionSlaves = new Map()>>
+    <<for _companionKey, _companion range $player.companions>>
+        <<set _guestType = _companionKey.split(':')[0]>>>
+        <<set _npcIndex = _companionKey.split(':')[1]>>
+        <<if _guestType !== 'guest'>>
+            <<set _slave = $slaves[_npcIndex]>>
+            <<set _npcId = _slave.id>>
+            <<set _companionSlaves.set(_npcId, true)>>
+        <<else>>
+            <<set _guest = $guests[_npcIndex]>>
+            <<set _npcId = _guest.id>>
+            <<set _companions.set(_npcId, true)>>
+        <</if>>
+    <</for>>
+    <<set _outDupNpcs = []>>
+    <<set _outMinusNpcs = []>>
+    <<set _bp_plus  = [], _bp_minus = []>>
+    <<set _badWeatther = /* $weather?.heatWave || */ $weather?.sandStorm>>
+    <<for _npcI, _npc range _npcs>>
+        <<set _job = _companions.has(_npc.id) ? 'companion' :
+                 _companionSlaves.has(_npc.id) ? 'companion_slave': (_npc.assignedTo ?? 'none')>>
+        <<set _outDupItems = []>>
+        <<set _outMinusItems = []>>
+
+        /* (setup.getNpcHappyLevel(_npc) === 'very_sad'  */
+
+        <<if _ruleStreetworker && ['streets', 'nightclub', 'milk_barn', 'quarry'].includes(_job) && (setup.automatization.sexworkerDayOffCheck(_npc) || _npc.sick) && (typeof _npc.rest === 'undefined')>>
+            <<set _npc.rest = {
+				days: setup.getNpcHappyLevel(_npc) === 'very_sad' ? 3 : 2,
+				desc: 'Day off resting',
+				id: 'resting'
+			}>>
+        <</if>>
+
+        <<if _ruleButtplug>> /* add to specific gender only; remove from all when done */
+            <<set _gender = typeof _npc.gender !== 'undefined' ? _npc.gender : 4 >>
+            <<set _genderOK = _ruleBPgender[_gender]>>
+            <<if _npc.sub >= 20 && _npc.anal < 20 && !(_npc.buttplug ?? false) && _genderOK>>
+                <<set _bp_plus.push(_npc)>>
+            <<elseif _npc.anal >= 20 && (_npc.buttplug ?? false)>>
+                <<set _npc.buttplug = false>>
+                <<set setup.cabinInventory.pickup('buttplug', 1)>>
+                <<set _outMinusItems.push('Buttplug: 1')>>
+            <</if>>
+        <</if>>
+
+        /* chastity_belt, can only remove, TODO later */
+
+        <<for _itemI, _item range setup.inventoryNpc>>
+            <<set _itemcount = setup.npcInventoryCount(_npc, _item)>>
+
+            /* duplicates go to backpack or storage */
+            <<if _ruleDup || (_ruleCondom  && _item === 'condom')  || (_ruleDumbbell  && ['dumbbell', 'kettlebell', 'dumbestbell'].includes(_item)) || 
+                    (_ruleHunter &&  ['bow', 'axe'].includes(_item)) || 
+                    (_ruleJob &&  !['condom', 'kettlebell', 'kettlebell', 'dumbestbell'].includes(_item)) >>
+                <<if _itemcount > 1>>
+                    <<run _itemcount-->>
+                    <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount)>>
+                    <<set _outDupItems.push(_item + ': ' + _itemcount)>>
+                    <<set _itemcount = 1>>
+                <</if>>
+            <</if>>
+
+            <<if _item === 'condom'>>
+                <<if !_ruleCondom>>
+                    <<continue>>
+                <</if>>
+
+                /* special for condom, no need if already pregnant, age >=60, wrong gender, see setup.pregnancyChance(_npc) */
+                /* < <if (typeof _npc.pregnancy !== 'undefined' || _npc.gender || _npc.age >= 60)> > */
+                <<if !setup.pregnancyChance(_npc)>>
+                    <<if _itemcount > 0>>
+                        <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount)>>
+                        <<set _outMinusItems.push(_item + ': ' + _itemcount)>>
+                    <</if>>
+                <<elseif _job === 'streets' && _itemcount == 0>>
+                    <<set _want[_item] ??= []>>
+                    <<set _want[_item].push(_npc)>>
+                <</if>>
+
+            /* special for dumbbell, baseed on strength not toolbox */ 
+            <<elseif ['dumbbell', 'kettlebell', 'dumbestbell'].includes(_item)>>
+                <<if !_ruleDumbbell>>
+                    <<continue>>
+                <</if>>
+                
+                <<if _bellstrength[_item].min <= _npc.strength && _npc.strength < _bellstrength[_item].max && _itemcount == 0>>
+                    <<set _want[_item] ??= []>>
+                    <<set _want[_item].push(_npc)>>
+                <<elseif (_npc.strength < _bellstrength[_item].min || _npc.strength >= _bellstrength[_item].max) && _itemcount > 0>>
+                    <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount)>>
+                    <<set _outMinusItems.push(_item + ': ' + _itemcount)>>
+                <</if>>
+
+            /* toolbox for job */
+            <<elseif _ruleJob || (_ruleHunter &&  ['bow', 'axe'].includes(_item))>>
+                <<if (setup.automatization.job_tools[_job] ?? []).includes(_item) && _itemcount == 0>>
+                    <<set _want[_item] ??= []>>
+                    <<set _want[_item].push(_npc)>>
+                <<elseif !(setup.automatization.job_tools[_job] ?? []).includes(_item) && _itemcount > 0>>
+                    <<run setup.cabinInventory.from_npc(_npc, _item, _itemcount)>>
+                    <<set _outMinusItems.push(_item + ': ' + _itemcount)>>
+                <</if>>
+            <</if>>
+        <</for>>
+        
+        <<if _outDupItems.length > 0>>
+            <<set _outDupNpcs.push(_npc.name + ' (' + _outDupItems.sort().join(', ') + ')')>>
+        <</if>>
+        <<if _outMinusItems.length > 0>>
+            <<set _outMinusNpcs.push(_npc.name + ' (' + _outMinusItems.sort().join(', ') + ')')>>
+        <</if>>
+    <</for>>
+
+    <<if _outDupNpcs.length > 0>>
+        <<set  _outputAutoList.push('Duplicates removed: ' + _outDupNpcs.sort().join('; ') + ';')>>
+    <</if>>
+    <<if _outMinusNpcs.length > 0>>
+        <<set _outputAutoList.push('Removed things: ' + _outMinusNpcs.sort().join('; ')+ ';')>>
+    <</if>>
+    <<unset _outDupItems, _outDupNpcs, _outMinusItems, _outMinusNpcs, _npcI, _npc, _npcs, _itemI, _item, _itemcount>>
+
+    /* using pop so guests gets first ;-) */
+
+    /* add */
+    <<for _item, _npcs  range _want>>
+        <<set _outItem = []>>
+        <<set _itemcount = setup.automatization.job_tools.mc.includes(_item) ? 2 : 1>> /* save one for the MC */
+        <<for _npcs.length > 0 && setup.cabinInventory.has(_item, _itemcount)>>
+            <<set _npc = _npcs.pop()>>
+            <<run setup.cabinInventory.to_npc(_npc, _item)>>
+            <<set _outItem.push(_npc.name)>>
+        <</for>>
+        <<if _outItem.length > 0>>
+            <<set _outputAutoList.push('Added ' + _item + ' to: ' + _outItem.sort().join(', ') + ';')>>
+        <</if>>
+        <<if _want[_item].length > 0>>
+            <<set _outNo = []>>
+            <<for _npc range _want[_item]>>
+                <<set _outNo.push(_npc.name)>>
+            <</for>>
+            <<set _outputAutoList.push('Add failed - no ' + _item + ' in storage for: ' + _outNo.sort().join(', ') + ';')>>
+        <</if>>
+    <</for>>
+
+    /* buttplug */
+    <<set _outItemAdd = [], _outItemRemove = []>>
+    <<for _bp_plus.length > 0 && (setup.cabinInventory.has('buttplug') || _bp_minus.length > 0) >>
+        <<if setup.cabinInventory.has('buttplug')>>
+            <<set setup.cabinInventory.drop('buttplug', 1)>>
+        <<else>>
+            <<set _npc = _bp_minus.pop()>>
+            <<set _npc.buttplug = false>>
+            <<set _outItemRemove.push(_npc.name)>>
+        <</if>>
+        <<set _npc = _bp_plus.pop()>>
+        <<set _npc.buttplug = true>>
+        <<set _outItemAdd.push(_npc.name)>>
+    <</for>>
+    <<if _outItemRemove.length > 0>>
+        <<set _outputAutoList.push('Removed buttplug from: ' + _outItemRemove.sort().join(', ') + ';')>>
+    <</if>>
+    <<if _outItemAdd.length > 0>>
+        <<set _outputAutoList.push('Added buttplug to: ' + _outItemAdd.sort().join(', ') + ';')>>
+    <</if>>
+    <<if _bp_plus.length > 0>>
+        <<set _outNo = []>>
+        <<for _npc range _bp_plus>>
+            <<set _outNo.push(_npc.name)>>
+        <</for>>
+        <<set _outputAutoList.push('Add failed - no buttplug in storage for: ' + _outNo.sort().join(', ') + ';')>>
+    <</if>>
+
+    /* dumb-, dumber-, dumbest-bells, npc gets the next higher type */
+    <<if _ruleDumbbell>>
+        <<set _outItem = []>>
+        <<set _want.dumbbell ??= []>>
+        <<set _want.kettlebell ??= []>>
+        <<set _want.dumbestbell ??= []>>
+        <<for _item range ['kettlebell', 'dumbestbell']>>
+            <<for (_want.dumbbell.length > 0 || _want.kettlebell.length > 0) && setup.cabinInventory.has(_item, 1)>>
+                <<if _want.kettlebell.length > 0>>
+                    <<set _npc = _want.kettlebell.pop()>>
+                    <<run setup.cabinInventory.to_npc(_npc, _item)>>
+                    <<set _outItem.push(_npc.name + ' got ' + _item + ' instead of kettlebell')>>
+                <<elseif _want.dumbbell.length > 0>>
+                    <<set _npc = _want.dumbbell.pop()>>
+                    <<run setup.cabinInventory.to_npc(_npc, _item)>>
+                    <<set _outItem.push(_npc.name + ' got ' + _item + ' instead of dumbbell')>>
+                <</if>>
+            <</for>>
+            <<if _outItem.length > 0>>
+                <<set _outputAutoList.push(_item + ': ' + _outItem.sort().join(', ') + ';')>>
+            <</if>>
+            <<set _outItem = []>>
+        <</for>>
+    <</if>>
+
+    <<if _ruleHunter>>
+        <<set _item = 'axe'>>
+        <<set _outItem = []>>
+        <<set _want.bow ??= []>>
+        <<for _want.bow.length > 0 && setup.cabinInventory.has(_item, 2)>>
+            <<set _npc = _want.bow.pop()>>
+            <<run setup.cabinInventory.to_npc(_npc, _item)>>
+            <<set _outItem.push(_npc.name)>>
+        <</for>>
+        <<if _outItem.length > 0>>
+            <<set _outputAutoList.push('Hunter ' + _item + ' npc ← cabin: ' + _outItem.sort().join(', ') + ';')>>
+        <</if>>
+        <<if _want.bow.length > 0>>
+            <<set _outNo = []>>
+            <<for _npc range _want.bow>>
+                <<set _outNo.push(_npc.name)>>
+            <</for>>
+            <<set _outputAutoList.push('Hunter failed - no ' + _item + ': ' + _outNo.sort().join(', ') + ';')>>
+        <</if>>
+    <</if>>
+    <<unset _npc, _want, _outNo>>
+
+    /* MC */
+    <<set _outItem = []>>
+    <<if _isStorageAvailable>>
+        <<for _item range setup.automatization.job_tools.mc.sort()>>
+            <<if !$backpack.has(_item) && $storage.has(_item)>>
+                <<transfer $storage $backpack _item 1>>
+                <<set _outItem.push('Got +' + _item)>>
+            <<elseif $backpack.has(_item)>>
+                /* keep */
+            <<else>>
+                <<set _outItem.push('No -' + _item)>>
+            <</if>>
+        <</for>>
+    <</if>>
+    <<if (_outItem ?? []).length > 0>>
+         <<set _outputAutoList.push('You: ' + _outItem.join(' | '))>>
+    <</if>> 
+    <<unset _outItem, _item>>
+<</if>>

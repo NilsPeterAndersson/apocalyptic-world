@@ -1,0 +1,75 @@
+:: NPC Wardrobe
+
+<<set _wardrobe = {
+    top: {
+        list: setup.npcClothes.top
+    },
+    bot: {
+        list: setup.npcClothes.bot
+    },
+    panties: {
+        list: setup.npcClothes.panties
+    },
+    accessories: {
+        list: setup.npcClothes.accessories
+    },
+    shoes: {
+        list: setup.npcClothes.shoes
+    }
+}>>
+
+<<if typeof $tmpGirl.clothes === 'undefined'>>
+    <<set $tmpGirl.clothes = {}>>
+<</if>>
+
+<<link 'Remove all clothes'>>
+    <<script>>
+        Dialog.setup("NPC Wardrobe", "NPC Wardrobe");
+        Dialog.wiki(Story.get("NPC Wardrobe").processText());
+        Dialog.open();
+    <</script>>
+    <<for _category, _cloth range $tmpGirl.clothes>>
+        <<run delete $tmpGirl.clothes[_category]>>
+    <</for>>
+    <<goto `passage()`>>
+<</link>>
+
+<<for _wardrobeCategory, _wardrobeCategoryItems range _wardrobe>>
+    <<capture _wardrobeCategory>>
+        <fieldset>
+            <legend>
+                <<=_wardrobeCategory>>
+            </legend>
+            <div class="npc-wardrobe-items">
+                <<if typeof $tmpGirl.clothes[_wardrobeCategory] !== 'undefined'>>
+                    <div class="npc-wardrobe-item remove">
+                        <<link '<div>[img[setup.ImagePath+"game/doll/none.png"]]</div>'>>
+                            <<run delete $tmpGirl.clothes[_wardrobeCategory]>>
+                            <<script>>
+                                    Dialog.setup("NPC Wardrobe", "NPC Wardrobe");
+                                    Dialog.wiki(Story.get("NPC Wardrobe").processText());
+                                    Dialog.open();
+                            <</script>>
+                            <<goto `passage()`>>
+                        <</link>>
+                    </div>
+                <</if>>
+                <<for _wardrobeItem range _wardrobeCategoryItems.list>>
+                    <<capture _wardrobeItem>>
+                        <div class="npc-wardrobe-item">
+                            <<link '<div>[img[setup.ImagePath+"game/doll/"+_wardrobeCategory+"/"+_wardrobeItem+".png"]]</div>'>>
+                                <<set $tmpGirl.clothes[_wardrobeCategory] = _wardrobeItem>>
+                                <<script>>
+                                    Dialog.setup("NPC Wardrobe", "NPC Wardrobe");
+                                    Dialog.wiki(Story.get("NPC Wardrobe").processText());
+                                    Dialog.open();
+                                <</script>>
+                                <<goto `passage()`>>
+                            <</link>>
+                        </div>
+                    <</capture>>
+                <</for>>
+            </div>
+        </fieldset>
+    <</capture>>
+<</for>>

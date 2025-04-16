@@ -1,26 +1,151 @@
 div.girl_info_picture {
-	width: 97px;
-	padding: 20px;
 	position: relative;
-	zoom: 150%;
 	padding-bottom: 0px;
-	margin-top: -22px; 
 }
 
 div#girl_hair {
-	height: 59px;
-	background-repeat: no-repeat;
-	top: 0px;
-	position: absolute;
-	width: 80px;
-	top: 14px;
-	left: 31px;
-	z-index: 3;
+    height: 63px;
+    background-repeat: no-repeat;
+    top: 0px;
+    position: absolute;
+    width: 100px;
+    top: -43px;
+    left: -2px;
+    z-index: 5;
 }
+
+/**
+ * Hair long
+ **/
+div#girl_hair.size-long.color-brown #path2 {
+    fill: #3D2314 !important;
+}
+div#girl_hair.size-long.color-brown path:not(#path2) {
+    fill: #2C1608 !important;
+}
+
+div#girl_hair.size-long.color-black #path2 {
+    fill: #242424 !important;
+}
+div#girl_hair.size-long.color-black path:not(#path2) {
+    fill: #3e3e3e !important;
+}
+
+div#girl_hair.size-long.color-blonde #path2 {
+    fill: #fbe7a1 !important;
+}
+div#girl_hair.size-long.color-blonde path:not(#path2) { 
+    fill: #d9b380 !important;
+}
+
+div#girl_hair.size-long.color-ginger #path2 {
+    fill: #e1621d !important;
+}
+div#girl_hair.size-long.color-ginger path:not(#path2) { 
+    fill: #e17d17 !important;
+}
+
+div#girl_hair.size-long.color-gray #path2 {
+    fill: #C0B9AF !important;
+}
+div#girl_hair.size-long.color-gray path:not(#path2) { 
+    fill: #97928B !important;
+}
+
+div#girl_hair.size-long.color-white #path2 {
+    fill: #f2f2f2 !important;
+}
+div#girl_hair.size-long.color-white path:not(#path2) { 
+    fill: #e5e5e5 !important;
+}
+
+div#girl_hair.size-long.color-red #path2 {
+    fill: #e5282e !important;
+}
+div#girl_hair.size-long.color-red path:not(#path2) { 
+    fill: #971f28 !important;
+}
+
+div#girl_hair.size-long.color-green #path2 {
+    fill: #547e5b !important;
+}
+div#girl_hair.size-long.color-green path:not(#path2) { 
+    fill: #38513d !important;
+}
+
+div#girl_hair.size-long.color-blue #path2 {
+    fill: #0457be !important;
+}
+div#girl_hair.size-long.color-blue path:not(#path2) { 
+    fill: #022455 !important;
+}
+
+div#girl_hair.size-long.color-purple #path2 {
+    fill: #7c4fd0 !important;
+}
+div#girl_hair.size-long.color-purple path:not(#path2) { 
+    fill: #351f67 !important;
+}
+
+div#girl_hair.size-long.color-pink #path2 {
+    fill: #B947B1 !important;
+}
+div#girl_hair.size-long.color-pink path:not(#path2) { 
+    fill: #743296 !important;
+}
+
+
 
 div#girl_body {
    	 height: 153px;
    	 background-repeat: no-repeat;
+}
+
+#girl_panties {
+    width: 26px;
+    position: absolute;
+	top: 60px;
+    left: 31px;
+	height: 16px;
+    z-index: 1;
+    background-size: contain;
+}
+
+#girl_top.top5 {
+    background-size: contain;
+    width: 60px;
+	left: 19px;
+    top: 29px;
+    background-size: contain;
+}
+
+#girl_top.top6, #girl_top.top7, #girl_top.top8 {
+    background-size: contain;
+	top: 25px;
+    left: 27px;
+}
+
+#girl_top.top9 {
+    background-size: contain;
+	top: 29px;
+    left: 35px;
+    width: 26px;
+}
+
+#girl_top.top10 {
+    background-size: contain;
+    left: 27px;
+    top: 28px;
+    width: 36px;
+}
+
+#girl_face {
+	position: absolute;
+	top: 7px;
+    left: 40px;
+    width: 20px;
+    height: 16px;
+    background-size: contain;
 }
 
 div#girl_top {
@@ -30,90 +155,394 @@ div#girl_top {
 	top: 54px;
 	left: 38px;
 	background-repeat: no-repeat;
-	z-index: 2;
+	z-index: 4;
+    background-size: contain;
 }
 
 div#girl_hair.girl_body_hair_black {
-	top: 15px;
-	left: 37px;
+	top: -5px;
+    left: 33px;
 }
 
 div#girl_hair.girl_body_hair_blonde {
-	top: 16px;
-	left: 38px;
+    top: -4px;
+    left: 33px;
 }
 
 div#girl_hair.girl_body_hair_red {
-	top: 13px;
-	left: 20px;
+    top: -6px;
+    left: 15px;
 }
 
 div#girl_top.top1 {
-	top: 46px;
-	left: 39px;
+	top: 26px;
+    left: 33px;
 }
 
 div#girl_top.top2 {
-	top: 47px;
-	left: 35px;
+    top: 27px;
+    left: 26px;
 }
 
 div#girl_top.top3 {
-	top: 47px;
-	left: 36px;
+    top: 28px;
+    left: 33px;
+}
+
+
+@media only screen and (max-width: 660px) {
+	#girl_info_stats {
+		font-size: 9pt;
+	}
+	div.girl_info_picture {
+		transform: scale(1) !important;
+		transform-origin: 100% 0 !important;
+	}
+}
+
+@media only screen and (max-width: 440px) {
+	div.girl_info_picture {
+		transform: scale(1);
+		transform-origin: 100% 0;
+	}
+
+	#npc_info_right {
+		width: 33%;
+	}
+}
+
+.say_custom_portrait img {
+    float: none;
+    width: 100%;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    box-shadow: none;
+    margin: 0;
+    border: none;
+    border-radius: 0px;
+    margin-top: -10px;
+    margin-left: -24px;
+}
+
+.npc_custom_visual {
+    width: 158px;
 }
 
 div#girl_top.top4 {
-	top: 47px;
-	left: 37px;
-	}
+    top: 28px;
+    left: 31px;
+    width: 42px;
+}
+
+div#girl_bot.bot3 {
+	top: 59px;
+    left: 26px;
+	width: 38px;
+}
+
+div#girl_bot.bot1 {
+	width: 37px;
+    top: 61px;
+    left: 25px;
+}
 
 div#girl_bot {
 	position: absolute;
 	height: 100px;
-	width: 38px;
-	top: 79px;
-	left: 33px;
+	width: 39px;
+	top: 60px;
+    left: 28px;
 	background-repeat: no-repeat;
-	z-index: 1;
+	z-index: 3;
+	background-size: contain;
 }
 
 div#girl_hair.girl_body_hair_brown {
-	top: 15px;
-	left: 37px;
+	top: -5px;
+    left: 33px;
 }
 
 div#girl_hair.girl_body_hair_blue {
-	top: 15px;
-	left: 37px;
+    top: -5px;
+    left: 33px;
 }
 
 div#girl_hair.girl_body_hair_green {
-	top: 15px;
-	left: 37px;
+	top: -5px;
+    left: 33px;
 }
 
 div#girl_hair.girl_body_hair_pink {
-	top: 16px;
-	left: 38px;
+    top: -5px;
+    left: 33px;
 }
 
 div#girl_hair.girl_body_hair_white {
-	top: 16px;
-	left: 38px;
+	top: -5px;
+    left: 33px;
 }
 
 div#girl_hair.girl_body_hair_ginger {
-	top: 13px;
-	left: 20px;
+	top: -6px;
+    left: 15px;
 }
 
 div#girl_hair.girl_body_hair_purple {
-	top: 13px;
-	left: 20px;
+	top: -6px;
+    left: 15px;
 }
 
 div#girl_hair.girl_body_hair_gray {
-	top: 16px;
-	left: 38px;
+    top: -5px;
+    left: 33px;
+}
+
+#girl_breasts {
+	position: absolute;
+    top: 30px;
+    left: 35px;
+    width: 26px;
+    height: 13px;
+    background-size: contain;
+    z-index: 1;
+}
+
+svg#nipples {
+    top: 4px;
+    right: 0;
+    position: absolute;
+}
+
+#girl_panties {
+	background-repeat: no-repeat;
+}
+
+#girl_panties.panties2 {
+	top: 66px;
+    width: 32px;
+    left: 28px;
+}
+
+#npc_visual_body path#path21,
+#npc_visual_body path#path25 {
+	fill: none !important;
+}
+
+/**
+ * White 
+*/
+#npc_visual_body.white #path72 {
+    fill: #ffdbac !important;
+}
+
+#girl_breasts.race-white path#breast_left {
+	fill: #ffdbac !important;
+}
+
+#girl_breasts.race-white path#breast_right {
+	fill: #ffdbac !important;
+}
+#girl_penis.race-white path#left_ball,
+#girl_penis.race-white path#right_ball,
+#girl_penis.race-white path#penis {
+	fill: #ffdbac !important;
+}
+
+/**
+ * Asian 
+*/
+#npc_visual_body.asian #path72 {
+    fill: #f1c27d !important;
+}
+
+#girl_breasts.race-asian path#breast_left {
+	fill: #f1c27d !important;
+}
+
+#girl_breasts.race-asian path#breast_right {
+	fill: #f1c27d !important;
+}
+#girl_penis.race-asian path#left_ball,
+#girl_penis.race-asian path#right_ball,
+#girl_penis.race-asian path#penis {
+	fill: #f1c27d !important;
+}
+
+
+/**
+ * Black 
+*/
+#npc_visual_body.black #path72 {
+    fill: #8d5524 !important;
+}
+
+
+#girl_breasts.race-black path#breast_left {
+	fill: #8d5524 !important;
+}
+
+#girl_breasts.race-black path#breast_right {
+	fill: #8d5524 !important;
+}
+#girl_penis.race-black path#left_ball,
+#girl_penis.race-black path#right_ball,
+#girl_penis.race-black path#penis {
+	fill: #8d5524 !important;
+}
+
+/**
+ * Latina 
+*/
+#npc_visual_body.latina #path72 {
+    fill: #c68642 !important;
+}
+
+#girl_breasts.race-latina path#breast_left {
+	fill: #c68642 !important;
+}
+
+#girl_breasts.race-latina path#breast_right {
+	fill: #c68642 !important;
+}
+#girl_penis.race-latina path#left_ball,
+#girl_penis.race-latina path#right_ball,
+#girl_penis.race-latina path#penis {
+	fill: #c68642 !important;
+}
+
+#girl_penis.race-latina path#left_ball,
+#girl_penis.race-latina path#right_ball,
+#girl_penis.race-latina path#penis {
+	fill: #c68642 !important;
+}
+
+/**
+ * Indian 
+*/
+#npc_visual_body.indian #path72 {
+    fill: #9c7246 !important;
+}
+
+#girl_breasts.race-indian path#breast_left {
+	fill: #9c7246 !important;
+}
+
+#girl_breasts.race-indiana path#breast_right {
+	fill: #9c7246 !important;
+}
+#girl_penis.race-indian path#left_ball,
+#girl_penis.race-indian path#right_ball,
+#girl_penis.race-indian path#penis {
+	fill: #9c7246 !important;
+}
+
+#girl_penis.race-indian path#left_ball,
+#girl_penis.race-indian path#right_ball,
+#girl_penis.race-indian path#penis {
+	fill: #9c7246 !important;
+}
+
+#girl_penis {
+    z-index: 999;
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 67px;
+    left: 31px;
+	z-index: 0;
+}
+
+#girl_penis path#dickhead {
+	fill: #ECBDCA !important;
+}
+
+div#girl_accessories {
+    position: absolute;
+    background-size: contain;
+    background-repeat: no-repeat;
+    top: 60px;
+    left: 27px;
+    width: 52px;
+    height: 205px;
+    z-index: 2;
+}
+
+
+div#girl_accessories.accessories2 {
+}
+
+div#girl_accessories.accessories3 {
+}
+
+div#girl_shoes {
+    background-size: contain;
+	left: 27px;
+    top: 59px;
+    width: 52px;
+    height: 107px;
+    position: absolute;
+    z-index: 999;
+    background-repeat: no-repeat;
+}
+
+div#girl_shoes.shoes4 {
+    left: 28px;
+    top: 61px;
+}
+
+div#girl_panties.panties3, div#girl_panties.panties4 {
+    width: 206px;
+    height: 65px;
+    top: 35px;
+    left: 11px;
+}
+
+div#girl_top.top11 {
+    top: 27px;
+    left: 29px;
+    height: 86px;
+    width: 33px;
+}
+
+div#npc_visual_piercing {
+    width: 4px;
+    height: 4px;
+    background-size: contain;
+    position: absolute;
+    background-repeat: no-repeat;
+    z-index: 99;
+}
+
+div#npc_visual_piercing.left {
+    top: 43px;
+    left: 37px;
+}
+
+div#npc_visual_piercing.right {
+    left: 51px;
+    top: 44px;
+}
+
+.girl_tattoo {
+    position: absolute;
+    background-size: contain;
+}
+
+.girl_tattoo.right_leg1 {
+    width: 25px;
+    height: 25px;
+    top: 76px;
+    left: 26px;
+}
+.girl_tattoo.right_leg2 {
+    width: 23px;
+    height: 23px;
+    top: 76px;
+    left: 25px;
+}
+.girl_tattoo.right_leg3 {
+    width: 22px;
+    height: 21px;
+    top: 76px;
+    left: 26px;
 }

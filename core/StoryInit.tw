@@ -12,11 +12,25 @@ setup.ImagePath = setup.Path + "images/";
 setup.videoPath = setup.Path + "videos/";
 setup.audioPath = setup.Path + "audio/";
 
-importScripts(setup.Path + "js/actions.js")
+setup.lockID = LoadScreen.lock();  // Lock loading screen
+
+let _timestamp = Math.floor(Date.now() / 1000);
+
+importScripts(setup.Path + "js/actions.js?v=" + _timestamp)
 	.then(function() {
         memorize('actions', setup.actions);
+        // Reload current passage since imported scripts can function now.
+		Engine.play(passage(), true);
+		LoadScreen.unlock(setup.lockID);  // Unlock loading screen
 	}).catch(function(error) {  // eslint-disable-line
 		alert("Error: Could not find file 'actions.js'.");
+	}
+);
+importScripts(setup.Path + "packs/packs.js?v=" + _timestamp)
+	.then(function() {
+        memorize('packs', setup.packs);
+	}).catch(function(error) {  // eslint-disable-line
+		alert("Error: Could not find file 'packs/packs.js'.");
 	}
 );
 
@@ -72,14 +86,13 @@ importScripts("https://www.googletagmanager.com/gtag/js?id=G-XVQJZNSBZ6")
 <<set $game.day = 0>>
 <<set $slaves to []>>
 <<set $tmpGirl to {}>>
-<<set $tmpGirlkey to 0>>
 <<set $morningMessages to []>>
-<<set $charactersInLocation to {}>>
-<<set $charsInGrid = []>>
 <<set $basementLimit = 3>>
 <<set $guesthouseLimit = 3>>
 <<set $workersLimitGarden = 8>>
-<<set $undergroundEvent = false>>
+<<set $workersLimitHunter = 8>>
+<<set $workersLimitHospital = 3>>
+<<set $companionsLimit = 6>>
 <<set $guests = []>>
 <<set 
 $characters to {
@@ -123,6 +136,7 @@ $characters to {
 
 <<character 'anonguy' 'Guy' setup.ImagePath+'/people/anonguy.png'>>
 <<character 'anongirl' 'Girl' setup.ImagePath+'/people/anongirl.png'>>
+<<character 'ashley' 'Girl' setup.ImagePath+'/people/ashley.png'>>
 
 <<character 'harper' setup.ImagePath+'/people/harper/avatar.png'>>
 <<character 'isabel' setup.ImagePath+'/people/isabel.png'>>
@@ -144,6 +158,11 @@ $characters to {
 <<newmeter '$hornyBar' 1>>
 	<<sizing '100%'>>
     <<label '$player.horny'>>
+	<<colors '#ff00ee' '#ff00ee' 'black'>>
+<</newmeter>>
+<<newmeter '$npcHornyBar' 1>>
+    <<sizing '100%'>>
+    <<label '$tmpGirl.horny / 100 arousal'>>
 	<<colors '#ff00ee' '#ff00ee' 'black'>>
 <</newmeter>>
 

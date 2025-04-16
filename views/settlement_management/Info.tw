@@ -1,0 +1,266 @@
+:: Settlement management - info
+
+<<set _companionGuests = new Map(), _companionSlaves = new Map()>>
+<<for _companionKey, _companion range $player.companions>>
+	<<set _index = _companionKey.split(':')[1]>>
+	<<if _companionKey.split(':')[0] === 'guest'>>
+		<<set _guest = $guests[_index]>>
+		<<set _npcId = _guest.id>>
+		<<set _companionGuests.set(_npcId, true)>>
+	<<else>>
+		<<set _slave = $slaves[_index]>>
+		<<set _npcId = _slave.id>>
+		<<set _companionSlaves.set(_npcId, true)>>
+	<</if>>
+<</for>>
+
+<<set _giveFood = (($game.location.greenhouse ?? false) ? 2 : 1)>>
+<<set _garden =   ($game.location.greenhouse ?? false) ? 'greenhouse' : 'garden' >>
+<<set _percentTaxStreet = !$characters.dom.quests.accepted_deal ? 80 : 40>>
+<<set _percentTaxNightclub = 50>>
+
+<<set _settlementStatsData = {
+	work: {},
+	settlers: 0,
+	happy: 0,
+	happylvl: {
+		very_sad: 0, sad: 0, normal:0, happy: 0, very_happy: 0
+	},
+	food: {produce: 0, consume: 0, none: 0},
+	hunt: {food: 0, wolf: 0},
+	milk: 0,
+	mining: 0,
+	scav: 0,
+	streets: 0, streets_die: 0, nightclub: 0,
+	wood: 0,
+	birthday: [],
+	pregnant: 0
+}>>
+<<for _statsNpcI, _statsNpc range ($guests ?? []).concat($slaves ?? []).concat($nursery ?? [])>>
+	<<if _statsNpc.assignedTo>>
+		<<set _job = _statsNpc.assignedTo>>
+	<<elseif _companionGuests.has(_statsNpc.id)>>
+		<<set _job = 'companionGuest'>>
+	<<elseif _companionSlaves.has(_statsNpc.id)>>
+		<<set _job = 'companionSlave'>>
+	<<elseif setup.getAge(_statsNpc) < 18>>
+		<<set _job = 'child'>>
+	<<else>>
+		<<set _job = 'none'>>
+	<</if>>
+	<<set _settlementStatsData['work'][_job] ??= 0>>
+	<<set _settlementStatsData['work'][_job]++>>
+	<<set _settlementStatsData['happy'] += _statsNpc.happy>>
+	<<set _settlementStatsData['settlers']++>>
+	<<set _settlementStatsData.happylvl[setup.getNpcHappyLevel(_statsNpc)]++>>
+	<<set _settlementStatsData['pregnant'] += (typeof _statsNpc.pregnancy !== 'undefined') ? 1 : 0>>
+	<<if _job === 'garden'>>
+		<<set _settlementStatsData.food.produce += _giveFood  + ((_statsNpc.skills ?? []).includes('gardener') ? 2 : 0)>>
+	<<elseif _job === 'forest'>>
+		<<set _settlementStatsData.wood +=  (_statsNpc.strength > 30 ? 2 : 1) + 
+			((_statsNpc.skills ?? []).includes('woodcraft') ? 1 : 0) + setup.npcInventoryHas(_statsNpc, 'axe')>>
+	<<elseif _job === 'milk_barn'>>
+			<<set _settlementStatsData.milk += _statsNpc.pregnancy >= 7 || (_statsNpc.traits ?? []).includes('milker') ? 1/3 : 0>>
+	<<elseif _job === 'hunter'>>
+		<<set _percentage = 10 + (_statsNpc.strength > 50 ? 25 : _statsNpc.strength > 10 ? 10 : 0)>>
+		<<set  _settlementStatsData.hunt.wolf += _percentage * 0.2 * 1.5/100,
+			   _settlementStatsData.hunt.food += _percentage * 0.8 * 3.5/100>>
+	<<elseif _job === 'scavenging'>>
+		/* should consider: chance of not coming home == lower average */
+		<<set _settlementStatsData.scav += (_statsNpc.skills ?? []).includes('scavenger') ? 1.5 : 1>>
+	<<elseif _job === 'streets'>>
+		<<set _chanceDeath = ($characters.dom.quests.accepted_deal ? 1 :
+			(_statsNpc.strength ?? 0) > 20 ? 3 :
+			(_statsNpc.strength ?? 0) > 10 ? 4 : 5) -
+			(setup.npcInventoryHas(_statsNpc, 'knife') ? 1 : 0)>>
+		<<set _chanceDeath *= !$characters.dom.quests.accepted_deal ? 1 : 0.5>>
+		<<set _chanceLife = 100 - _chanceDeath>>
+		<<set _chanceMoney = 0.5 * _chanceLife>>
+		<<set _money =  (_statsNpc.gender == 0 ? 6 : _statsNpc.gender == 2 ? 4 : 2)>>
+		<<set _money *= (_statsNpc.traits ?? []).includes('nymphomaniac') ? 2 : 1>>
+		<<set _money +=
+	 		Math.round((_statsNpc.sub ?? 0)/25) +
+	 		Math.round((_statsNpc.beauty ?? 0)/25) +
+			Math.round((_statsNpc.pussy ?? 0)/25) +
+			Math.round((_statsNpc.anal ?? 0)/25)>>
+		<<if _statsNpc.chastityBelt>>
+			<<set _money = Math.max(1, _money / 3)>>
+		<</if>>
+		<<set _money = parseInt(_money)>>
+		<<set _money = Math.round(_money*(100-_percentTaxStreet)/100)>>
+
+		<<set _settlementStatsData.streets += _money * _chanceMoney/100>>
+		<<set _settlementStatsData.streets_die += _chanceDeath>>
+	<<elseif _job === 'nightclub'>>
+		<<set _money =  (_statsNpc.gender == 0 ? 7 : _statsNpc.gender == 2 ? 5 : 3)>>
+		<<set _money *= (_statsNpc.traits ?? []).includes('nymphomaniac') ? 2 : 1>>
+		<<set _chanceMoney = 100>>
+		<<set _money += Math.round((_statsNpc.sub ?? 0)/25)>>
+		<<set _money = parseInt(_money)>>
+		<<set _money = Math.round(_money*(100-_percentTaxNightclub)/100)>>
+
+		<<set _settlementStatsData.nightclub += _money>>
+	<<elseif _job === 'quarry'>>
+		<<set _settlementStatsData.mining += 1 + (_statsNpc.strength >= 50 ? 0.25 : 0)>>
+	<</if>>
+	<<if  setup.getAge(_statsNpc) > 3>>
+		<<set _settlementStatsData.food.consume++>>
+	<<else>>
+		<<set _settlementStatsData.food.none++>>
+	<</if>>
+	<<if _statsNpc.birthDate.getDate() == $gameDate.getDate() && _statsNpc.birthDate.getMonth() == $gameDate.getMonth()>>
+		<<set _settlementStatsData.birthday.push(_statsNpc.name)>>
+	<</if>>
+<</for>>
+
+<<set _happiness = {
+	happy: Math.round(_settlementStatsData.happy / _settlementStatsData.settlers, 0)
+}>>
+
+<<set _basementLimit = (($basementLimit ?? 3) - ($slaves ?? []).length)>>
+<<set _basementBuild = (30 - ($basementLimit ?? 3))>>
+<<set _basementText = '(' + (_basementLimit > 0 ? _basementLimit : 'No') + ' free cells; ' + 
+	(_basementBuild > 0 ? 'Can build ' + _basementBuild + ' more' : 'Fully built') + ')'>>
+
+<<set _guesthouseLimit = (($guesthouseLimit ?? 3) - ($guests ?? []).length)>>
+<<set _guesthouseBuild = (25 - ($guesthouseLimit ?? 3))>>
+<<if ($game.location.guesthouse ?? false)>>
+	<<set _guesthouseText = '(' + (_guesthouseLimit > 0 ? _guesthouseLimit : 'No') + ' free beds; ' + 
+		(_guesthouseBuild > 0 ? 'Can build ' + _guesthouseBuild + ' more' : 'Fully built') + ')'>>
+<<else>>
+	<<set _guesthouseText = '(Build guest house first with room for up to 25 guests)'>>
+<</if>>
+<<if ($game.location.nursery ?? false)>>
+	<<set _nurseryText = '(No limits, always room for more kids. This is a Hilbert nursery .... with ∞ space)'>>
+<<else>>
+	<<set _nurseryText = '(Build nursery first with room for up to ∞ kids)'>>
+<</if>>
+
+<<set _avgFoodProduce =     _settlementStatsData.food.produce/3>>
+<<set _avgFoodConsume = 1 + _settlementStatsData.food.consume/3>>
+<<set _forestFood = (_settlementStatsData.work.forest ?? 0)/10>>
+<<set _forestText =  _forestFood > 0 ? ' + forest ' +  setup.ppFraction(_forestFood) : ''>>
+<<set _huntFood =  _settlementStatsData.hunt.food>>
+<<set _huntText =  _huntFood > 0 ? ' + hunters ' +  setup.ppFraction(_huntFood) : ''>>
+<<set _avgFoodNet = _avgFoodProduce + _forestFood + _huntFood - _avgFoodConsume>>
+
+<<set _pre = '', _post = ''>>
+<<if _avgFoodNet < -1/6>>
+	<<set _pre = '<span style="color: red; font-weight: bold">', _post = '</span>'>>
+<<elseif  _avgFoodNet > 1/6>>
+	<<set _pre = '<span style="color: green; font-weight: bold">+', _post = '</span>'>>	
+<<else>>
+	<<set _pre = '<span style="color: yellow; font-weight: bold">±', _post = '</span>'>>	
+<</if>>
+<<set _avgFoodText = '(Average food/day: + ' +  _garden + ' makes ' + setup.ppFraction(_avgFoodProduce) +  _forestText + _huntText +
+	' - people eats '                                     + setup.ppFraction(_avgFoodConsume) +  
+	' = net result '                               + _pre + setup.ppFraction(_avgFoodNet) + _post +')'>>
+<<set _wood =  _settlementStatsData.wood>>
+<<set _avgWood = _wood > 0 ? 'Average production wood/day: ' + _wood : ''>>
+<<set _wolf = _settlementStatsData.hunt.wolf.toFixed(1)>>
+<<set _avgWolf = _wolf > 0 ? 'Average production wolf pelts/day: ' + _wolf : ''>>
+<<set _scav = _settlementStatsData.scav.toFixed(1)>>
+<<set _avgScav = _scav > 0 ? 'Average findings of "stuff"/day: ' + _scav : ''>>
+<<set _streets =  _settlementStatsData.streets.toFixed(1)>>
+<<set _streets_die = _settlementStatsData.streets_die>>
+<<set _streets_die_fraction = setup.ppFraction(_streets_die, 2)>>
+<<set _streetsText =  (_streets > 0 ? 'Average earnings/day: ' + _streets : '') + (_streets_die > 0 ? '; Average deaths/day: ' + _streets_die_fraction + ' %': '')>>
+<<set _nightclub = _settlementStatsData.nightclub.toFixed(1)>>
+<<set _nightclubText = (!$player?.quests?.gloryholeJob ? '(Make a deal with the glory hole manager first)' : '') + (_nightclub > 0 ? 'Average earnings/day: ' + _nightclub : '')>>
+
+<table class="mc-stats-table">
+	<tr><th colspan="3">Living</th></tr>
+	<tr><td>Slaves:</td><td><<=($slaves ?? []).length>></td><td><<=_basementText>></td></tr>
+	<tr><td>Guests:</td><td><<=($guests ?? []).length>></td><td><<=_guesthouseText>></td></tr>
+	<tr><td>Nursery:</td><td><<=($nursery ?? []).length>></td><td><<=_nurseryText>></td></tr>
+	<tr><td>Total (people ≥ 3 years)</td><td><<=_settlementStatsData.food.consume>></td><td><<=_avgFoodText>></td></tr>
+	<tr><td>(kids < 3 years)</td><td><<=_settlementStatsData.food.none>></td></tr>
+	<tr><td>&nbsp;</td><td> </td></tr>
+	<tr><th colspan="3">Working</th></tr>
+	<tr><td>Working in <<=_garden>>:</td><td><<=_settlementStatsData.work.garden ?? 0>></td><td>(Max <<=($workersLimitGarden ?? 8)>>)</td></tr>
+	<tr><td>Working in scavenging:</td><td><<=_settlementStatsData.work.scavenging ?? 0>></td><td><<=_avgScav>></td></tr>
+	<tr><td>Working on streets:</td><td><<=_settlementStatsData.work.streets ?? 0>></td><td><<=_streetsText>></td></tr>
+	<tr><td>Working in nightclub:</td><td><<=_settlementStatsData.work.nightclub ?? 0>></td><td><<=_nightclubText>></td></tr>
+	<tr><td>Working in forest:</td><td><<=_settlementStatsData.work.forest ?? 0>></td><td><<=_avgWood>></td></tr>
+	<tr><td>Working as hunter:</td><td><<=_settlementStatsData.work.hunter ?? 0>></td><td>(Max <<=($workersLimitHunter ?? 8)>>) <<=_avgWolf>></td></tr>
+	<tr><td>Working as guard:</td><td><<=_settlementStatsData.work.guard ?? 0>></td></tr>
+	<tr><td>Working as companion (guests+slaves):</td>
+		<td><<=_settlementStatsData.work.companionGuest ?? 0>>+<<=_settlementStatsData.work.companionSlave ?? 0>></td>
+		<td>(Max 6)</td>
+	</tr>
+	<tr><td>Working in kitchen:</td><td><<=_settlementStatsData.work.kitchen ?? 0>></td><td>(Max 1)</td></tr>
+	<tr><td>Working as maid:</td><td><<=_settlementStatsData.work.maid ?? 0>></td><td>(Max 1)</td></tr>
+	<tr><td>Working as mistress:</td><td><<=_settlementStatsData.work.mistress ?? 0>></td><td>(Max 1)</td></tr>
+	<tr><td>Working in shop:</td><td><<=_settlementStatsData.work.shop ?? 0>></td><td>(Max 1)</td></tr>
+	<tr><td>Working as teacher:</td><td><<=_settlementStatsData.work.teacher ?? 0>></td><td>(Max 0)(No use yet) <span style="color: yellow">[Not in game yet!]</span></td></tr>
+	<tr><td>Mechanic in garage:</td><td><<=_settlementStatsData.work.garage ?? 0>></td><td>(Max 1)(No use yet)</td></tr>
+
+	<<set _text = !$backpack.has('blueprint_library') ? '(Explore to find blueprint → build)' : 
+			!$game.location.library ? '(Build the library)' : '(Max 0)(No use yet)<span style="color: yellow">[Not in game yet!]</span>' >>
+	<tr><td>Working in library:</td><td><<=_settlementStatsData.work.library ?? 0>></td><td><<=_text>></td></tr>
+
+	<<set   _text = !$game.location.quarry ?  '(Explore to find quarry)' : 'Average mining/day <<=_settlementStatsData.mining>> coal/stone'>>
+	<tr><td>Working in quarry:</td><td><<=_settlementStatsData.work.quarry ?? 0>></td><td><<=_text>></td></tr>
+
+	<<if !$player.quests?.base_building>>
+		<tr><td>Base management</td><td></td><td><span style="color: blue">[Will appear later in your game!]</span> (Place reserved for hospital & milk barn & more...)</td></tr>
+	<</if>>
+	<<if $player.quests.base_building>>
+		<<set _text = !$player.quests.found_hospital_blueprint ? '(Explore to find blueprint → build → assign doctors)' : 
+			!$game.location.hospital ? '(Build the hospital → assign a doctor)' : '(Max ' + ($workersLimitHospital ?? 3) + ')' >>
+		<tr><td>Doctors in hospital:</td><td><<=_settlementStatsData.work.hospital ?? 0>></td><td><<=_text>></td></tr>
+
+		<<set _text = !$player.quests?.milk_farm ? '(Vincent have an idea → build milk barn → assign dairy cattle)' : !$game.location?.milk_barn ? '(Build milk barn → assign dairy cattle)' : !_settlementStatsData.work?.milk_barn ? '(Assign dairy cattle)' : '(Average milk/day: ' + setup.ppFraction(_settlementStatsData.milk) + ')'>>
+		<tr><td>Dairy cattle in milk barn:</td><td><<=_settlementStatsData.work.milk_barn ?? 0>></td><td><<=_text>></td></tr>
+	<</if>>
+
+	<tr><td>Unassigned:</td><td><<=_settlementStatsData.work.none ?? 0>></td></tr>
+	<tr><td>Being a child:</td><td><<=_settlementStatsData.work.child ?? 0>></td></tr>
+	<tr><td>&nbsp;</td><td> </td></tr>
+	<tr><th colspan="3">Interesting?</th></tr>
+	<tr><td># pregnant women</td><td><<=_settlementStatsData.pregnant ?? 0>></td>
+		<td>
+			<<if _settlementStatsData.pregnant>>
+				<<set _towelsHave = setup.cabinInventory.count('towel')>>
+				<<set _towelsNeed = 5*_settlementStatsData.pregnant>>
+				<<set _towelsNet  = _towelsHave - _towelsNeed>>
+				<<if setup.hasWorkingHospital()>>
+					(You have hospital with doctor! The best chances for a successful birth.)
+				<<elseif _towelsNet >= 0>>
+					(Without a hospital doctors and towels makes births safer; You have enough towels for all births!)
+				<<else>>
+					(Without a hospital doctors and towels makes births safer; You don't have enough towels for all births:
+					 + Have <<=_towelsHave>> - need <<=_towelsNeed>> = deficit <span style="color: red; font-weight: bold"><<=_towelsNet>></span>)	
+				<</if>>
+				/* <span style="color: yellow">[writer todo - check how 'hospital' infects these texts!]</span> */
+			<</if>>
+		</td>
+	</tr>
+	<tr><td>&nbsp;</td><td> </td></tr>
+	<tr><td>Average happiness:</td><td><<happyIcon _happiness>></td>
+		<td>(
+			<<for _happyLevel, _count range _settlementStatsData.happylvl>>
+				<<happyIcon _happyLevel>> <<=_count>>, 
+			<</for>>
+		)
+		</td>
+	</tr>
+	<<if _settlementStatsData.birthday.length>>
+		<tr>
+			<td>Today's birthdays:</td>
+			<td></td>
+			<td><<=_settlementStatsData.birthday.join('<br/>')>></td>
+		</tr>
+	<</if>>
+	<tr><td>&nbsp;</td><td> </td></tr>
+
+	/*
+		base management -> 
+		$player.quests.base_building
+	 */
+
+	<<if ($player.horse ?? false)>>
+		<tr><th colspan="3">Horsing</th></tr>
+		<tr><td colspan="2">Your horse <<=$player.horse>> </td><td>have enough hay for <<=setup.cabinInventory.count('hay')>> days</td></tr>
+	<</if>>
+</table>

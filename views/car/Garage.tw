@@ -1,5 +1,17 @@
-:: Garage [Place]
+:: Garage [Place bg-garage]
 <h1 class="ptitle">GARAGE</h1>
+<<set $player.car??={
+    has: true,
+    health: 0,
+    fuel: 0
+}>>
+
+<<set _mechanicList = setup.getPersonsForLocation($guests, 'garage')>>
+<<unset $tmpGirl>>
+<<if _mechanicList.length && timeBetween('10:00', '18:00')>>
+    <<set $tmpGirl = $guests[_mechanicList[0]]>>
+	<<set $tmpGirl.location = 'car'>>
+<</if>>
 <br />
     <fieldset>
         <legend>
@@ -7,28 +19,89 @@
         </legend>
         <table>
             <tr>
-                <td>Damaged:</td><td><<=$player?.car?.damaged ?? 100>>%</td>
+                <td>Damaged:</td>
+                <td><<= 100 - $player.car.health>>%</td>
+                <td>
+                    <<if setup.cabinInventory.has('car_part') && $player.car.health < 100>>
+                        <<link 'Fix'>>
+                            <<set $player.car.health = Math.min($player.car.health + 20, 100)>>
+                            <<addmins 30>>
+                            <<run setup.cabinInventory.drop('car_part', 1)>>
+                            <<goto `passage()`>>
+                        <</link>>
+                    <</if>>
+                </td>
             </tr>
             <tr>
-                <td>Fuel:</td><td><<=$player?.car?.fuel ?? 0>>%</td>
-            </tr>
-            <tr>
-                <td>Parts missing:</td><td><<=$player?.car?.parts ?? 5>></td>
+                <td>Fuel:</td>
+                <td><<=$player.car.fuel>>%</td>
+                <td>
+                    <<if setup.cabinInventory.has('fuel') && $player.car.fuel < 100>>
+                        <<link 'Fill up'>>
+                            <<set $player.car.fuel = Math.min($player.car.fuel + 20, 100)>>
+                            <<addmins 5>>
+                            <<run setup.cabinInventory.drop('fuel', 1)>>
+                            <<goto `passage()`>>
+                        <</link>>
+                    <</if>>
+                </td>
             </tr>
         </table>
     </fieldset>
     <br />
-    <<warning 'End of content'>>
+    <<if !$player.car.explore && !$characters.vincent.quests.car_fixed && $player.car.fuel === 100 && $player.car.health === 100>>
+        <<goto 'Vincent quest - Car finished. First explore'>>
+    <</if>>
+    <div class="menu-grid">
+        <<set _props = {
+            fuel: 20,
+            disabled: $player.car.fuel < 20
+        }>>
+        <<if $player.car.explore>>
+            <<set _isDisabled = (!timeBetween('08:00', '20:00') || $player.car.fuel < 20 || $player.car.health < 20 ? 60 : 4)>>
+            <<grid garage explore 'Car - Explore' Explore 30 _isDisabled null _props>>
+        <</if>>
+        <<if ($game.location.car_stadium ?? false)>>
+            <<set _isDisabled = (!timeBetween('08:00', '16:00') || $player.car.fuel < 20 || $player.car.health < 20 ? 60 : 4)>>
+            <<grid garage race_stadium 'Car - Race stadium' 'Race stadium' 30 _isDisabled null _props>>
+        <</if>>
+    </div>
 <br /><br />
+<<if $tmpGirl && !$tmpGirl.gender>>
+    <center>
+        <<actionImage $tmpGirl 'fix'>>
+    </center>
+    <<=setup.displayName($tmpGirl)>> is working on your car.
+    <br /><br />
+    <<set _linkName = 'Approach ' + $tmpGirl.name>>
+    <<link _linkName>>
+        <<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<set $tmpGirlBack = 'Garage'>>
+		<<set $tmpGirl.rape to false>>
+		<<set $tmpGirlCapture to false>> 
+		<<set $tmpGirlInvite to false>>
+		<<set $guestId = _mechanicList[0]>>
+		<<run delete $slaveId, $charId, $childId>>
+        <<if recall($suppCode) && !($locationEvents.garage ?? false)>>
+            <<goto 'Garage - help mechanic'>>
+        <<else>>
+		    <<goto 'NPC view - guest'>>
+        <</if>>
+    <</link>>
+<</if>>
 <<link 'Leave'>>
     <<goto 'Wood cabin'>>
 <</link>>
 <<if !$player.quests.garage_first>>
     <<set $player.quests.garage_first = true>>
+    <<set $locationEvents.garage = true>>
     <<goto 'Car - first event'>>
+<<elseif $player?.quests?.race_first && !$player?.quests?.car_modified && $tmpGirl>>
+    <<goto 'Car - after first race'>>
+    <<set $locationEvents.garage = true>>
 <</if>>
 <<if !($locationEvents.garage ?? false)>>
-    <<if setup.percentageChance(10) >>
+    <<if setup.percentageChance(5) >>
         <<set $locationEvents.garage = true>>
         <<goto 'Car - repair fuck'>>
     <</if>>

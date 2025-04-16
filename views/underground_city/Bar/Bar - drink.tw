@@ -1,0 +1,28 @@
+:: Bar - drink [bg-underground] {"position":"2505,1941","size":"100,100"}
+<<addmins 15>>
+<<set $player = setup.drink($player)>>
+<<if $player.drunk > 75>>
+	<<perkAdd 'drunk'>>
+<</if>>
+
+<h1 class="ptitle">BAR</h1>
+<center>
+	[img[setup.ImagePath+'places/bar/drink.webp']]
+</center>
+<br /><br />
+You order a beer at the bar and start drinking it.
+<br /><br />
+
+<<if $game.day > 150 && $player.reputation > 150 && !($locationEvents.bar ?? false) && setup.percentageChance(5)>>
+	<<goto 'Bar - A strange offer'>>
+	<<set $locationEvents.bar = true>>
+<<elseif !($locationEvents.bar ?? false) && setup.percentageChance(5)>>
+	<<set $locationEvents.bar = true>>
+	<<goto 'Bar - girl in danger'>>
+<<elseif randomInteger(1,5) === 1>>
+	<<goto 'Bar - random event #1'>>
+<</if>>
+
+[[Continue|Bar]]
+
+

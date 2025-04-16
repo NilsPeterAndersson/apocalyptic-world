@@ -6,7 +6,7 @@
 [img[setup.ImagePath+'places/settlement/rodger_book_house.jpg']]
 </center>
 <br /><br />
-After few more hour of walk you finally reached an old house. You went in and Even instantly went upstairs as she would know where was it. 
+After few more hour of walk you finally reached an old house. You went in and Eve instantly went upstairs as she would know where was it. 
 <br />
 You follow her and without a surprise - she found it very quickly. 
 <br /><br />
@@ -26,6 +26,9 @@ You picked up the book and read the title "<strong>Book of Knowledge</strong>"
 <br /><br />
 <<set $characters.eve.relationship++>>
 <strong>Relationship with Eve increased by 1</strong>
+<<set $characters.rodger.relationship++>>
+<br />
+<strong>Relationship with Rodger increased by 1</strong>
 <br /><br />
 <<link 'Go back to the settlement'>>
 	<<goto 'Settlement'>>

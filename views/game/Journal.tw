@@ -48,8 +48,10 @@
 			Talk with Vincent in the farm
 		<<elseif ($game.location.shop ?? false) && $characters.vincent.quests.shop_talk && !$characters.vincent.quests.sanctuary_car_talk>>
 			Talk with Vincent in the farm
-		<<elseif $characters.vincent.quests.sanctuary_car_talk && !$characters.vincent.quests.sanctuary_car_talk_done && !($game.location.garage ?? false)>>
-			Go with your companions to Vincent farm (Need 4 with strength 40+)
+		<<elseif $characters.vincent.quests.sanctuary_car_talk && !($game.location.garage ?? false)>>
+			Go with your companions to Vincent farm (Need 4 guests with strength 40+)
+		<<elseif ($game.location.garage ?? false) && !$characters.vincent.quests.military_base>>
+			Wait few days
 		<<else>>
 			That's all for now
 		<</if>>
@@ -64,8 +66,6 @@
 			Talk with Vicent about wanted poster<br />
 		<<elseif $characters.blair.relationship < 15>>
 			Increase relationship by talking with her in kitchen or bedroom (15)<br />
-		<<elseif ($game.location.streets ?? false) && !$characters.vincent.wanted_poster>>
-			Talk with Vicent about wanted poster<br />
 		<<elseif $characters.blair.relationship < 20 && !($game.location.bar ?? false)>>
 			Increase relationship by talking with her in kitchen or bedroom (20)<br />
 		<<elseif !($game.location.bar ?? false)>>
@@ -133,7 +133,15 @@
 		<<elseif ($game.location.settlement_shop ?? false) && !$characters.rodger.quests.horse>>
 			Talk with him in the church
 		<<elseif $characters.rodger.quests.horse && !$characters.rodger.quests.faith>>
-			Go to the Rodger's settlement
+			<<if $game.day < 80>>
+				Continue living for a while (reach 80 days)
+			<<else>>
+				Go to the Rodger's settlement
+			<</if>>
+		<<elseif !$characters.rodger.quests.cheat>>
+			Increase Eve corruption to 30 and visit talk to Rodger after 120 days
+		<<elseif !$characters.rodger.quests.eve_pregnant>>
+			Wait two weeks and then visit Settlement.
 		<<else>>
 			That's all for now
 		<</if>>
@@ -149,7 +157,7 @@
 		<</if>>
 	<<elseif $characters.dom.quests.accepted_deal>>
 		<<if !$characters.dom.quests.quest1>>
-			Wait for a few days until some of Dom's men find you.	
+			Wait for a few days until some of Dom's men find you. (Visit underground city streets)	
 		<<elseif $characters.dom.quests.quest1 && !$characters.dom.quests.quest1_done>>
 			Get 10 bottles of champagne for Dom
 		<<elseif !$characters.dom.quests.quest2>>
@@ -165,21 +173,53 @@
 				Meet Dom in streets
 			<</if>>
 		<<elseif !$characters.dom.quests.quest4>>
-			<<if ($characters.dom.quests.quest3_end_day + 10) >= $game.day>>
+			<<if ($characters.dom.quests.quest3_done_day + 10) >= $game.day>>
 				Wait few days
 			<<else>>
 				Go to the nightclub
 			<</if>>
 		<<elseif !$characters.dom.quests.quest5>>
-			<<if ($characters.dom.quests.quest4_end_day + 10) >= $game.day>>
+			<<if ($characters.dom.quests.quest4_done_day + 10) >= $game.day>>
 				Wait few days
 			<<else>>
 				Go to the streets
 			<</if>>
+		<<elseif $characters.dom.quests.quest5 && !isMetChar('negan')>>
+			Go to The Sanctuary and meet with Negan
+		<<elseif !$characters.negan.quests.quest2>>
+			Progress Negan story
+		<<elseif $characters.negan.quests.quest2 && !$characters.dom.quests.quest6>>
+			Go to underground city and bring fuel to Isabel
+		<<elseif $characters.dom.quests.quest6 && !$characters.dom.quests.isabel_beg>>
+			Go to underground city to the streets
+		<<elseif $characters.dom.quests.isabel_beg && !$characters.dom.quests.isabel_beg_fuel>>
+			<<if ($characters.dom.quests.isabel_beg_day + 5) > $game.day>>
+				Wait few days
+			<<else>>
+				Bring 10 fuel cans to Isabel (Streets)
+			<</if>>
+		<<elseif $characters.isabel.quests.temp_home & !$characters.isabel.quests.check_city>>
+			Wait two weeks and visit Isabel in her room
+		<<elseif $characters.isabel.quests.check_city && !$characters.isabel.quests.pregnant>>
+			<<if typeof $characters.isabel.pregnancy === 'undefined' || $characters.isabel.pregnancy < 10>>
+				Get Isabel pregnant
+			<<else>>
+				Go to Isabel's room
+			<</if>>
+		<<elseif $characters.isabel.quests.pregnant && !$characters.isabel.quests.dom_return>>
+			Wait few days
+		<<elseif $characters.isabel.quests.dom_return && !$characters.dom.quests.return_city1>>
+			Wait few days (15) and then visit underground city
+		<<elseif $characters.dom.quests.return_city1 && !$characters.dom.quests.return_city_done>>
+			Prepare for fight and visit underground city
+		<<elseif $characters.dom.quests.return_city_done && !$characters.dom.quests.return_city_done1>>
+			Visit Dom's office after few days
+		<<elseif $characters.dom.quests.return_city_done1 && !$characters.dom.quests.return_city_done2>>
+			Visit Dom's office after few days
 		<<else>>
 			That's all for now
 		<</if>>
-	<<else>>
+	<<else>> 
 		That's all for now
 	<</if>>
 
@@ -200,6 +240,30 @@
 			<<else>>
 				Go to her camp.
 			<</if>>
+		<<elseif !$characters.octavia.quests.kidnapped>>
+			<<if $characters.octavia.relationship < 50>>
+				Increase relationship.
+			<<else>>
+				Go to her camp.
+			<</if>>
+		<<elseif !$characters.octavia.quests.kidnapped_found>>
+			<<if $backpack.count('tribe_medallion') < 3>>
+				Get more tribe medallions (3)
+			<<else>>
+				Go to her camp. Need at least 6 companions.
+			<</if>>
+		<<elseif !$characters.octavia.quests.betrayal>>
+			Wait when Octavia will visit you.
+		<<elseif !$characters.octavia.quests.betrayal2>>
+			Wait when Octavia will visit you.
+		<<elseif !$characters.octavia.quests.next_move>>
+			Wait when Octavia will visit you.
+		<<elseif !$characters.octavia.quests.new_plan>>
+			Wait few days and visit Octavia in her room
+		<<elseif !$characters.octavia.quests.new_plan2>>
+			Talk with her in her room
+		<<elseif !$characters.octavia.quests.new_plan3>> $characters.octavia.quests.new_plan3
+			Talk with her in her room next day
 		<<else>>
 			That's all for now
 		<</if>>
@@ -228,6 +292,40 @@
 		<</if>>
 	<<else>>
 		Get to day 200
+	<</if>>
+
+	<h2>Negan</h2>
+	<<if isMetChar('negan') >>
+		<<if !$characters.negan.quests.quest1 && $characters?.dom?.quests?.quest5>>
+			Bring four slaves to him. (Blondes and 80+ beauty)
+		<<elseif !$characters.negan.quests.quest2 && $characters?.dom?.quests?.quest5>>
+			Bring four girls (80+ beauty and blonds) to Negan. (As companions)
+		<<elseif $characters.negan.quests.quest2 && !$characters.negan.quests.quest3>>
+			Bring Negan twice 2 slaves and then visit his office. (80+ beauty and blonds)
+		<<elseif $characters.negan.quests.quest3 && !$characters.negan.quests.quest4>>
+			Wait few days and visit his office
+		<<elseif $characters.negan.quests.quest4 && !$characters.negan.quests.quest5>>
+			Wait few days and visit his office
+		<<else>>
+			That's all for now
+		<</if>>
+	<<else>>
+		Progress with Dom story.
+	<</if>>
+
+	<h2>Boris</h2>
+	<<if isMetChar('boris')>>
+		<<if !$characters.boris.quests.shop>>
+			Increase your fighter rank (95)
+		<<elseif !$characters.boris.quests.fight1>>
+			Increase your fighter rank and win your next rival
+		<<elseif !$characters.boris.quests.fight2>>
+			Increase your fighter rank and win your next rival
+		<<else>>
+			That's all for now
+		<</if>>
+	<<else>>
+		Train yourself in underground city (Reach 30 strength) 
 	<</if>>
 
 </div>

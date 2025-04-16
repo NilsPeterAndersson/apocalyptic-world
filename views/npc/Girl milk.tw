@@ -1,20 +1,31 @@
 :: Girl milk [sex] {"position":"2512,335","size":"100,100"}
-<<energy -30>>
+<<energy -10>>
 <<addmins 15>>
 <<set $tmpGirl.milked = true>>
+<center>
+	<<actionImage $tmpGirl 'milking'>>
+</center>
+<br /><br />
+<<if $tmpGirl.location == 'basement'>>
+	<<=setup.displayName($tmpGirl)>> moans as you milk her.
+<<else>>
+	You attach breast pump to <<=setup.displayName($tmpGirl)>>'s nipples and start to milk her. 
+<</if>> 
+<<set $tmpGirl.quests ??= {}>>
+<<set $tmpGirl.quests.lastInteractionDay = $game.day>>
+<br /><br />
+<<if $tmpGirl.relationship < 100>>
+	<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 3, 100)>>
+	<strong><<=$tmpGirl.name>> relationship increased by 3</strong>
+	<br /><br />
+<</if>>
 <<if randomInteger(0, 3) === 0>>
 	<<pickup $backpack 'milk' 1>>
 	<strong>You managed to get one bottle of milk.</strong>
+	<br /><br />
 <</if>>
-<center>
-	[img[setup.ImagePath+'places/basement/milk.webp']]
-</center>
-<br /><br />
-<<print $tmpGirl.name>> moans as you milk her. 
-<br /><br />
-<<set $tmpGirl.relationship += 3>>
-<strong><<=$tmpGirl.name>> relationship increased by 3</strong>
-<br /><br />
-[[Back|Girl view]]
+<<link 'Back'>>
+	<<goto $tmpGirlViewBack>>
+<</link>>
 
 

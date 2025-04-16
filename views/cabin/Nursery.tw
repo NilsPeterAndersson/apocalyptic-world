@@ -1,29 +1,55 @@
-:: Nursery [Place] {"position":"1346,773","size":"100,100"}
-<h1 class="ptitle">NURSERY</h1>
-<div id="place-head">
-[img[setup.ImagePath+'places/cabin/guesthouse_head.jpg']]
-</div>
-<h3>Kids</h3>
+:: Nursery [Place bg-nursery] {"position":"1346,773","size":"100,100"}
+<h1 class="ptitle">
+	<<backButton 'Youth district'>>		
+	NURSERY
+</h1>
+
+<<set _sleepingChance = 0>>
+<<if timeBetween('20:00', '23:00')>>
+	<<set _sleepingChance = 40>>
+<<elseif timeBetween('23:00', '23:59')>>
+	<<set _sleepingChance = 70>>
+<<elseif timeBetween('23:59', '01:00')>>
+	<<set _sleepingChance = 100>>
+<<elseif timeBetween('01:00', '02:00')>>
+	<<set _sleepingChance = 100>>
+<</if>>
 
 <<if ($nursery ?? []).length < 1>>
 	<div style="margin-top: 20px;">
 		Noone is living here...
 	</div>
 <<else>>
-	<table id="slaves">
+	<table id="slaves" class="npc-list">
 	<<for _nurseryI, _nursery range $nursery>>
 		<<capture _nurseryI, _nursery>>
 			<<set _genderClass = 'gender-' + setup.genderClass(_nursery)>>
-			<tr>
+			<<if setup.percentageChance(_sleepingChance)>>
+				<<set _nursery.sleeping = true>>
+			<</if>>
+			<<set _customColorStyle = ''>>
+			<<if typeof _nursery.color !== 'undefined' >>
+				<<set _customColorStyle = ' npc-color color-' + _nursery.color >>
+			<</if>>
+			<tr class="item">
 				<td style="width: 300px">
-					<span @class="''+_genderClass+''">
-						<<link _nursery.name>>
-							<<set $childId = _nurseryI>>
-							<<set $tmpGirl = _nursery>>
-							<<set $tmpGirlBack = 'Nursery'>>
-							<<goto 'Child view'>>
-						<</link>>
+					<<set _motherNpc = ''>>
+					<<if (_nursery.family ?? false) && (_nursery.family.mother ?? false)>>
+						<<set _motherNpc = setup.getNpcById(_nursery.family.mother)>>
+					<</if>>
+					<span @class="_genderClass + _customColorStyle">
+						<span data-balloon-length="medium" @aria-label="Mother: '' + (_motherNpc ? _motherNpc.name : '????') + ''" data-balloon-pos="up-left">
+							<<link _nursery.name>>
+								<<unset $guestId, $charId, $slaveId>>
+								<<set $childId = _nurseryI>>
+								<<set $tmpGirl = _nursery>>
+								<<set $tmpGirlBack = 'Nursery'>>
+								<<set $tmpGirlViewBack = 'Child view'>>
+								<<goto 'Child view'>>
+							<</link>>
+						</span>
 					</span>
+					<<=setup.npcListInfo(_nursery)>>
 				</td>
 				<td>
 					Age: <<=setup.getAge(_nursery)>>
@@ -47,6 +73,6 @@
 	</table>
 <</if>>
 
-[[Back|Wood cabin]]
+[[Back|Youth district]]
 
 

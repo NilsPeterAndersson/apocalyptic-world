@@ -1,0 +1,179 @@
+:: Fight - won {"position":"3381,858","size":"100,100"}
+<h1 class="ptitle">FIGHT</h1>
+<center>
+	[img[setup.ImagePath+'places/fight/won.webp']]
+</center>
+<br /><br />
+You <strong><<=($fight.hp < 20 ? 'barely' : 'easily')>></strong> won the fight and manage to drop them all on the ground.
+<br /><br />
+
+<<set $fight.enemiesAlive = false>>
+<<set $fight.enemiesCaptured = 0>>
+<<set _enemiesWithAction = 0>>
+<<for _i to 0; _i lt $fight.defeatedEnemies.length; _i++>>
+	<<capture _i>>
+		<<if !setup.fightIsKilled($fight.defeatedEnemies[_i])>>
+			<<set $fight.enemiesAlive = true>>
+		<<else>>
+			<<set $fight.defeatedEnemies[_i].killed = true>>
+		<</if>>
+		<<if $fight.defeatedEnemies[_i].captured>>
+			<<set $fight.enemiesCaptured++>>
+		<</if>>
+
+		<<if $fight.killAll && !$fight.defeatedEnemies[_i].captured>>
+			<<set $fight.defeatedEnemies[_i].killed = true>>
+		<</if>>
+
+		<<if $fight.captureAll && !$fight.defeatedEnemies[_i].killed>>
+			<<set $fight.defeatedEnemies[_i].captured = true>>
+		<</if>>
+
+		<<if !$fight.defeatedEnemies[_i].killed && !$fight.defeatedEnemies[_i].captured>>
+			<<set _enemiesWithAction++>>
+		<</if>>
+	<</capture>>
+<</for>>
+<<run delete $fight.killAll>>
+
+<<if !$fight.reward>>
+	<<if $player.strength < 100>>
+		<<set $player.strength++>>
+		<strong>Your strength increased by 1</strong>
+		<br /><br />
+	<</if>>
+	<<if $fight.allies.length > 0>>
+		<<for _fightAllyI, _fightAlly range $fight.allies>>
+			<<set _guestKey = _fightAlly.key.split(':')[1]>>
+			<<if $guests[_guestKey].strength < 100>>
+				<<set $guests[_guestKey].strength++>>
+				<strong><<=$guests[_guestKey].name>> strength increased by 1</strong><br />
+			<</if>>
+		<</for>>
+		<br />
+	<</if>>
+	
+	<<set $fight.gotCaps = randomInteger(5, 10)>>
+	<<set $player.money += $fight.gotCaps>>
+	You got <strong><<=$fight.gotCaps>></strong> caps.
+	<br /><br />
+	<<set $fight.reward = true>>
+	
+	<<for _i, _enemy range $fight.defeatedEnemies>>
+		<<capture _i>>
+			<<if Object.keys(_enemy.inventory ?? {}).length>>
+				<<for _enemyInventory, _enemyInventoryCount range _enemy.inventory>>
+					<<pickup $backpack _enemyInventory _enemyInventoryCount>>
+					<div>
+						You picked up <strong><<=Item.get(_enemyInventory).name>></strong> from <strong><<=_enemy.name>></strong>
+					</div>
+				<</for>>
+				<<run delete _enemy.inventory>>
+				<br /><br />
+			<</if>>
+		<</capture>>
+	<</for>>
+	
+	<<if $fight.public>>
+	  	<<set $player.reputation++>>
+	  	<strong>Someone saw your fight. Your reputation increased by 1</strong>
+		<br /><br />
+	<</if>>
+
+	<<if $fight.arrowsOnGround>>
+		<strong>You picked up <<=$fight.arrowsOnGround>> arrow<<=($fight.arrowsOnGround > 1 ? 's' : '')>> from the ground</strong>
+		<br /><br />
+	<</if>>
+<</if>>
+<<if !$fight.enemiesAlive>>
+	<strong>You look at them and noone of them is breathing. All of them are dead.</strong>
+<<else>>
+	<strong>You look down at <<=($fight.defeatedEnemies.length > 1 ? 'their' : ($fight.defeatedEnemies[0].gender ? 'his' : 'her'))>> <<=($fight.defeatedEnemies.length > 1 ? 'bodies' : 'body')>>, 
+	lying on the floor and you're deciding...</strong>
+	<<if _enemiesWithAction > 1>>
+		<br />
+		<span class="no-style">
+			<<link 'Kill them all'>>
+				<<set $fight.killAll = true>>
+				<<set $player.goodwill -= (_enemiesWithAction * 2)>>
+				<<goto 'Fight - won'>>
+			<</link>>
+		</span>
+		<<if (($game.location.basement ?? false) && ($slaves.length + _enemiesWithAction) <= $basementLimit)>>
+		 | 
+			<span class="no-style">
+				<<link 'Capture them all'>>
+					<<set $fight.captureAll = true>>
+					<<set $player.goodwill -= _enemiesWithAction>>
+					<<goto 'Fight - won'>>
+				<</link>>
+			</span>
+		<</if>>
+	<</if>>
+	<table id="fight-table">
+	  <<for _i to 0; _i lt $fight.defeatedEnemies.length; _i++>>
+		  <<capture _i>>
+		  	<tr>
+				<td @style="'color:' + (!$fight.defeatedEnemies[_i].gender ? 'pink' : 'blue') + ''">
+					<<=$fight.defeatedEnemies[_i].name>>
+				</td>
+				<td>
+					<<if $fight.defeatedEnemies[_i].killed>>
+						<span style="color: red">dead</span>
+					<<else>>
+						<<if !$fight.defeatedEnemies[_i].captured && !$fight.defeatedEnemies[_i].cantKill>>
+						  	<<link 'kill'>>
+								<<set $fight.defeatedEnemies[_i].killed = true>>
+								<<set $player.goodwill-->>
+								<<goto 'Fight - won'>>
+					  		<</link>>
+					  <</if>>
+					<</if>>
+				</td>
+				<td>
+					<<if !$fight.defeatedEnemies[_i].killed>>
+						<<if $fight.defeatedEnemies[_i].captured>>
+							<span style="color: green">captured</span>
+						<<else>>
+							<<if ($game.location.basement?? false) && ($slaves.length + $fight.enemiesCaptured) < $basementLimit && ($fight.canCapture ?? true)>>
+							  <<link 'capture'>>
+								<<set $fight.defeatedEnemies[_i].captured = true>>
+								<<goto 'Fight - won'>>
+		 					  <</link>>
+							<</if>>
+						<</if>>
+						<<link 'Fuck'>>
+							<<set $tmpGirl = $fight.defeatedEnemies[_i]>>
+							<<unset $charId, $guestId, $slaveId, $childId>>
+							<<set $tmpGirl.location = 'forest'>>
+							<<set $tmpGirl.rape to true>>
+							<<set $tmpGirlCapture to false>>
+							<<set $tmpGirlInvite to false>>
+							<<set $tmpGirlViewBack = 'Fight - won'>>
+							<<set $tmpGirlBack = 'Fight - won'>>
+							<<fuck $tmpGirl>>
+							<<set $sexForced = true>>
+						<</link>>
+					<</if>>
+			 	</td>
+				<td>
+					<<set _ageReal = setup.getAge($fight.defeatedEnemies[_i])>>
+					<<set _age = setup.agePeriod(_ageReal)>>
+					Age: <<= _age>> 
+					<<if [0, 2].includes($fight.defeatedEnemies[_i].gender)>>
+						Beauty: <<=$fight.defeatedEnemies[_i].beauty>>
+					<</if>>
+				</td>
+			</tr>
+		  <</capture>>
+	  <</for>>
+	</table>
+<</if>>
+
+<<include 'Fight - after companions'>>
+<br /><br />
+<<link 'Leave'>>
+	<<fightEnd true>>
+<</link>>
+
+

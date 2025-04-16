@@ -1,4 +1,5 @@
 :: NPC inventory
+<<set $automatization ??= {}>>
 <div id="storage-transfer">
 	<div id="storage-transfer-left">
 		<fieldset>
@@ -8,24 +9,31 @@
                     <<if !$backpack.has(_inventoryNpcMcItem)>>
                         <<continue>>
                     <</if>>
+                    <<set _icon = _inventoryNpcMcItem.indexOf("blueprint") !== -1 ? 'blueprint' :
+                                   _inventoryNpcMcItem.indexOf("note")     !== -1 ? 'note' :  
+                                   _inventoryNpcMcItem.indexOf("dumb")     !== -1 ? 'dumbbell' : _inventoryNpcMcItem>>
                     <div class="npc-inventory-transfer-container">
                         <div class="npc-inventory-transfer-icon">
-                            [img[setup.ImagePath+'game/inventory/' + _inventoryNpcMcItem + '.png']]
+                            [img[setup.ImagePath+'game/inventory/' + _icon + '.png']]
                         </div>
                         <div class="npc-inventory-transfer-name">
                          (<<=$backpack.count(_inventoryNpcMcItem)>>x) <<=Item.get(_inventoryNpcMcItem).name>>
                         </div>
                         <div class="npc-inventory-transfer-link">
-                            <<link '>>'>>
-                                <<drop $backpack _inventoryNpcMcItem 1>>
-                                <<=setup.npcInventoryAdd($tmpGirl, _inventoryNpcMcItem)>>
-                                <<script>>
-                                    Dialog.setup("NPC inventory", "NPC inventory");
-                                    Dialog.wiki(Story.get("NPC inventory").processText());
-                                    Dialog.open();
-                                <</script>>
-                                <<goto `passage()`>>
-                            <</link>>
+                            <<if ($automatization.dup ?? false) && setup.npcInventoryHas($tmpGirl, _inventoryNpcMcItem) && !setup.npcInventoryMultipleItems.includes(_inventoryNpcMcItem)>>
+                                ≯≯  
+                            <<else>>
+                                <<link '>>'>>
+                                    <<drop $backpack _inventoryNpcMcItem 1>>
+                                    <<=setup.npcInventoryAdd($tmpGirl, _inventoryNpcMcItem)>>
+                                    <<script>>
+                                        Dialog.setup("NPC inventory", "NPC inventory");
+                                        Dialog.wiki(Story.get("NPC inventory").processText());
+                                        Dialog.open();
+                                    <</script>>
+                                    <<goto `passage()`>>
+                                <</link>>                       
+                             <</if>>
                         </div>
                     </div>
                 <</capture>>
@@ -53,11 +61,15 @@
                                 <<goto `passage()`>>
                             <</link>>
                         </div>
+                        <<set _icon = _inventoryNpcMcItem.indexOf("blueprint") !== -1 ? 'blueprint' :
+                                    _inventoryNpcMcItem.indexOf("note")     !== -1 ? 'note' :  
+                                    _inventoryNpcMcItem.indexOf("dumb")     !== -1 ? 'dumbbell' : _inventoryNpcMcItem>>
+
                         <div class="npc-inventory-transfer-name">
                             (<<=setup.npcInventoryCount($tmpGirl, _inventoryNpcMcItem)>>x) <<=Item.get(_inventoryNpcMcItem).name>>
                         </div>
                         <div class="npc-inventory-transfer-icon">
-                            [img[setup.ImagePath+'game/inventory/' + _inventoryNpcMcItem + '.png']]
+                            [img[setup.ImagePath+'game/inventory/' + _icon + '.png']]
                         </div>
                     </div>
                 <</capture>>

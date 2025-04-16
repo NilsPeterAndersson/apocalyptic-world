@@ -1,15 +1,12 @@
 :: Nightclub - inside [Places nightclub bg-underground] {"position":"2060,1463","size":"100,100"}
 <h1 class="ptitle">NIGHTCLUB</h1>
 <div id="place-head">
-[img[setup.ImagePath+'places/underground/nightclub_head.jpg']]
+	<<image 'places/underground/nightclub_head.jpg' sfw>>
 </div>
 <br /><br />
 
 <<if $player.money >=3 && $player.energy >= 10>>
-	<<link 'Enjoy drink'>>
-		<<set $player.money -=3>>
-		<<energy -10>>
-		<<addmins 30>>
+	<<link 'Drink at the bar (3 caps)'>>
 		<<goto 'Nightclub - drink'>>
 	<</link>>
 <</if>>
@@ -22,6 +19,14 @@
   <</link>>
 <</if>>
 
+<<if ($game.location.gloryhole ?? false)>>
+	<<link 'Go to bathroom'>>
+		<<addmins 5>>
+		<<energy -10>>
+		<<goto 'Nightclub - bathroom'>>
+	<</link>>
+<</if>>
+
 <<if isMetChar('dom') && $characters.dom.quests.quest3_done_day && ($characters.dom.quests.quest3_done_day + 10) < $game.day && !$characters.dom.quests.quest4>>
 	<<set $characters.dom.quests.quest4 = true>>
 	<<set $characters.dom.quests.quest4_done_day = $game.day>>
@@ -29,5 +34,17 @@
 <</if>>
 
 [[Leave|Underground city]]
+
+<<set _gloryHoleJobTriggerChance = 10>>
+<<if $player.reputation > 100>>
+	<<set _gloryHoleJobTriggerChance = 40>>
+<<elseif $player.reputation > 150>>
+	<<set _gloryHoleJobTriggerChance = 90>>
+<</if>>
+<<if $player.reputation > 150 && !($game.location.gloryhole ?? false)>>
+	<<goto 'Nightclub - bathroom introduction'>>
+<<elseif $player.reputation > 170 && ($game.location.gloryhole ?? false) && !$player?.quests?.gloryholeJobAsked && setup.percentageChance(_gloryHoleJobTriggerChance)>>
+	<<goto 'Nightclub - bathroom job'>>
+<</if>>
 
 

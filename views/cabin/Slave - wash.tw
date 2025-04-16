@@ -26,6 +26,7 @@
 	<<set $tmpGirl.beauty = Math.min($tmpGirl.beauty + ($tmpGirl.washBeauty * 7), 100)>>
 <</if>>
 <<set $tmpGirl.washDays = 7>>
+<<set $tmpGirl.happy += 10>>
 
 <<linkreplace 'Help wash'>>
 	<center>
@@ -34,7 +35,7 @@
 	<br /><br />
 	You walk behind <<=setup.pronounceWho($tmpGirl)>> and slowly massage <<=setup.pronounceWhos($tmpGirl)>> body as <<=setup.pronounceWhat($tmpGirl)>> quietly gasps,  
 
-	<<if $tmpGirl.likesGuys && $tmpGirl.relationship > 30>>
+	<<if setup.percentageChance(setup.sexChance($tmpGirl))>>
 		<<=setup.pronounceWhat($tmpGirl)>> presses <<=setup.pronounceWhos($tmpGirl)>> body against yours and you think that <<=setup.pronounceWhat($tmpGirl)>>'s really enjoying the moment.
 	<<else>>
 		<<=setup.pronounceWhat($tmpGirl)>> looks a bit unconfortable and says <<=setup.pronounceWhat($tmpGirl)>> is finished washing.
@@ -43,15 +44,9 @@
 		
 	<<if $player.energy >= 30>>
 		<<set _linkName = 'Fuck ' + setup.pronounceWho($tmpGirl)>>
-		<<if !$tmpGirl.gender>>
-			<<linkreplace `_linkName`>>
-				<<goto 'Girl fuck'>>
-			<</linkreplace>>
-		<<else>>
-			<<linkreplace `_linkName`>>
-				<<goto 'Guy fuck'>>
-			<</linkreplace>>
-		<</if>>
+		<<linkreplace `_linkName`>>
+			<<fuck $tmpGirl>>
+		<</linkreplace>>
 	<</if>>
 <</linkreplace>>
 
@@ -60,11 +55,7 @@
 		<<set $tmpGirl.location = $oldTmpGirlLocation>>
 		<<run delete $oldTmpGirlLocation>>
 	<</if>>
-	<<if !$tmpGirl.gender>>
-		<<goto 'Girl view'>>
-	<<else>>
-		<<goto 'Guy view'>>
-	<</if>>
+	<<goto 'NPC view'>>
 <</link>>
 
 

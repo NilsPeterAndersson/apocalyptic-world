@@ -1,0 +1,14 @@
+:: Library [Place]
+<h1 class="ptitle">LIBRARY</h1>
+<br />
+Unread books in your shelves: <strong><<=setup.cabinInventory.count('book')>></strong>
+
+<br /><br />
+<<if setup.cabinInventory.count('book') && $player.energy >= 20>>
+    <<link 'Read book'>>
+        <<goto 'Library - read book'>>
+    <</link>>
+<</if>>
+<<link 'Leave'>>
+    <<goto 'Youth district'>>
+<</link>>

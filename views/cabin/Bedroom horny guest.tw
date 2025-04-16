@@ -5,7 +5,7 @@
 You sit down on  your bed when suddenly your doors open and <<=setup.displayName(_guest)>> stands in the doors with only her nightshirt. 
 <br /><br />
 <center>
-	[img[setup.ImagePath+'places/bedroom/guest_visit.webp']]
+	<<image 'places/bedroom/guest_visit.webp' 'sfw'>>
 </center>
 <<set $tmpGirl = _guest>>
 <<include 'NPC info'>>
@@ -15,7 +15,7 @@ You sit down on  your bed when suddenly your doors open and <<=setup.displayName
 <</say>>
 <br /><br />
 <<set _linkName = 'Fuck ' + $tmpGirl.name>>
-<<if $charactersInLocation['bedroom'].includes('blair') && timeBetween('22:00','23:59') && $characters.blair.relationship >= 90>>
+<<if _charactersInLocation['bedroom'].includes('blair') && timeBetween('22:00','23:59') && $characters.blair.relationship >= 90>>
 	<<blair>>
 		Don't leave me out. Can I join?
 	<</blair>>
@@ -26,11 +26,12 @@ You sit down on  your bed when suddenly your doors open and <<=setup.displayName
 	<<run delete $charId>>
 	<<run delete $slaveId>>
 	<<set $tmpGirl.location = 'bedroom'>>
-	<<set $tmpGirlCapture to false>>
 	<<set $tmpGirl.rape to false>>
+	<<set $tmpGirlCapture to false>>
+	<<set $tmpGirlInvite to false>>
 	<<set $tmpGirlViewBack = 'Sleep eval'>>
 	<<set $tmpGirlBack = 'Sleep eval'>>
-	<<goto 'Girl fuck'>>
+	<<fuck $tmpGirl>>
 <</link>>
 <<if _blairJoin>>
 	<<if recall($suppCode)>>

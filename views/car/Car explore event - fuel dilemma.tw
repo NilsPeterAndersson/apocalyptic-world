@@ -1,0 +1,175 @@
+:: Car explore event - fuel dilemma [bg-garage]
+<h1 class="ptitle">OUTSIDE</h1>
+<br />
+As you traverse the rugged terrain in your well-maintained vehicle, you come across a traveling camp of settlers.
+<br />
+Their makeshift tents hint at a nomadic lifestyle, but something seems amiss as you drive closer.<br /> 
+A small group is gathered around a fuel drum, their expressions tense and worried.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'places/explore_car/fuel_dilemma1.jpg']]
+</center>
+<br />
+A sudden movement catches your attention.
+<br />
+A young woman from the camp rushes onto the road, waving her hands frantically to get your attention. 
+Her face is a mix of desperation and urgency, and you can sense that something important is on her mind.
+<br /><br />
+<center>
+    [img[setup.ImagePath+'places/explore_car/fuel_dilemma_girl.webp']]
+</center>
+<br /><br />
+<<newgirl>>
+<<set _npcGirl = clone($tmpGirl)>>
+<<set _npcGirl.race = 'white'>>
+<div id="option_stop">
+    <<linkreplace 'Stop'>>
+        <<run $('#option_ignore').hide()>>
+        <<run $('#option_leave').show()>>
+        Intrigued and concerned, you ease off the accelerator and come to a halt a short distance away from her. The rest of the camp watches curiously as the young woman approaches your vehicle, her eyes locked on yours.
+        <br /><br />
+        <<sayNpc _npcGirl>>
+            Thank you for stopping! 
+        <</sayNpc>>
+        <br />
+        <<sayNpc _npcGirl>>
+            We're really struggling out here. Our generators are barely running on fumes, and without more fuel, we won't be able to keep warm or power essential equipment.
+        <</sayNpc>>
+        <br />
+        Taking a deep breath to compose herself, she begins to explain their dire situation with fuel.
+        <br />
+        Her words resonate with you, reminding you of the precariousness of survival in this unforgiving world
+        <br /><br />
+        <<if $player.car.fuel < 20 && $backpack.count('fuel') < 2>>
+            <strong>You don't have enough fuel to help</strong>
+            <br /><br />
+        <<else>>
+            <<if $backpack.count('fuel') >= 2>>
+                <<set _gaveCans = true>>
+                <strong>You will give 2 fuel cans</strong>
+            <<else>>
+                <strong>You will give her 20% of your fuel tank</strong>
+            <</if>>
+            <br /><br />
+            <div id="option_give">
+                <<linkreplace 'Give her fuel'>>
+                    <<if $backpack.count('fuel') >= 2>>
+                        <<drop $backpack 'fuel' 2>>
+                    <<else>>
+                        <<set $player.car.fuel -= 20>>
+                    <</if>>
+                    
+                    <<set $player.goodwill += randomInteger(3, 5)>>
+                    <<run $('#option_bj, #option_fuck').hide()>>
+                    <<sayNpc _npcGirl>>
+                        Really? Thank you so much
+                    <</sayNpc>>
+                    <br />
+                    <<if _gaveCans>>
+                        The woman watches anxiously as you carefully take two cans of fuel out of your car and give them to her.
+                    <<else>>
+                        The woman watches anxiously as you carefully draw fuel from your tank into the container. Once you've filled it with a reasonable amount, you hand it to her. 
+                    <</if>>
+                    <br /><br />
+                    <<you>>
+                        This should give you a bit of breathing room. I need to ensure I have enough for my own journey, but I hope this helps.
+                    <</you>>
+                    <br />
+                    <<set $player.reputation += 2>>
+                    She nods gratefully, clutching the container tightly. 
+                    <br /><br />
+                    <<sayNpc _npcGirl>>
+                        Thank you. This will make a world of difference for us. We won't forget your kindness.
+                    <</sayNpc>>
+                    <br />
+                <</linkreplace>>
+            </div>
+            <div id="option_capture">
+                <<linkreplace 'Try to capture her'>>
+                    <<run $('#option_bj,#option_give, #option_fuck').hide()>>
+                    As you grab her hand she starts to scream and resist. Other people from her group notices what you are doing. 
+                    Some just look away and tries to ignore but other starts to scream at you and when gathered together starts to run towards you.
+                    <br /><br />
+                    <<link 'Fight them'>>
+                        <<generateEnemies 3 2>>
+                        <<set $tmpGirl = _npcGirl>>
+                        <<run $enemies.push($tmpGirl)>>
+                        <<fight $enemies 'Garage' 'Garage'>>
+                    <</link>>
+                <</linkreplace>>
+            </div>
+            <div id="option_bj">
+                <<linkreplace 'Ask for a blowjob'>>
+                    <<run $('#option_give, #option_fuck').hide()>>
+                    <<sayNpc _npc>>
+                        Fuck you all! You're all the same... Give me the fuel and I will suck you off.
+                    <</sayNpc>>
+                    <br />
+                    The woman watches anxiously as you carefully draw fuel from your tank into the container. Once you've filled it with a reasonable amount, you hand it to her. 
+                    <br /><br />
+                    <center>
+                        [img[setup.ImagePath+'places/explore_car/fuel_dilemma_bj1.webp']]
+                    </center>
+                    <br />
+                    Then she opens door of your car and gets in and waits for you. As soon as you  get in the car, without hesitation she unzips your pants, takes out your dick and carefully puts it in her mouth.
+                    <br /><br />
+                    <center>
+                        [img[setup.ImagePath+'places/explore_car/fuel_dilemma_bj2.webp']]
+                    </center>
+                    <br /><br />
+                    She doesn't put much effort in and just keeps it slow but somehow her lips are so tight that you don't mind it. Then she increases her speed a bit and you feel it won't be long anymore.
+                    <br /><br />
+                    <center>
+                        [img[setup.ImagePath+'places/explore_car/fuel_dilemma_bj3.webp']]
+                    </center>
+                    <br />
+                    <<horny_reset>>
+                    As you start to cum in her mouth, she instantly pulls your dick out and spits out all cum you managed to shot in her mouth. She slowly continues to jerk you off as you keep cumming.
+                    <br /><br />
+                    <<sayNpc _npc>>
+                        Deal is a deal. Now leave. Thank you.
+                    <</sayNpc>>
+                    <br /><br />
+                    <<if $backpack.count('fuel') >= 2>>
+                        <<drop $backpack 'fuel' 2>>
+                    <<else>>
+                        <<set $player.car.fuel -= 20>>
+                    <</if>>
+                <</linkreplace>>
+            </div>
+            <div id="option_fuck">
+                <<if !recall($suppCode)>>
+                    <div class="link-internal disabled" style="background: #ccc">
+                        Ask for a fuck
+                        <<notPatreonIcon>>
+                    </div>
+                <<else>>
+                    <<link 'Ask for a fuck'>>
+                        <<goto 'Car explore event - fuel dilemma fuck'>>
+                    <</link>>
+                <</if>>
+            </div>
+        <</if>>
+    <</linkreplace>>
+</div>
+<div id="option_ignore">
+    <<linkreplace 'Ignore her'>>
+        <<run $('#option_stop').hide()>>
+        <<run $('#option_leave').show()>>
+        <center>
+            [img[setup.ImagePath+'places/explore_car/fuel_dilemma_finger.jpg']]
+        </center>
+        <br />
+        Glancing back in the mirror, you catch a glimpse of the woman's frustrated expression. 
+        She raises a defiant middle finger in your direction, yelling something indiscernible over the roar of your engine.
+        <br />
+        Her anger is palpable, a tangible reminder of the consequences of your choice to prioritize your own journey over helping others in need.
+        <br /><br />
+        <<set $player.goodwill -= 10>>
+    <</linkreplace>>
+</div>
+<div id="option_leave" style="display:none">
+    <<link 'Leave'>>
+        <<goto 'Garage'>>
+    <</link>>
+</div>

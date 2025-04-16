@@ -1,0 +1,35 @@
+:: Mc fuck - tired {"position":"2897,215","size":"100,100"}
+<<if $tiredNoTime>>
+	You feel too tired to continue, it has been a long day.
+<<else>>
+	You have run out of stamina and need a little rest.
+<</if>>
+<br /><br />
+
+ <<link 'Back'>>
+	<<unset $tiredNoTime>>>
+	<<if typeof $guestId2 !== 'undefined' && typeof $tmpGirl2 !== 'undefined'>>
+		<<set $guests[$guestId2] = $tmpGirl2>>
+	<</if>>
+	<<unset $guestId2, $tmpGirl2>>
+
+	<<unset $sexAction, $sexForced>>
+	<<if typeof $slaveId !== 'undefined'>>
+		<<set $slaves[$slaveId] = $tmpGirl>>
+	<<elseif typeof $guestId !== 'undefined'>>
+		<<set $guests[$guestId] = $tmpGirl>>
+	<<elseif typeof $charId !== 'undefined'>>
+		<<set $characters[$charId] = $tmpGirl>>
+	<</if>>
+	<<if $oldTmpGirlLocation>>
+        <<set $tmpGirl.location = $oldTmpGirlLocation>>
+    	<<unset $oldTmpGirlLocation>>
+    <</if>>
+	<<if $tmpGirlBack>>
+		<<goto $tmpGirlBack>>
+	<<else>>
+		<<goto 'NPC view'>>
+	<</if>>
+<</link>>
+
+

@@ -17,18 +17,15 @@
 	<<=setup.displayName($tmpGirl)>> is cooking in the kitchen, <<=setup.pronounceWhat($tmpGirl)>> notices you and gives you a warm smile<br /><br />
 	<<set _girlGuestLink = 'Approach ' + $tmpGirl.name>>
 	<<link `_girlGuestLink`>>
-		<<set $tmpGirlViewBack = 'Girl view - guest'>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
 		<<set $tmpGirlBack = 'Kitchen-room'>>
-		<<set $tmpGirlCapture to false>> 
 		<<set $tmpGirl.rape to false>>
+		<<set $tmpGirlCapture to false>> 
+		<<set $tmpGirlInvite to false>>
 		<<set $guestId = _girlGuest[0]>>
 		<<run delete $slaveId>>
 		<<run delete $charId>>
-		<<if !$tmpGirl.gender>>
-			<<goto 'Girl view - guest'>>
-		<<else>>
-			<<goto 'Guy view - guest'>>		
-		<</if>>	
+		<<goto 'NPC view - guest'>>
 	<</link>>
 <</if>>
 <<if $backpack.has('food') && (hasTime(0, 30) || $player.hunger != $player.maxHunger)>>
@@ -41,20 +38,39 @@
   <</link>>
 <</if>>
 
-<<if $charactersInLocation['kitchen'].includes('blair')>>
+<<if _charactersInLocation['kitchen'].includes('blair')>>
 	<<link 'Talk with Blair'>>
+		<<unset $guestId, $slaveId, $childId>>
+		<<set $charId = 'blair'>>
+		<<set $tmpGirl = $characters.blair>>
 		<<goto 'Blair - kitchen talk'>>
 	<</link>>
 <</if>>
 
 [[Back|Wood cabin]]
 
+<<set _guestsWomen = setup.getAvailablePersons18yo($guests)[0] ?? []>>
 
 <<if !($locationEvents.kitchen ?? false)>>
 	<<if _isKitchenGirlAssigned && !$tmpGirl.gender && setup.percentageChance(5)>>
 		<<set $locationEvents.kitchen = true>>
 		<<set $guestId = _girlGuest[0]>>
 		<<goto 'Event: Kitchen stuck'>>
+	<<elseif _guestsWomen.length >= 2 && setup.percentageChance(10) && timeBetween('10:00', '14:00') && $weather?.weather == 'rain' && recall($suppCode)>>
+		<<set $locationEvents.kitchen = true>>
+		<<set $tmpEvent = {
+			id: setup.getRandomElement(setup.getAvailablePersons18yo($guests)[0])
+		}>>
+		<<goto 'Kitchen - wet shirt'>>
+	<<elseif _guestsWomen.length >= 1 && timeBetween('10:00', '12:00') && recall($suppCode) && setup.percentageChance(10)>>
+		<<set _id = setup.getRandomElement(_guestsWomen)>>
+		<<if $guests[_id].horny > 50 || true>>
+			<<set $locationEvents.kitchen = true>>
+			<<set $tmpEvent = {
+				id: _id
+			}>>
+			<<goto 'Kitchen - breakfast'>>
+		<</if>>
 	<</if>>
 <</if>>
 

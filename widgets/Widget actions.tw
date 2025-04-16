@@ -4,128 +4,270 @@
 <</widget>>
 
 <<widget actionImage>>
+	<<set _imageImageFound = false>>
 	<<if typeof setup.actions === 'undefined'>>
 		<<set _actionsFallback = recall('actions')>>
 		<<if _actionsFallback>>
 			<<set setup.actions = _actionsFallback>>
 		<</if>>
 	<</if>>
+
+	<<if $args[0].pack>>
+		<<set _imageIsPack = (($packs ?? {})[_args[0].pack] ?? false) && typeof setup.actions[_args[0].pack] !== 'undefined'>>
+	<</if>>
+	<<if !_imageIsPack>>
+		<<set _imageIsPack = (($packs ?? {})[$args[0].name] ?? false) && typeof setup.actions[$args[0].name] !== 'undefined'>>
+	<</if>>
+	<<set _defaultActionsPath = 'actions'>>
+	<<set _actionsPath = _imageIsPack ? 'packs'  : _defaultActionsPath>>
+	<<set _subActionsPath = ''>>
+	<<if _imageIsPack>>
+		<<set _subActionsPath = '/actions/'>>
+	<</if>>
+
 	<div class="action-image">
-		<<if typeof setup.actions === 'undefined'>>
-		<<elseif $args[0].virgin && $args[1] === 'pussy'>>
-			[img[setup.ImagePath+'game/misc/deflower.webp']]
-		<<elseif $args[0].virgin && $args[1] === 'mistress_pussy'>>
-			[img[setup.ImagePath+'game/misc/deflower_strapon.webp']]
+
+		<<set _originalLocation = $args[0].location >>
+		<<if $args[0].location === 'basement-mistress.male' >>
+				<<set $args[0].location = 'basement' >>
+				<<set $args[1] = $args[1].replace('mistress_', '') >>
+		<</if>>
+
+		<<if $args[0].virgin && $args[1] === 'mistress_pussy' && $args[0].location === 'basement-mistress.female'>>
+			<<set $args[1] = 'deflower_strapon'>>
+		<<elseif $args[0].virgin && ('pussy').includes($args[1])>>
+			<<set $args[1] = 'deflower'>>
+		<</if>>
+		
+		<<set _genderDesc = setup.genderPath($args[0])>>
+		<<if _args[3]>>
+			<<set _genderDesc = _args[3]>>
+		<</if>>
+		<<run console.log(_genderDesc)>>
+		<<set _race = '.' + $args[0].race>>
+		<<set _hair = '.' + $args[0].hair + 'hair'>>
+		<<set _breasts = '.breasts-' + $args[0].breasts>>
+		<<if ($args[0].pregnancy ?? 0) > 100 >>
+			<<set _pregnancyDesc = '.pregnant'>>
 		<<else>>
+			<<set _pregnancyDesc = '.notpregnant'>>				
+		<</if>>
 		
-			<<set _genderDesc = ['female', 'male', 'transfemale', 'transmale'][$args[0].gender]>>
-			<<set _race = '.' + $args[0].race>>
+		<<if setup.getAge($args[0]) <= 24 >>
+			<<set _ageDesc = '.young'>>
+		<<elseif setup.getAge($args[0]) <= 39 >>
+			<<set _ageDesc = ''>>		
+		<<elseif setup.getAge($args[0]) <= 59 >>
+			<<set _ageDesc = '.mature'>>
+		<<else>>
+			<<set _ageDesc = '.old'>>				
+		<</if>>
 		
-			<<if ($args[0].pregnancy ?? 0) > 100 >>
-				<<set _pregnancyDesc = '.pregnant'>>
-			<<else>>
-				<<set _pregnancyDesc = '.notpregnant'>>				
+		<<set _morphs = [
+		$args[0].name + _pregnancyDesc,
+		$args[0].name,
+		_genderDesc + _race + _hair + _ageDesc + _pregnancyDesc,		
+		_genderDesc + _race + _ageDesc + _pregnancyDesc,		
+		_genderDesc + _race + _hair + _pregnancyDesc,		
+		_genderDesc + _race + _pregnancyDesc,		
+		_genderDesc + _race + _hair + _ageDesc,
+		_genderDesc + _race + _ageDesc,
+		_genderDesc + _race + _hair,
+		_genderDesc + _race + _breasts,
+		_genderDesc + _race + _hair + _breasts,
+		_genderDesc + _race,
+		_genderDesc + _hair + _ageDesc + _pregnancyDesc,		
+		_genderDesc + _ageDesc + _pregnancyDesc,		
+		_genderDesc + _hair + _pregnancyDesc,		
+		_genderDesc + _pregnancyDesc,		
+		_genderDesc + _hair + _ageDesc,
+		_genderDesc + _ageDesc,
+		_genderDesc + _hair,
+		_genderDesc + _breasts,
+		_genderDesc
+		]>>
+
+		<<set _actions = clone(setup.actions)>>
+		<<set _location = $args[0].location>>
+		<<if $args[0].pack>>
+			<<run _morphs.unshift($args[0].pack + _pregnancyDesc, $args[0].pack)>>
+			<<if typeof _actions[$args[0].pack] !== 'undefined' && typeof _actions[$args[0].pack][$args[0].location] === 'undefined' && typeof _actions[$args[0].pack]['default'][$args[1]] !== 'undefined'>>
+				<<set _actions[$args[0].pack][$args[0].location] = _actions[$args[0].pack]['default']>>
+				<<set _location = 'default'>>
 			<</if>>
-			
-			<<if setup.getAge($args[0]) <= 24 >>
-				<<set _ageDesc = '.young'>>
-			<<elseif setup.getAge($args[0]) <= 39 >>
-				<<set _ageDesc = ''>>		
-			<<elseif setup.getAge($args[0]) <= 59 >>
-				<<set _ageDesc = '.mature'>>
-			<<else>>
-				<<set _ageDesc = '.old'>>				
+		<</if>>
+		
+		<<for _imageI to 0; _imageI < _morphs.length; _imageI++>>
+			<<if
+			typeof _actions[_morphs[_imageI]] !== 'undefined' && 
+			typeof _actions[_morphs[_imageI]][$args[0].location] !== 'undefined' && 
+			typeof _actions[_morphs[_imageI]][$args[0].location][$args[1]] !== 'undefined'>>
+				<<if _imageIsPack && ![$args[0].pack, $args[0].name].includes(_morphs[_imageI])>>
+					<<set _actionsPath = _defaultActionsPath>>
+					<<set _subActionsPath = ''>>
+					<<set _imageIsPack = false>>
+				<</if>>
+				<<set _image = either(_actions[_morphs[_imageI]][_location][$args[1]])>>
+				<<if _image.includes('/')>>
+					<<actionImageOutput `'packs/' + _image` true>>
+				<<else>>
+					<<actionImageOutput ` _actionsPath + '/' + _morphs[_imageI] + '/' + _subActionsPath + _location  + '/'+ $args[1] + '/' + _image` _imageIsPack>>
+				<</if>>
+				<<set _imageImageFound = true>>
+				<<break>>
 			<</if>>
-			
-			<<set _morphs = [
-			$args[0].name,
-			_genderDesc + _race + _ageDesc + _pregnancyDesc,		
-			_genderDesc + _race + _pregnancyDesc,		
-			_genderDesc + _race + _ageDesc,
-			_genderDesc + _race,
-			_genderDesc + _ageDesc + _pregnancyDesc,		
-			_genderDesc + _pregnancyDesc,		
-			_genderDesc + _ageDesc,
-			_genderDesc
-			]>>
-			
-			<<for _i to 0; _i < _morphs.length; _i++>>
+		<</for>>
+
+		<<if !_imageImageFound>>
+			<<for _imageI to 0; _imageI < _morphs.length; _imageI++>>
 				<<if
-				typeof setup.actions[_morphs[_i]] !== 'undefined' && 
-				typeof setup.actions[_morphs[_i]][$args[0].location] !== 'undefined' && 
-				typeof setup.actions[_morphs[_i]][$args[0].location][$args[1]] !== 'undefined'>>
-						<<actionImageOutput `setup.ImagePath+'actions/' + _morphs[_i] + '/' + $args[0].location  + '/'+ $args[1] + '/' + either(setup.actions[_morphs[_i]][$args[0].location][$args[1]])`>>
-					<<break>>
-				<<elseif
-				typeof setup.actions[_morphs[_i]] !== 'undefined' && 
-				typeof setup.actions[_morphs[_i]]['default'] !== 'undefined' && 
-				typeof setup.actions[_morphs[_i]]['default'][$args[1]] !== 'undefined'>>
-						<<actionImageOutput `setup.ImagePath+'actions/' + _morphs[_i] + '/default/'+ $args[1] + '/' + either(setup.actions[_morphs[_i]]['default'][$args[1]])`>>
+				typeof setup.actions[_morphs[_imageI]] !== 'undefined' && 
+				typeof setup.actions[_morphs[_imageI]]['default'] !== 'undefined' && 
+				typeof setup.actions[_morphs[_imageI]]['default'][$args[1]] !== 'undefined'>>
+					<<if _imageIsPack && ![$args[0].pack, $args[0].name].includes(_morphs[_imageI])>>
+						<<set _actionsPath = _defaultActionsPath>>
+						<<set _subActionsPath = ''>>
+						<<set _imageIsPack = false>>
+					<</if>>
+						<<set _image = either(setup.actions[_morphs[_imageI]]['default'][$args[1]])>>
+
+						<<if _image.includes('/')>>
+							<<actionImageOutput `'packs/' + _image` true>>
+						<<else>>
+							<<actionImageOutput `_actionsPath + '/' + _morphs[_imageI] + _subActionsPath + '/default/'+ $args[1] + '/' + _image` _imageIsPack>>
+						<</if>>
 					<<break>>
 				<</if>>	
 			<</for>>
-			
 		<</if>>
 	</div>
-	<br />
-	<div class="action-text">
-		<<set _StatsMapping = {
-			mistress_anal: 'anal'
-		}>>
-		<<set _npcStat = _StatsMapping[$args[1]] ?? $args[1]>>
 
-		<<if $args[0].virgin && typeof $actionText[$args[1]] !== 'undefined' && typeof $actionText[$args[1]]['v'] !== 'undefined'>>
-			 <<print $actionText[$args[1]]['v'].replace('%name%', $args[0].name)>>
-		<<else>>
-			<<if $args[0].gender === 1>>
-				<<if $actionText['male'][$args[1]] !== undefined>>
-					<<print $actionText['male'][$args[1]][0].replace('%name%', $args[0].name)>>
-				<</if>>
-			<<elseif $args[0].gender === 2>>
-				<<if $actionText['transgirl'][$args[1]] !== undefined>>
-					<<print $actionText['transgirl'][$args[1]][0].replace('%name%', $args[0].name)>>
-				<</if>>
+	<<if ($args[2] ?? 'with-text') != 'no-text'>>
+		<br />
+		<div class="action-text">
+			<<if _originalLocation === 'basement-mistress.male' >>
+					<<set $args[0].location = _originalLocation >>
+					<<set $args[1] = 'mistress_' + $args[1] >>
+			<</if>>
+			<<set _StatsMapping = {
+				mistress_anal: 'anal',
+				threesome_f_anal: 'anal',
+				threesome_f_bj: 'bj',
+				threesome_f_dp: 'dp',
+				threesome_f_pussy: 'pussy'
+			}>>
+			<<set _npcStat = _StatsMapping[$args[1]] ?? $args[1]>>
+			<<set _actionText = setup.actionText>>
+			<<if $args[0].virgin && typeof _actionText[$args[1]] !== 'undefined' && typeof _actionText[$args[1]]['v'] !== 'undefined'>>
+				<<print _actionText[$args[1]]['v'].replace('%name%', $args[0].name)>>
 			<<else>>
-				<<if $actionText[$args[1]] !== undefined>>
-					<<if ($actionText[$args[1]] ?? false) && ($actionText[$args[1]]['stats'] ?? false)>>
-						<<for _sortedTextsStat, _sortedTextsData range $actionText[$args[1]]['stats']>>
-							<<if typeof $tmpGirl[_npcStat] !== 'undefined' && $tmpGirl[_npcStat] >= _sortedTextsData.s>>
-								<<set _randomSortedText = _sortedTextsData.texts[Math.floor(Math.random()*_sortedTextsData.texts.length)]>>
+				<<if $args[0].gender || $args[1].includes('threesome')>>
+					<<if typeof _actionText[setup.genderPath($args[0])][$args[1]] !== 'undefined'>>
+						<<set _name2 = ''>>
+						<<if typeof $tmpGirl2 !== 'undefined'>>
+							<<set _name2 = $tmpGirl2.name>>
+						<</if>>
+						<<print _actionText[setup.genderPath($args[0])][$args[1]][0].replace(/%name%/g, $args[0].name).replace('%name2%', _name2)>>
+					<</if>>
+				<<else>>
+					<<if _actionText[$args[1]] !== undefined>>
+						<<set _locationLocalizedTexts = _actionText[$args[1]]?.location?.[$args[0].location]?.texts>>
+						<<if _locationLocalizedTexts>>
+							<<set _textFound = true>>
+							<<= _locationLocalizedTexts[Math.floor(Math.random()*_locationLocalizedTexts.length)].replace(/%name%/g, setup.displayName($args[0]))>>
+						<</if>>
+						<<if !_textFound>>
+							<<if (_actionText[$args[1]] ?? false) && (_actionText[$args[1]]['stats'] ?? false)>>
+								<<for _sortedTextsStat, _sortedTextsData range _actionText[$args[1]]['stats']>>
+									<<if typeof $tmpGirl[_npcStat] !== 'undefined' && $tmpGirl[_npcStat] >= _sortedTextsData.s>>
+										<<set _randomSortedText = _sortedTextsData.texts[Math.floor(Math.random()*_sortedTextsData.texts.length)]>>
+									<</if>>
+								<</for>>
+								<<print _randomSortedText.replace('%name%', setup.displayName($args[0]))>>
+							<<else>>
+								<<= _actionText[$args[1]].texts[Math.floor(Math.random()*_actionText[$args[1]].texts.length)].replace(/%name%/g, setup.displayName($args[0]))>>
 							<</if>>
-						<</for>>
-						<<print _randomSortedText.replace('%name%', setup.displayName($args[0]))>>
-					<<else>>
-						<<print $actionText[$args[1]][0].replace('%name%', $args[0].name)>>
+						<</if>>
 					<</if>>
 				<</if>>
 			<</if>>
-		<</if>>
-	</div>
+		</div>
+	<</if>>
 <</widget>>
 
 <<widget actionDream>>
-	<<set $sleepAction = {
-		place: either(['basement', 'bathhouse', 'forest', 'kitchen', 'maid', 'nightclub', 'shower', 'streets']),
-		type: either('pussy', 'anal', 'bj', 'dp')
-	}>>
-	<<if typeof setup.actions === 'undefined'>>
-		[img['images/actions/female/default/pussy/7771836.webp']]
-	<<else>>
-		<<set _dreamImg = setup.ImagePath+'actions/female/' + $sleepAction.place  + '/' + $sleepAction.type  + '/' + either(setup.actions.female[$sleepAction.place][$sleepAction.type])>>
-		[img[_dreamImg]]
+	<<set _actions = ['anal', 'bj']>>
+	<<set _places = ['basement', 'default', 'forest', 'shower']>>
+	<<set _dreamText = 'You went to bed horny and dreamt about fucking someone.'>>
+	<<set _genders = []>>
+
+	<<if settings.gaysDreamsEnabled>>
+		<<set _genders.push('male')>>
 	<</if>>
+	<<if settings.transDreamsEnabled>>
+		<<set _genders.push('transfemale')>>
+	<</if>>
+	<<if settings.lesbiansDreamsEnabled>>
+		<<set _genders.push('female_on_female-2')>>
+		<<set _genders.push('female_on_female-3')>>
+	<</if>>
+	<<if settings.lesbiansDreamsEnabled && settings.transDreamsEnabled>>
+		<<set _genders.push('transfemale_on_female')>>
+		<<set _genders.push('transfemale_on_transfemale')>>
+	<</if>>
+	<<if settings.straightDreamsEnabled || _genders.length === 0>>
+		<<set _genders.push('female')>>
+	<</if>>
+	
+	<<set _gender = either(_genders)>>
+	<<if _gender === 'female'>>
+		<<set _actions.push('pussy')>>
+		<<set _places.push('kitchen', 'maid', 'bathhouse')>>
+	<<elseif _gender === 'female_on_female-2' || _gender === 'female_on_female-3'>>
+		<<set _actions = ['sn_pussy', 'scissoring', 'masturbating']>>
+		<<set _places = ['default']>>
+		<<set _dreamText = 'You went to bed horny and dreamt about hot lesbians fucking.'>>
+	<<elseif _gender === 'transfemale_on_female' || _gender === 'transfemale_on_transfemale'>>
+		<<set _places = ['default']>>
+		<<set _dreamText = 'You went to bed horny and dreamt about hot transfemales fucking.'>>
+	<</if>>
+	
+	<<set _sleepAction = {
+		place: either(_places),
+		type: either(_actions)
+	}>>
+	<<if typeof setup.actions !== 'undefined'>>
+		<<set _image = either(setup.actions[_gender][_sleepAction.place][_sleepAction.type])>>
+		<<set _dreamImg = 'actions/' + _gender + '/' + _sleepAction.place  + '/' + _sleepAction.type  + '/' + _image>>
+		<<if _image.includes('/')>>
+			<<set _dreamImg = 'packs/' + _image>>
+		<</if>>
+	<<else>>
+		<<set _image = either(setup.actions[_gender].default[_sleepAction.type])>>
+		<<set _dreamImg = 'actions/' + _gender +'/default/' + _sleepAction.type  + '/' + _image>>
+		<<if _image.includes('/')>>
+			<<set _dreamImg = 'packs/' + _image>>
+		<</if>>
+	<</if>>
+
+	<<actionImageOutput _dreamImg _image.includes('/')>>
+	<br />
+	<<print _dreamText>> 
 <</widget>>
 
 <<widget actionImageOutput>>
 	<<set _extension = $args[0].split('.').pop()>>
 	<<if ['mp4', 'webm'].includes(_extension)>>
 		<<set _videoType = 'video/' + _extension>>
-		<<set $url to $args[0]>>
+		<<set _url to $args[0]>>
+		<<if !_args[1]>>
+			<<set _url = setup.ImagePath + _url>>
+		<</if>>
 		<video controls autoplay loop>
-  			<source @src="$url" @type="_videoType">
+  			<source @src="_url" @type="_videoType">
 		</video>
 	<<else>>
-		[img[$args[0]]]
+		<<image _args[0] 'nsfw' _args[1]>>
 	<</if>>
 <</widget>>
 

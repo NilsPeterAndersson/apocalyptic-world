@@ -1,0 +1,74 @@
+:: Mistress fuck buttons
+<<if ($sexForced ?? false) || ($tmpGirl.traits ?? []).includes('nymphomaniac')>>
+    <<set _actionMax = 100>>
+<<elseif setup.likesGender($tmpGirl, $guests[_girlGuest[0]].gender)>>
+	<<set _actionMax = Math.max($tmpGirl.relationship, $tmpGirl.horny)>>
+	<<set _actionMax = Math.min(_actionMax, $tmpGirl.corruption)>>
+	<<set _actionMax = Math.max(_actionMax, $tmpGirl.sub, $tmpGirl.drunk ?? 0)>>
+<<else>>
+	<<set _actionMax = Math.floor(Math.max($tmpGirl.sub, $tmpGirl.drunk ?? 0)/2)>>
+<</if>>
+
+<<if $player.horny >= 100>>
+    <br />
+    <div id="choices">
+        <<link "Cum">>
+            <<replace "#choices">>
+                <center>
+                    [img[setup.ImagePath+'game/misc/cum.webp']]
+                </center>
+                <br />
+                <<link 'Continue'>>
+                    <<unset $sexAction>>
+                    <<goto `passage()`>>
+                <</link>>
+            <</replace>>
+        <</link>>
+        <<link "Cum with help from mistress">>
+            <<replace "#choices">>
+                <<actionImage $guests[_girlGuest[0]] handjob_cum>>
+                <br />
+                <<link 'Continue'>>
+                    <<unset $sexAction>>
+                    <<goto `passage()`>>
+                <</link>>
+            <</replace>>
+        <</link>>
+    </div>
+    <<horny_reset>>
+    <<set $player.sexp++>>
+		
+<<else>>
+        <<if $player.energy >= 3>>
+            <div id="action-buttons">
+                <<for _sexActionKey, _sexAction range _sexActions>>
+                    <<capture _sexActionKey, _sexAction>>
+                        <<if (_sexAction.show ?? true)>>
+                            <<set _linkName = '<span data-balloon-length="medium" data-balloon-pos="up-left" aria-label="' + _sexAction.title + '">[img[setup.ImagePath+"game/misc/actions/"+_sexActionKey.replace("mistress_", "")+".png"]]</span>'>>
+                            <<link _linkName>>
+                                <<if !($tmpGirl.traits ?? []).includes('nymphomaniac')>>
+                                    <<set $sexForced = true>>
+                                <</if>>
+                                <<set $sexAction = _sexActionKey>>
+                                <<goto `passage()`>>
+                            <</link>>
+                        <</if>>
+                    <</capture>>
+                <</for>>
+            </div>
+        <br />
+     <</if>>
+
+<</if>>
+
+<<link 'Take over'>>
+    <<unset $sexAction, $sexForced>>
+    <<set $tmpGirl.location = 'basement'>>
+	<<fuck $tmpGirl>>
+<</link>>
+
+<<link 'End'>>
+    <<unset $sexAction, $sexForced>>
+    <<set $tmpGirl.location = 'basement'>>
+	<<goto 'NPC view'>>
+<</link>>

@@ -2,9 +2,9 @@
 <h1 class="ptitle">BEDROOM</h1>
 <br /><br />
 <center>
-
 <<set _girlGuest = setup.getPersonsForLocation($guests, 'maid')>>
-<<if _girlGuest.length > 0 && timeBetween('09:00', '15:00')>>
+<<set _isMaidInRoom = _girlGuest.length > 0 && timeBetween('09:00', '15:00')>>
+<<if _isMaidInRoom>>
 	<<set $tmpGirl = $guests[_girlGuest[0]]>>
 	<<set $tmpGirl.location = 'maid'>>
 	<center>
@@ -15,24 +15,19 @@
 	<<set _girlGuestLink = 'Approach ' + $tmpGirl.name>>
 	<<link `_girlGuestLink`>>
 		<<set $tmpGirlBack = 'Bedroom'>>
-		<<set $tmpGirlCapture to false>> 
 		<<set $tmpGirl.rape to false>>
+		<<set $tmpGirlCapture to false>> 
+		<<set $tmpGirlInvite to false>>
 		<<set $guestId = _girlGuest[0]>>
-		<<run delete $slaveId>>
-		<<run delete $charId>>
-		<<if !$tmpGirl.gender>>
-			<<set $tmpGirlViewBack = 'Girl view - guest'>>
-			<<goto 'Girl view - guest'>>
-		<<else>>
-			<<set $tmpGirlViewBack = 'Guy view - guest'>>
-			<<goto 'Guy view - guest'>>		
-		<</if>>
+		<<unset $slaveId, $charId, $childId>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<goto 'NPC view - guest'>>
 	<</link>>
 	<br /><br />
 <</if>>
 
 
-<<if $charactersInLocation['bedroom'].includes('blair') && timeBetween('22:00','23:59')>>
+<<if _charactersInLocation['bedroom'].includes('blair') && timeBetween('22:00','23:59')>>
 	<<link 'Talk with Blair'>>
 		<<goto 'Blair - bedroom talk'>>
 	<</link>>
@@ -48,7 +43,15 @@
 		<<if setup.getPersonsForLocation($guests, 'maid').length>>
 			<<energy 20>>
 		<</if>>
-		<<goto 'Bedroom'>>
+		<<if _isMaidInRoom && setup.percentageChance(100) && $tmpGirl.likesGuys && !($locationEvents.bedroom ?? false)>>
+			<<set $tmpEvent = {
+				id: _girlGuest[0]
+			}>>
+			<<set $locationEvents.bedroom = true>>
+			<<goto 'Bedroom event - maid surprise'>>
+		<<else>>
+			<<goto 'Bedroom'>>
+		<</if>>
 	<</link>>
 <</if>>
 
@@ -59,13 +62,18 @@
 	<</link>>
 <</if>>
 
-<<link 'STATS'>>
+<<link 'Stats'>>
 	<<script>>
 		Dialog.setup("Stats", "Stats");
 		Dialog.wiki(Story.get("MC stats").processText());
 		Dialog.open();
 	  <</script>>
 <</link>>
+<<if ($game.cabinName ?? false)>>
+	<<link 'Settlement management'>>
+		<<goto 'Settlement management'>>
+	<</link>>
+<</if>>
 
 [[Back|Wood cabin]]
 </center>
@@ -73,10 +81,19 @@
 <<if !($locationEvents.bedroom ?? false)>>
 	<<if timeBetween('20:00', '23:00') && setup.percentageChance(10)>>
 		<<set _hornyGuests = setup.getHornyPersons($guests)>>
-		<<if (_hornyGuests[0] ?? false)>>
+		<<if (_hornyGuests[0] ?? []).length>>
 			<<set $guestId = _hornyGuests[0][Math.floor(Math.random()*_hornyGuests[0].length)]>>
 			<<set $locationEvents.bedroom = true>>
 			<<goto 'Bedroom: horny guest'>>
+		<</if>>
+	<<elseif timeBetween('21:00', '23:00') && setup.percentageChance(5) && recall($suppCode)>>
+		<<set _girls = setup.getAvailablePersons18yo($guests)>>
+		<<if (_girls[0] ?? []).length>>
+			<<set $tmpEvent = {
+				id: _girls[0][Math.floor(Math.random()*_girls[0].length)]
+			}>>
+			<<set $locationEvents.bedroom = true>>
+			<<goto 'Bedroom - sleepover'>>
 		<</if>>
 	<</if>>
 <</if>>

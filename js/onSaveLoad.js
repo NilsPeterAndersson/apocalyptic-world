@@ -1,10 +1,158 @@
+
+function checkAndFixTraits(npc)
+{
+    if ((npc.traits ?? []).includes('breeder') && (npc.traits ?? []).includes('infertile')) {
+        let indexOf = npc.traits.indexOf('infertile');
+        npc.traits.splice(indexOf, 1);
+    }
+    /* name & -change 0.45 dumberbell -> 0.46 kettlebell */
+    if ( typeof npc.inventory !== 'undefined' && typeof npc.inventory['dumberbell'] !== 'undefined') {
+        npc.inventory['kettlebell'] = npc.inventory['dumberbell'];
+        delete npc.inventory['dumberbell'];
+    }
+}
+
+Save.onSave.add(function (save, details) {
+    if (details.type === 'disk') {
+        save.metadata = {};
+        save.metadata.settings = clone(settings);
+    }
+});
+
 Save.onLoad.add(function (save) {
+
+    if (save.metadata && save.metadata.settings) {
+        for (const name in save.metadata.settings) {
+            if (settings[name] !== save.metadata.settings[name]) {
+                settings[name] = save.metadata.settings[name]
+                const s = Setting.get(name);
+                if (s.hasOwnProperty('onChange')) {
+                    s.onChange.call();
+                }
+            }
+        }
+        Setting.save();
+    }
+
+
+    let variables = save.state.history[save.state.index].variables; // shortcut to be used when we cleanup
+
+    // Cleanup old variables
+    var _oldVariables = [
+        'cellSlaveIds',
+        'assignedToStreets',
+        'assignedToGreenhouse',
+        'addHorny',
+        'addDay',
+        'charsInGrid',
+        'energyPenalty',
+        'foundItem',
+        'giveFood',
+        'icon',
+        'isDisabled',
+        'randomEnemy',
+        'workingInGarden',
+        'showSlavesCount',
+        'sleepAction',
+        'sleepDead',
+        'talkedAbout',
+        'tmpGirlkey',
+        'undergroundEvent',
+        'url',
+        'wantedGender',
+        'wantedLink',
+        'wantedPerson',
+        'wantedPron',
+        'wantedPron2',
+        'wantedPsg',
+        'shooterFight',
+        'timeCycle',
+        'randomNumber',
+        'charactersInLocation',
+    ];
+    for (var _i = 0; _i <= _oldVariables.length; _i++) {
+        if (typeof save.state.history[save.state.index].variables[_oldVariables[_i]] !== 'undefined') {
+            delete save.state.history[save.state.index].variables[_oldVariables[_i]];
+        }
+    }
+
+
+    // Default
+
+    if (typeof save.state.history[save.state.index].variables.game.location.nursery !== 'undefined') {
+        save.state.history[save.state.index].variables.game.location.youth_district = true;
+    }
+    if ((variables.game.location.nursery ?? false) || (variables.game.location.library ?? false)) {
+        variables.game.location.youth_district = true;
+    }
+    if (variables.player?.quests?.settlement_burned && !variables.game.location?.settlement) {
+        variables.game.location.settlement = true;
+    }
+
     if (typeof save.state.history[save.state.index].variables.characters.dom === 'undefined') {
         save.state.history[save.state.index].variables.characters.dom = {
             quests: {},
             relationship: 0
         };
     }
+    if (typeof save.state.history[save.state.index].variables.characters.dom !== 'undefined') {
+        save.state.history[save.state.index].variables.characters.dom.name ??= 'Dom';
+        save.state.history[save.state.index].variables.characters.dom.id ??= 'dom';
+        save.state.history[save.state.index].variables.characters.dom.family ??= { wives: ['isabel'] };
+    }
+
+    if (typeof save.state.history[save.state.index].variables.characters.isabel !== 'undefined') {
+        save.state.history[save.state.index].variables.characters.isabel.canFuck = true;
+        save.state.history[save.state.index].variables.characters.isabel.likesGuys = true;
+        save.state.history[save.state.index].variables.characters.isabel.likesGirls = true;
+        save.state.history[save.state.index].variables.characters.isabel.likesTGuys = false;
+        save.state.history[save.state.index].variables.characters.isabel.likesTGirls = false;
+
+        save.state.history[save.state.index].variables.characters.isabel.id ??= 'isabel';
+        save.state.history[save.state.index].variables.characters.isabel.family ??= { husband: 'dom'};
+        if (typeof save.state.history[save.state.index].variables.characters.isabel.submission !== 'undefined') {
+            save.state.history[save.state.index].variables.characters.isabel.sub = 60;
+            delete save.state.history[save.state.index].variables.characters.isabel.submission;
+        }
+
+        if (
+            typeof save.state.history[save.state.index].variables.charId !== 'undefined' && 
+            save.state.history[save.state.index].variables.charId === 'isabel' && 
+            typeof save.state.history[save.state.index].variables.tmpGirlViewBack === 'undefined'
+        ) {
+            save.state.history[save.state.index].variables.tmpGirlViewBack = 'Isabel room';
+        }
+        if (typeof variables.characters.isabel.pregnancy !== 'undefined') {
+            variables.characters.isabel.pregnancy_father ??= 'mc';
+        }
+
+    }
+
+    if (typeof save.state.history[save.state.index].variables.characters.blair !== 'undefined') {
+        save.state.history[save.state.index].variables.characters.blair.id ??= 'blair';
+        save.state.history[save.state.index].variables.characters.blair.family ??= {};
+        save.state.history[save.state.index].variables.characters.blair.family.father ??= 'vincent';
+        delete variables.characters.blair.family.mother;
+        save.state.history[save.state.index].variables.characters.blair.likesGuys = true;
+        save.state.history[save.state.index].variables.characters.blair.likesGirls = false;
+        save.state.history[save.state.index].variables.characters.blair.likesTGuys = false;
+        save.state.history[save.state.index].variables.characters.blair.likesTGirls = false;
+        if (typeof variables.characters.blair.pregnancy !== 'undefined') {
+            variables.characters.blair.pregnancy_father ??= 'mc';
+        }
+        checkAndFixTraits(save.state.history[save.state.index].variables.characters.blair);
+    }
+
+    if (typeof save.state.history[save.state.index].variables.characters.octavia !== 'undefined') {
+        checkAndFixTraits(save.state.history[save.state.index].variables.characters.octavia);
+    }
+
+    if (typeof save.state.history[save.state.index].variables.characters.vincent !== 'undefined') {
+        save.state.history[save.state.index].variables.characters.vincent.name ??= 'Vincent';
+        save.state.history[save.state.index].variables.characters.vincent.id   ??= 'vincent';
+        save.state.history[save.state.index].variables.characters.vincent.family ??= {kids: ['blair'] };
+    }
+
     if ((save.state.history[save.state.index].variables.game.location.settlement ?? false) && (save.state.history[save.state.index].variables.characters.octavia ?? false) && typeof save.state.history[save.state.index].variables.characters.octavia.quests === 'undefined') {
         save.state.history[save.state.index].variables.characters.octavia.quests = {};
     }
@@ -32,8 +180,6 @@ Save.onLoad.add(function (save) {
         save.state.history[save.state.index].variables.startDate.setTime(save.state.history[save.state.index].variables.startDate.getTime() - dateOffset);
     }
 
-
-
     if ((save.state.history[save.state.index].variables.tmpGirl ?? null) && !Array.isArray(save.state.history[save.state.index].variables.tmpGirl.traits ?? [])) {
         save.state.history[save.state.index].variables.tmpGirl.traits = [];
     }
@@ -42,6 +188,17 @@ Save.onLoad.add(function (save) {
     }
 
     if ((save.state.history[save.state.index].variables.tmpGirl ?? null)) {
+        for (var saveTmpGirlSkillI = 0; saveTmpGirlSkillI < (save.state.history[save.state.index].variables.tmpGirl.skills ?? []).length; saveTmpGirlSkillI++) {
+            if (setup.traits.hasOwnProperty(save.state.history[save.state.index].variables.tmpGirl.skills[saveTmpGirlSkillI])) {
+                if (typeof save.state.history[save.state.index].variables.tmpGirl.traits === 'undefined') {
+                    save.state.history[save.state.index].variables.tmpGirl.traits = [];
+                }
+                save.state.history[save.state.index].variables.tmpGirl.traits.push(save.state.history[save.state.index].variables.tmpGirl.skills[saveTmpGirlSkillI]);
+                save.state.history[save.state.index].variables.tmpGirl.skills.splice(saveTmpGirlSkillI, 1);
+                saveTmpGirlSkillI--;
+            }
+        }
+    
         for (var saveTmpGirlTraitI = 0; saveTmpGirlTraitI < (save.state.history[save.state.index].variables.tmpGirl.traits ?? []).length; saveTmpGirlTraitI++) {
             if (setup.skills.hasOwnProperty(save.state.history[save.state.index].variables.tmpGirl.traits[saveTmpGirlTraitI])) {
                 if (typeof save.state.history[save.state.index].variables.tmpGirl.skills === 'undefined') {
@@ -60,18 +217,19 @@ Save.onLoad.add(function (save) {
             }
         }
           
-        if (typeof save.state.history[save.state.index].variables.tmpGirl.orientation === 'undefined') {  
-            save.state.history[save.state.index].variables.tmpGirl.orientation = 'straight';
-            if (!save.state.history[save.state.index].variables.tmpGirl.gender) {
-                save.state.history[save.state.index].variables.tmpGirl.likesGuys = true;
-            }
+        if (typeof save.state.history[save.state.index].variables.tmpGirl.likesGuys === 'undefined') {
+		save.state.history[save.state.index].variables.tmpGirl = setup.setSexuality(save.state.history[save.state.index].variables.tmpGirl, 'straight');
         }
 		
-		if (typeof save.state.history[save.state.index].variables.tmpGirl.personality === 'undefined') {  
+	if (typeof save.state.history[save.state.index].variables.tmpGirl.orientation !== 'undefined') {
+		delete save.state.history[save.state.index].variables.tmpGirl.orientation;
+        }
+		
+	if (typeof save.state.history[save.state.index].variables.tmpGirl.personality === 'undefined') {  
             save.state.history[save.state.index].variables.tmpGirl.personality = setup.personalityTraits(2);
         }
 
-		if (typeof save.state.history[save.state.index].variables.tmpGirl.eyes === 'undefined') {  
+	if (typeof save.state.history[save.state.index].variables.tmpGirl.eyes === 'undefined') {  
             save.state.history[save.state.index].variables.tmpGirl.eyes = setup.eyesRoll(save.state.history[save.state.index].variables.tmpGirl.race, save.state.history[save.state.index].variables.tmpGirl.hair);
         }
         
@@ -83,12 +241,26 @@ Save.onLoad.add(function (save) {
             save.state.history[save.state.index].variables.tmpGirl.likes = setup.getRandomGifts(either(1, 2));
 			save.state.history[save.state.index].variables.tmpGirl.dislikes = setup.getRandomGifts(either(1, 2), save.state.history[save.state.index].variables.tmpGirl.likes);
         }
+
+        if (typeof save.state.history[save.state.index].variables.tmpGirl.submission !== 'undefined') {
+            save.state.history[save.state.index].variables.tmpGirl.sub = 60;
+            delete save.state.history[save.state.index].variables.tmpGirl.submission;
+        }
     }
 
     save.state.history[save.state.index].variables.characters.rodger = (save.state.history[save.state.index].variables.characters.rodger ?? {});
     save.state.history[save.state.index].variables.characters.eve = (save.state.history[save.state.index].variables.characters.eve ?? {});
-    if (typeof save.state.history[save.state.index].variables.characters.eve.name !== 'undefined' && typeof save.state.history[save.state.index].variables.characters.eve.quests === 'undefined') {
-        save.state.history[save.state.index].variables.characters.eve.quests = {};
+    if (typeof save.state.history[save.state.index].variables.characters.eve.name !== 'undefined' ) {
+        save.state.history[save.state.index].variables.characters.eve.quests ??= {};
+        save.state.history[save.state.index].variables.characters.eve.id ??= 'eve';
+        if (variables.characters.eve.id !== 'eve') {
+            variables.characters.eve.id   = 'eve';
+        }
+        save.state.history[save.state.index].variables.characters.eve.family ??= { husband: 'rodger'};
+        save.state.history[save.state.index].variables.characters.rodger.name ??= 'Rodger';
+        save.state.history[save.state.index].variables.characters.rodger.id ??= 'rodger';
+        save.state.history[save.state.index].variables.characters.rodger.family ??= { wives: ['eve'] };
+
     }
 
     if (typeof save.state.history[save.state.index].variables.guests === 'undefined') {
@@ -97,6 +269,9 @@ Save.onLoad.add(function (save) {
     }
     if (typeof save.state.history[save.state.index].variables.basementLimit === 'undefined') {
         save.state.history[save.state.index].variables.basementLimit = Math.max(3, save.state.history[save.state.index].variables.slaves.length);
+    }
+    if (typeof save.state.history[save.state.index].variables.companionsLimit === 'undefined') {
+        save.state.history[save.state.index].variables.companionsLimit = 6;
     }
     if (typeof save.state.history[save.state.index].variables.player.reputation_bounty_hunter === 'undefined') {
         save.state.history[save.state.index].variables.player.reputation_bounty_hunter = 0;
@@ -108,17 +283,20 @@ Save.onLoad.add(function (save) {
     if (!(save.state.history[save.state.index].variables.player.stats ?? false)) {
         save.state.history[save.state.index].variables.player.stats = {};
     }
+    variables.player.id ??= 'mc';
 
     for(var varsSlaveI = 0; varsSlaveI < save.state.history[save.state.index].variables.slaves.length; varsSlaveI++) {
+        checkAndFixTraits(save.state.history[save.state.index].variables.slaves[varsSlaveI]);
         if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].orgasms === 'undefined') {
             save.state.history[save.state.index].variables.slaves[varsSlaveI].orgasms = 0;
             save.state.history[save.state.index].variables.slaves[varsSlaveI].guys = 1;
         }
-        if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].orientation === 'undefined') {
-            save.state.history[save.state.index].variables.slaves[varsSlaveI].orientation = 'straight';
-            if (!save.state.history[save.state.index].variables.slaves[varsSlaveI].gender) {
-                save.state.history[save.state.index].variables.slaves[varsSlaveI].likesGuys = true;
-            }
+	if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].likesGuys === 'undefined') {
+		save.state.history[save.state.index].variables.slaves[varsSlaveI] = setup.setSexuality(save.state.history[save.state.index].variables.slaves[varsSlaveI], 'straight');
+        }
+		
+	if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].orientation !== 'undefined') {
+		delete save.state.history[save.state.index].variables.slaves[varsSlaveI].orientation;
         }
 
         if (typeof save.state.history[save.state.index].variables.slaves[varsSlaveI].happy === 'undefined') {
@@ -186,6 +364,11 @@ Save.onLoad.add(function (save) {
     }
 
     for(var saveGuestI = 0; saveGuestI < save.state.history[save.state.index].variables.guests.length; saveGuestI++) {
+        checkAndFixTraits(save.state.history[save.state.index].variables.guests[saveGuestI]);
+        if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].strength === 'undefined') {
+            save.state.history[save.state.index].variables.guests[saveGuestI].strength = 0;
+        }
+
         if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].birthDate === 'undefined') {
             save.state.history[save.state.index].variables.guests[saveGuestI].birthDate = setup.getBirthDate(save.state.history[save.state.index].variables.guests[saveGuestI].age);
             delete save.state.history[save.state.index].variables.guests[saveGuestI].age;
@@ -205,11 +388,12 @@ Save.onLoad.add(function (save) {
             save.state.history[save.state.index].variables.guests[saveGuestI].dislikes = setup.getRandomGifts(either(1, 2), save.state.history[save.state.index].variables.guests[saveGuestI].likes);
         }
 
-        if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].orientation === 'undefined') {
-            save.state.history[save.state.index].variables.guests[saveGuestI].orientation = 'straight';
-            if (!save.state.history[save.state.index].variables.guests[saveGuestI].gender) {
-                save.state.history[save.state.index].variables.guests[saveGuestI].likesGuys = true;
-            }
+	if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].likesGuys === 'undefined') {
+		save.state.history[save.state.index].variables.guests[saveGuestI] = setup.setSexuality(save.state.history[save.state.index].variables.guests[saveGuestI], 'straight');
+        }
+		
+	if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].orientation !== 'undefined') {
+		delete save.state.history[save.state.index].variables.guests[saveGuestI].orientation;
         }
 
         if (typeof save.state.history[save.state.index].variables.guests[saveGuestI].happy === 'undefined') {
@@ -270,12 +454,14 @@ Save.onLoad.add(function (save) {
             save.state.history[save.state.index].variables.characters[saveCharI].skills = [];
         }
 
-        if (typeof save.state.history[save.state.index].variables.characters[saveCharI].orientation === 'undefined') {
-            save.state.history[save.state.index].variables.characters[saveCharI].orientation = 'straight';
-            if (!save.state.history[save.state.index].variables.characters[saveCharI].gender) {
-                save.state.history[save.state.index].variables.characters[saveCharI].likesGuys = true;
-            }
+	if (typeof save.state.history[save.state.index].variables.characters[saveCharI].likesGuys === 'undefined') {
+		save.state.history[save.state.index].variables.characters[saveCharI] = setup.setSexuality(save.state.history[save.state.index].variables.characters[saveCharI], 'straight');
         }
+		
+	if (typeof save.state.history[save.state.index].variables.characters[saveCharI].orientation !== 'undefined') {
+		delete save.state.history[save.state.index].variables.characters[saveCharI].orientation;
+        }
+
         if (typeof save.state.history[save.state.index].variables.characters[saveCharI].eyes === 'undefined') {  
             save.state.history[save.state.index].variables.characters[saveCharI].eyes = setup.eyesRoll(save.state.history[save.state.index].variables.characters[saveCharI].race, save.state.history[save.state.index].variables.characters[saveCharI].hair);
         }
@@ -306,6 +492,17 @@ Save.onLoad.add(function (save) {
                 saveNurseryTraitI--;
             }
         }
+
+        for (var saveNurserySkillI = 0; saveNurserySkillI < (save.state.history[save.state.index].variables.nursery[saveNurseryI].skills ?? []).length; saveNurserySkillI++) {
+            if (setup.traits.hasOwnProperty(save.state.history[save.state.index].variables.nursery[saveNurseryI].skills[saveNurserySkillI])) {
+                if (typeof save.state.history[save.state.index].variables.nursery[saveNurseryI].traits === 'undefined') {
+                    save.state.history[save.state.index].variables.nursery[saveNurseryI].traits = [];
+                }
+                save.state.history[save.state.index].variables.nursery[saveNurseryI].traits.push(save.state.history[save.state.index].variables.nursery[saveNurseryI].skills[saveNurserySkillI]);
+                save.state.history[save.state.index].variables.nursery[saveNurseryI].skills.splice(saveNurserySkillI, 1);
+                saveNurserySkillI--;
+            }
+        }
     }
 
     for(var saveWantedI = 0; saveWantedI < (save.state.history[save.state.index].variables.wanted ?? []).length; saveWantedI++) {
@@ -324,4 +521,31 @@ Save.onLoad.add(function (save) {
             save.state.history[save.state.index].variables.wanted[saveWantedI].dislikes = setup.getRandomGifts(either(1, 2), save.state.history[save.state.index].variables.wanted[saveWantedI].likes);
         } 
     }
+
+    if ((variables.locationEvents.bathhouse ?? false) && !variables.backpack.has('blueprint_hot_tub')) {
+        /* fix for older saves $locationEvents.bathhouse is true but blueprint not in backpack. */
+        variables.backpack.pickup('blueprint_hot_tub', 1);
+    }
+    /* name & -change 0.45 dumberbell -> 0.46 kettlebell */
+    if (variables.backpack.has('dumberbell')) {
+        const count = variables.backpack.count('dumberbell');
+        variables.backpack.pickup('kettlebell', count);
+        variables.backpack.drop('dumberbell', count);
+    }
+    if (variables.storage.has('dumberbell')) {
+        const count = variables.storage.count('dumberbell');
+        variables.storage.pickup('kettlebell', count);
+        variables.storage.drop('dumberbell', count);
+    }
+
+    if ((variables.player.fighter_rank ?? 100) > 150) {
+        /* fight cage system changed from very old saves */
+        variables.player.fighter_rank = Math.floor(variables.player.fighter_rank/10);
+    }
+
+    /* obselete variables */
+    delete 
+        save.state.history[save.state.index].variables.workbenchItems,
+        save.state.history[save.state.index].variables.shopItems,
+        save.state.history[save.state.index].variables.actionText;
 });

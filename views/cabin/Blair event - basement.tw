@@ -38,14 +38,14 @@ She takes you by the hand and leads you to the basement.
 	<<link 'Fuck her'>>
 		<<set $tmpGirl = $characters.blair>>
 	  	<<set $tmpGirl.location = 'basement'>>
-	  	<<set $tmpGirlCapture to false>>
 	  	<<set $tmpGirl.rape to false>>
-	  	<<run delete $slaveId>>
-	  	<<run delete $guestId>>
+	  	<<set $tmpGirlCapture to false>>
+		<<set $tmpGirlInvite to false>>
+	  	<<unset $slaveId, $guestId, $childId>>
 	  	<<set $charId = 'blair'>>
 	  	<<set $tmpGirlViewBack = 'Sleep eval'>>
 	  	<<set $tmpGirlBack = 'Sleep eval'>>
-	  	<<goto 'Girl fuck'>>
+		<<fuck $tmpGirl>>
 	<</link>>
 <</linkreplace>>
 

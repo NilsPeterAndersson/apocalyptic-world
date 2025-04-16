@@ -18,16 +18,18 @@
 <</widget>>
 
 <<widget horny>>
-	<<set $addHorny = $args[0]>>
+	<<set _addHorny = $args[0]>>
 	<<if setup.perkHas('drunk')>>
-		<<set $addHorny = Math.round($addHorny / 2, 0)>>
+		<<set _addHorny = Math.round(_addHorny / 2, 0)>>
 	<</if>>
-	<<set $player.horny += $addHorny>>
+	<<set $player.horny += _addHorny>>
 	<<if $player.horny > 100>>
 		<<set $player.horny = 100>>
 	<</if>>
 	
-	<<updatemeter '$hornyBar' `$player.horny / 100`>>
+	<<timed 0.1s>>
+			<<updatemeter '$hornyBar' `$player.horny / 100`>>
+	<</timed>>
 <</widget>>
 
 <<widget horny_reset>>
@@ -58,6 +60,9 @@
 	<<if typeof $player.perks[$args[0]] === 'undefined'>>
 		<<set $player.perks[$args[0]] = $game.day + setup.perkList[$args[0]].days>>
 	<</if>>
+	<<notify 3s>>
+		<<=setup.perkList[$args[0]].title>>
+	<</notify>>
 <</widget>>
 
 <<widget perkList>>
@@ -83,7 +88,7 @@
 	<<set $player.companions[$args[0] + ':' + $args[1]] = true>>
 <</widget>>
 
-<<widget companionRemove>>
+<<widget companionRemoveItem>>
 	/* args[0] = list name:index in that array */
 	<<if (typeof $player.companions[$args[0]] !== "undefined" ) >>
 		<<run delete $player.companions[$args[0]]>>
@@ -94,36 +99,71 @@
 	<<for _comp, _compI range $player.companions>>
 		<<set _compKey = _comp.split(':')>>
 		<<capture _comp, _compKey>>
-			<<set _girlVisual = $guests[_compKey[1]]>>
-			<div class="companion tooltip" @title="'' + $guests[_compKey[1]].name + ''">
-				<div class="girl_info_picture">
-					<<include 'Girl visual'>>
+			<<set _girlVisual = setup.companionGet(_comp)>>
+			<<if !_girlVisual>>
+				<<run delete $player.companions[_comp]>>
+				<<continue>>
+			<</if>>
+			<<capture _girlVisual>>
+				<div class="companion tooltip" @data-id="_girlVisual.id" @title="'' + _girlVisual.name + ''">
+					<div class="girl_info_picture">
+						<<include 'NPC visual'>>
+					</div>
 				</div>
-			</div>
-			<<link 'x'>>
-					<<dialog 'Remove companion'>>
-						Remove <<=$guests[_compKey[1]].name>> from companions?
-						<br />
-						<<link 'Yes'>>
-							<<companionRemove _comp>>
-							<<goto `passage()`>>
-							<<dialogclose>>
-						<</link>>	
-					<</dialog>>
-				<</link>>
+				<<link 'x'>>
+						<<dialog 'Remove companion'>>
+							Remove <<=_girlVisual.name>> from companions?
+							<br />
+							<<link 'Yes'>>
+								<<companionRemoveItem _comp>>
+								<<goto `passage()`>>
+								<<dialogclose>>
+							<</link>>	
+						<</dialog>>
+					<</link>>
+			<</capture>>
 		<</capture>>
 	<</for>>
 <</widget>>
 
 <<widget companionRearange>>
+	<<set _newCompanions = {}>>
+	<<set _splitOldNpcKey = $args[0].split(':')>>
 	<<for _compR, _compIR range $player.companions>>
 		<<set _compKeyR = _compR.split(':')>>
-		<<if _compKeyR[1] > $args[0]>>
-			<<run delete $player.companions[_compR]>>
+		<<if _compKeyR[0] !== _splitOldNpcKey[0]>>
+			<<set _newCompanions[_compR] = true>>
+			<<continue>>
+		<</if>>
+
+		<<if parseInt(_compKeyR[1]) > parseInt(_splitOldNpcKey[1])>>
 			<<set _compKeyR[1]-->>
-			<<set $player.companions[_compKeyR.join(':')] = true>>
+			<<set _newCompanions[_compKeyR.join(':')] = true>>
+		<<else>>
+			<<set _newCompanions[_compKeyR.join(':')] = true>>
 		<</if>>
 	<</for>>
+
+	<<set $player.companions = _newCompanions>>
+<</widget>>
+
+<<widget sellSlavesRearange>>
+	<<set _newSellSlaves = {}>>
+	<<for _slaveSell, _slaveSellI range $sellSlaves>>
+		<<if _args[0] !== _splitOldNpcKey[0]>>
+			<<set _newCompanions[_compR] = true>>
+			<<continue>>
+		<</if>>
+
+		<<if parseInt(_compKeyR[1]) > parseInt(_splitOldNpcKey[1])>>
+			<<set _compKeyR[1]-->>
+			<<set _newCompanions[_compKeyR.join(':')] = true>>
+		<<else>>
+			<<set _newCompanions[_compKeyR.join(':')] = true>>
+		<</if>>
+	<</for>>
+
+	<<set $player.companions = _newCompanions>>
 <</widget>>
 
 <<widget guestRemove>>
@@ -140,8 +180,62 @@
     <</if>>
 
     /* but companionRearange _guestI works because the arg[0] is the same */
-    <<companionRearange _guestI>>
+    <<companionRearange _compI>>
     <<run $guests.splice(_guestI, 1)>>
+<</widget>>
+
+<<widget guestLeft>>
+	<<for _npcId, _npcLike range $guests[_args[0]].relationshipBetween?.stats ?? {}>>
+		<<set _npc = setup.getNpcById(_npcId)>>
+		<<if !_npc>>
+			<<continue>>
+		<</if>>
+		<<if _npcLike > 50>>
+			<<set _npc.happy -= 80>>
+		<<else>>
+			<<set _npc.happy -= 50>>
+		<</if>>
+	<</for>>
+	<<guestRemove _args[0]>>
+<</widget>>
+
+<<widget slaveRemove>>
+    /* does slaves.splice and companion rearrange, must use at every slave.splice
+       args[0] = index in slaves list */
+    <<set _slaveI = $args[0]>>
+    <<set _compI = 'slave:' + _slaveI>>
+
+    /* I wanted  to do "companionRemove 'slave:' + _slaveI" but it semms that
+       widgets can't call widgets - they share the same variables args[0]
+    */
+    <<if (typeof $player.companions[_compI] !== "undefined" ) >>
+		<<run delete $player.companions[_compI]>>
+    <</if>>
+
+    /* but companionRearange _guestI works because the arg[0] is the same */
+    <<companionRearange _compI>>
+    <<run $slaves.splice(_slaveI, 1)>>
+<</widget>>
+
+<<widget slaveSell>>
+	<<for _inventory, _inventoryCount range ($slaves[_args[0]].inventory ?? {})>>
+		<<run setup.npcInventoryRemove($slaves[_args[0]], _inventory, _inventoryCount)>>
+		<<pickup $backpack _inventory _inventoryCount>>
+	<</for>>
+	<<set $player.reputation++>>
+	<<set $player.goodwill-=5>>
+	<<set $player.money += $slaves[_args[0]].value>>
+	<<statsAdd 'slaves_sold'>>
+	<<slaveRemove _args[0]>>
+<</widget>>
+
+<<widget companionRemove>>
+	<<set _splitKey = $args[0].split(':')>>
+	<<if _splitKey[0] === 'guest'>>
+		<<guestRemove _splitKey[1]>>
+	<<else>>
+		<<slaveRemove _splitKey[1]>>
+	<</if>>
 <</widget>>
 
 <<widget setPlayerStats>>
@@ -162,7 +256,9 @@
 <<widget setNpcStats>>
 	<<set _minMaxRange = {
 		relationship: [-100, 100],
-		happy: [-100, 100]
+		happy: [-100, 100],
+		sub: [-100, 100],
+		corruption: [-100, 100]
 	}>>
 	<<if $args[0] === 'guest'>>
 		<<if $args[3] > 0>>
@@ -208,14 +304,14 @@
 <<widget showFamilyTree>>
 	<<if $args[0].mother>>
 		<<set _motherNpc = setup.getNpcById($args[0].mother)>>
-		Mother: <<=(_motherNpc ? _motherNpc.name : 'dead')>>
+		Mother: <<=(_motherNpc ? _motherNpc.name : '????')>>
 		<br />
 	<</if>>
 	<<if $args[0].father>>
 		<<if $args[0].father === 'mc'>>
 			Father: You
 		<<else>>
-			Father: <<=setup.getNpcById($args[0].father)name ?? 'dead'>>
+			Father: <<=setup.getNpcById($args[0].father)?.name ?? '????'>>
 		<</if>>
 		<br />
 	<</if>>
@@ -224,16 +320,30 @@
 		<<if $args[0].husband === 'mc'>>
 			You
 		<<else>>
-			<<=setup.getNpcById($args[0].father)>>
+			<<=setup.getNpcById($args[0].husband)?.name ??  '????'>>
 		<</if>>
+		<br />
+	<</if>>
+	<<if $args[0].wives>>
+		Wives: <br />
+		<<for _familyTreeWifeI, _familyTreeWife range $args[0].wives>>
+			<div>
+			<<set _familyMember = setup.getNpcById(_familyTreeWife)>>
+				<<if _familyMember>>
+					<<=_familyMember.name>>
+				<</if>>
+			</div>
+		<</for>>
 	<</if>>
 	<<if $args[0].kids>>
-		Childs: <br />
+		Children: <br />
 		<<for _familyTreeChildI, _familyTreeChild range $args[0].kids>>
+			<div>
 			<<set _familyMember = setup.getNpcById(_familyTreeChild)>>
-			<<if _familyMember>>
-				<<=_familyMember.name>> (<<=setup.getAge(_familyMember)>>)
-			<</if>>
+				<<if _familyMember>>
+					<<=_familyMember.name>> (<<=setup.getAge(_familyMember)>>)
+				<</if>>
+			</div>
 		<</for>>
 	<</if>>
 <</widget>>
@@ -272,3 +382,11 @@
 <</widget>>
 
 
+<<widget backButton>>
+	<<set _backLink =  ($args[0] ?? '')>>
+	<div id="back-button">
+		<<link '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g data-name="86.Arrow Left"><path d="M12 24a12 12 0 1 1 12-12 12.013 12.013 0 0 1-12 12zm0-22a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2z"/><path d="M10.293 14.707 5.586 10l4.707-4.707 1.414 1.414L8.414 10l3.293 3.293-1.414 1.414z"/><path d="M16 18h-2v-5a1.882 1.882 0 0 0-2-2H7V9h5a3.888 3.888 0 0 1 4 4z"/></g></svg>'>>
+			<<goto `_backLink`>>
+		<</link>>
+	</div>
+<</widget>>

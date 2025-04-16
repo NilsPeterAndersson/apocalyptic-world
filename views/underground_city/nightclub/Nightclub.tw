@@ -1,7 +1,7 @@
 :: Nightclub [Place bg-underground] {"position":"1938,1464","size":"100,100"}
 <h1 class="ptitle">NIGHTCLUB</h1>
 <div id="place-head">
-[img[setup.ImagePath+'places/underground/nightclub_head_outside.jpg']]
+	<<image 'places/underground/nightclub_head_outside.jpg' sfw>>
 </div>
 <br /><br />
 Works from 20:00 - 04:00<br />
@@ -11,6 +11,11 @@ Works from 20:00 - 04:00<br />
   <<link 'Go inside (5 caps)'>>
 	  <<set $player.money -=5>>
 	  <<goto 'Nightclub - inside'>>
+  <</link>>
+<<else>>
+	<<link 'Wait an hour'>>
+	  <<addmins 60>>
+	  <<goto `passage()`>> 
   <</link>>
 <</if>>
 [[Leave|Underground city]]

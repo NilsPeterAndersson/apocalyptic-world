@@ -1,4 +1,4 @@
-:: Changelog {"position":"1467,21","size":"100,100"}
+:: Changelog
 <div id="vc-wrapper" class="tabs">
 <!--// add > checked="checked" < to top tab for open by default//-->
 <!--// Template
@@ -11,9 +11,1202 @@
 
 at css some explanation for icons //--> 
 
+<div class="tab"><input type="radio" id="v056" name="rd" checked="checked">
+<label class="tab-label" for="v056"><span class="glyph vc-icon-top">&#57862;</span> 0.56 <span class="glyph vc-icon-top">&#57748;</span> 2 <span class="glyph vc-icon-top">&#57751;</span> 14 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+  <li>Octavia date choose. No option to go back.</li>
+  <li>Katrina Jade pack error</li>
+</ul>
 
-<div class="tab"><input type="radio" id="v023" name="rd" checked="checked">
-<label class="tab-label" for="v025"><span class="glyph vc-icon-top">&#57862;</span> 0.26 <span class="glyph vc-icon-top">&#57748;</span> 7 <span class="glyph vc-icon-top">&#57751;</span> 25 <span class="vc-top-fill"></span></label>
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+  <li>Octavia date choose. No option to go back.</li>
+  <li>Katrina Jade pack error</li>
+  <li>Event - Fight won (existing) - Option to have sex</li>
+  <li>Event [Gipsy family] (existing) - Options to capture or invite (contr. Illusion-XIII)</li>
+  <li>Event [Laura] - Examination scene</li>
+  <li>Event [Dom] - Dom's question</li>
+  <li>Event [Dom] - Champagne bloodbath</li>
+  <li>Girl pack - Rikki Six</li>
+  <li>Event [Underground city streets] - Another option when hiring hooker</li>
+  <li>Event [Blair] - Midnight hottub</li>
+  <li>Event [Sex] - If cum on face, sometimes cleanup scene</li>
+  <li>Event [Bounty hunter] - Bribe</li>
+  <li>Event [Laura] - Breast implants</li>
+  <li>Lab - NPC breasts surgery</li>
+  <li>Decreased save slots from 8 to 4 (Performance reasons)</li>
+  <li>Event [Shower] - Threesome (For supporters)</li>
+</ul>
+</div></div>
+
+
+
+<div class="tab"><input type="radio" id="v055" name="rd">
+<label class="tab-label" for="v055"><span class="glyph vc-icon-top">&#57862;</span> 0.55 <span class="glyph vc-icon-top">&#57748;</span> 2 <span class="glyph vc-icon-top">&#57751;</span> 18 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+    <li>Random actionImage errors and not showing pictures sometimes</li>
+    <li>All guest on guest interactions if packs enabled didn't show proper images with extended packs</li>
+</ul>
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+    <li>Blackjack. Will remember last bet (Won't need to change it after each hand)</li>
+    <li>Cheatmenu: Added option to add revolver bullets (x10) (For supporters)</li>
+    <li>Sex [Moddable] - Added new option for mod, for gender+race+hair+color.</li>
+    <li>MC stats. Added goodwill stats. (No use for it yet)</li>
+    <li>Cheatmenu: Added option to add food (x10)</li>
+    <li>Group workouts and milking will update lastInteractionDay</li>
+    <li>Underground people market. Added visible strength</li>
+    <li>Cheatmenu [NPC edit] - Option to change gender (For supporters)</li>
+    <li>New race: Indian</li>
+    <li>Sex - Pussy and anal will have additional insert scenes.</li>
+    <li>Sex - MC horny increase will take into account NPC beauty.</li>
+    <li>Random food drop while gardening or scavenging (contr. Illusion-XIII)</li>
+    <li>Morning messages will show birthdays (contr. Illusion-XIII)</li>
+    <li>New pack: Katrina Jade (contr. smokrader)</li>
+    <li>Guest move to basement images now moddable (basement/move) + added male images</li>
+    <li>New item: Energy drink (Restores energy)</li>
+    <li>Variables cleanup. Theoretically increases performance but not visibly</li>
+    <li>Event [Laura] - Morning sample (existing). Pretend to sleep option (For supporters)</li>
+</ul>
+</div></div>
+
+
+<div class="tab"><input type="radio" id="v054" name="rd">
+<label class="tab-label" for="v054"><span class="glyph vc-icon-top">&#57862;</span> 0.54 <span class="glyph vc-icon-top">&#57748;</span> 5 <span class="glyph vc-icon-top">&#57751;</span> 11 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+    <li>Event [NPC] - pregnancy potion (tmpGirl undefined error and giving trait)</li>
+    <li>Event [NPC] - nightclub dressing up image missing</li>
+    <li>Morning dream images not showing decker extended pack images</li>
+    <li>Fighter club didn't take into account time. Could use 24/7</li>
+    <li>Blackjack table didn't take into account time. Could use 24/7</li>
+</ul>
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+    <li>Event [Race stadium] - First race</li>
+    <li>Event [Bounty hunter] (existing) - Allow to invite mother and daughter to live in settlement</li>
+    <li>Event [Sex] - Transfemales will use different images in massage. (contr decker-666)</li>
+    <li>Event [Garage] - Modification talk</li>
+    <li>Event [Basement] - Mistress party introduction (existing) Changed amount of people needed from 10 to 6.</li>
+    <li>Event [Guest house] - Males forcing himself on women</li>
+    <li>Event [Dom] - Return to underground city plan</li>
+    <li>Event [Dom] - Return to underground city</li>
+    <li>Event [Isabel] - Storage talk</li>
+    <li>New location: Underground office (WIP)</li>
+    <li>Event [Car explore] - Fun ride (For supporters)</li>
+</ul>
+</div></div>
+
+
+
+<div class="tab"><input type="radio" id="v053" name="rd">
+<label class="tab-label" for="v053"><span class="glyph vc-icon-top">&#57862;</span> 0.53 <span class="glyph vc-icon-top">&#57748;</span> 6 <span class="glyph vc-icon-top">&#57751;</span> 20 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+    <li>Typos</li>
+    <li>Assign to quarry error</li>
+    <li>Event [Travel] - Underground city - girl ambush error if lost the fight</li>
+    <li>Event [Explore] - Lost child stats fix</li>
+    <li>Changelog </div> didn't allow to open previous changelogs</li>
+    <li>Milking images missing</li>
+</ul>
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+    <li>Nightclub - Dressing up images now moddable (Also added for trans)</li>
+    <li>Pregnancy speed potion reduced from 100 days to 30 days.</li>
+    <li>Fast travel - Added cabin location</li>
+    <li>Hospital - Trans working image</li>
+    <li>Sex - Pussy fisting option (contr. decker-666)</li>
+    <li>Sex - Trans orgasm images (contr. decker-666)</li>
+    <li>Dreams - Available to turn on for specific genders (contr. decker-666)</li>
+    <li>Cheatmenu - Increase max energy (For supporters)</li>
+    <li>Vincent breast milk and use girl links have caps added.</li>
+    <li>Fighting - NPCs with fighter trait will be stronger in random fights (not only cage fight)</li>
+    <li>Basement people market - Now in buy available males and transfemales</li>
+    <li>Underground shop - Added option to buy glass.</li>
+    <li>Journal - Help - Added work schedules</li>
+    <li>Sex - Female Latina separate default images</li>
+    <li>NPC Customize - Option to add notes to each NPC (Will show in lists)</li>
+    <li>Packs - Added decker pack as extended and in base game (With new updates won't need to update actions.js)</li>
+    <li>Fight - Added option for companions to use crossbow</li>
+    <li>NPC fight cage - Added images for transfemales too</li>
+    <li>Event [Car explore] - Gypsy family (For supporters)</li>
+</ul>
+</div></div>
+
+
+<div class="tab"><input type="radio" id="v052" name="rd">
+<label class="tab-label" for="v052"><span class="glyph vc-icon-top">&#57862;</span> 0.52 <span class="glyph vc-icon-top">&#57748;</span> 6 <span class="glyph vc-icon-top">&#57751;</span> 13 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+    <li>One of Octavia's events triggered only with 60 rel but journal tells 50</li>
+    <li>Married NPC asking for sex error sometimes (looked like for old NPCs)</li>
+    <li>Trans model: Penis visible with chastity belt on</li>
+    <li>Building Rodger's church didn't increase relationship</li>
+    <li>Dream trans nightclub image error</li>
+    <li>Cum in pussy with breeder trait didn't trigger orgam</li>
+</ul>
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+    <li>Event [Octavia] - New plan</li>
+    <li>Event [Octavia] - Nightclub visit</li>
+    <li>Event [Octavia] - Date to the nightclub (For supporters)</li>
+    <li>Event [Octavia] - Investigation</li>
+    <li>Event [Car] - Fuel dilemma (existing) - Option to capture NPC</li>
+    <li>Event [Sex] - Threesome more actions (contr. decker-666)</li>
+    <li>Event [Wanted] - Catched (existing) - If using "Use" option will impact relationship and submission.</li>
+    <li>Event [Fight cage] - Fighter club introduction</li>
+    <li>Event [Fight club] - Initial NPC fighting system introduced. Fight for caps or fighters (Waiting suggestions)</li>
+    <li>New skill: fighter (Has additional strength in NPC cage fights)</li>
+    <li>Event [Cabin] - Guest threesome MMF event (contr. decker-666)</li>
+    <li>Event [Sex] - Ask to fuck someone. Option to MMF (contr. decker-666)</li>
+    <li>Event [Cabin] - Safe haven</li>
+</ul>
+</div></div>
+
+
+<div class="tab"><input type="radio" id="v051" name="rd">
+<label class="tab-label" for="v051"><span class="glyph vc-icon-top">&#57862;</span> 0.51 <span class="glyph vc-icon-top">&#57748;</span> 4 <span class="glyph vc-icon-top">&#57751;</span> 19 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+    <li>Hospital: If bleeding didn't trigger healing event.</li>
+    <li>On job: Remove sometimes removed random NPC inventory items.</li>
+    <li>Explore event: The Lost Child (Fixed mother/father birth dates).</li>
+    <li>Vincent view: Talk about girl button rearranged.</li>
+</ul>
+
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+    <li>Sex: Additional images if girl has orgasm from pussy penetration/licking (and is not a squirter).</li>
+    <li>New item: Lube.</li>
+    <li>Sex [Anal]: Option to use lube if too inexperienced.</li>
+    <li>Fight: Option to capture all enemies with one button.</li>
+    <li>Sex: Women with the "Breeder" trait get additional arousal when creampied.</li>
+    <li>Event [Explore]: Wolves attack. Will also get food from them, not only pelts.</li>
+    <li>SFW mode: A lot of images (70+ passages) changed to support settings.</li>
+    <li>New pack: Vina Sky (contr. smokrader).</li>
+    <li>Set hunters max limit to 8.</li>
+    <li>Journal: Negan quest added info about (80+ beauty and blonds).</li>
+    <li>Workbench: Option to craft axe and pickaxe.</li>
+    <li>New item: Coal (no use yet).</li>
+    <li>New item: Stone (no use yet).</li>
+    <li>Job [Quarry]: Work in quarry to get coal and stone.</li>
+    <li>NPC market: Checkboxes with option to sell all.</li>
+    <li>New skill: Mechanic - Good with mechanics. Sometimes able to fix cars without needing parts.</li>
+    <li>Event: Garage. Fuck in the car mechanic.</li>
+    <li>Increased max beds in bedroom from 25 to 30 and basement from 30 to 35.</li>
+    <li>Event: Help mechanic (for supporters).</li>
+</ul>
+</div></div>
+
+
+<div class="tab"><input type="radio" id="v050" name="rd">
+<label class="tab-label" for="v050"><span class="glyph vc-icon-top">&#57862;</span> 0.50 <span class="glyph vc-icon-top">&#57748;</span> 9 <span class="glyph vc-icon-top">&#57751;</span> 15 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+  <li>Blair disappear bug in nightclub (Not 100% sure if fixed but found problem)</li>
+  <li>Shop - event triggered with non-female genders too.</li>
+  <li>Fast travel was available during sandstorm</li>
+  <li>NPC throw out of guest house happy error</li>
+  <li>NPC list. Sometimes husband error</li>
+  <li>Hospital. Only one doctor was showing</li>
+  <li>Event: Late dance - NPC didn't lose virginity</li>
+  <li>Nightclub - after guest accepts to move in, capture option visible.</li>
+  <li>Male footjob cum - missing images</li>
+</ul>
+
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+  <li>Event [Negan] - The Puppet Master</li>
+  <li>Event [Negan] - The Poisoned Gift</li>
+  <li>Cheatmenu - Background will be taken from sidebar settings.</li>
+  <li>Fight - if MC has body armor, bleeding chance gets reduced from 100% to 30%</li>
+  <li>Event [NPC market] - Option to use VIP room girl if you have sold 40+</li>
+  <li>Event [Bar] - Girl in danger (repeatable)</li>
+  <li>Event [Explore] - The Quarry Discovery</li>
+  <li>New location: Quarry (WIP. Will add mechanics in next update)</li>
+  <li>Event [Cabin] - Trespassing (For supporters)</li>
+  <li>Sex [Threesome] - Option in some cases to have threesomes. (contr. decker-666)</li>
+  <li>Event [Guest house] - Catch NPCs having sex (existing). Option to ask to join or replace male.</li>
+  <li>Event [Eve] - Rodger's surprise</li>
+  <li>Event [Guesthouse] - NPC pleasuring himself (existing). If you have given dildo, chance that she will use it</li>
+  <li>Event [Negan] - Lower deck purge</li>
+  <li>New pack - Dani Jensen (contr. smokrader)</li>
+</ul>
+</div></div>
+
+
+<div class="tab"><input type="radio" id="v049" name="rd">
+<label class="tab-label" for="v049"><span class="glyph vc-icon-top">&#57862;</span> 0.49 <span class="glyph vc-icon-top">&#57748;</span> 3 <span class="glyph vc-icon-top">&#57751;</span> 16 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+  <li>Say bubble - If custom portrait wasn't showing correctly.</li>
+  <li>Nightclub - After sex, if the NPC agrees to live with you, sometimes a clone appeared.</li>
+  <li>Sex - Sometimes with females, there was an option to give a BJ.</li>
+</ul>
+
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+  <li>Fight won - Option to kill them all.</li>
+  <li>Sex [Nightclub] - Added handjob & cum images.</li>
+  <li>Cheatmenu [Edit NPC] - Option to edit hair color (For supporters).</li>
+  <li>Sex - Added 69' position (Contributor: decker-666).</li>
+  <li>Forest will use the same NPC list as the guest house.</li>
+  <li>New item - Pickaxe (No use yet).</li>
+  <li>NPC Customize [Color] - More colors and also shown in the list, so guessing is no longer needed.</li>
+  <li>Packs [WIKI] - Added a WIKI on how to create new custom packs and also updated <code>searchActionsPack.js</code> so it's more automatic (Will add records in <code>packs.js</code> too).</li>
+  <li>Fight - Enemies will now use avatars instead of static images.</li>
+  <li>Increased the option to assign up to three people to the hospital, with each assignment decreasing the miscarriage rate by 2%.</li>
+  <li>Fast travel - Added the option to go outside.</li>
+  <li>[Mobile] - Shop view optimized for a better experience.</li>
+  <li>[Settings] - Added another background color (black).</li>
+  <li>Event [Bathhouse] - Massage reverse proposal (For supporters).</li>
+  <li>NPC market - Changed the list to be the same as the guest house (Additional info).</li>
+  <li>Continued work on NPC fight cage system - Still in progress, about 70% done.</li>
+</ul>
+</div></div>
+
+<div class="tab"><input type="radio" id="v048" name="rd">
+<label class="tab-label" for="v048"><span class="glyph vc-icon-top">&#57862;</span> 0.48 <span class="glyph vc-icon-top">&#57748;</span> 4 <span class="glyph vc-icon-top">&#57751;</span> 16 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+  <li>Event [Explore] - Twisted family does not exist</li>
+  <li>Event [Bedroom] - Laura - morning sample (When skipped didn't set delay for next trigger)</li>
+  <li>Guest on guest. Asking for creampie text adjusted, so everyone knows it's specified for pussy.</li>
+  <li>If more than one companion was removed sometimes there was error.</li>
+</ul>
+
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+  <li>Event [Isabel] - The talk</li>
+  <li>Event [Dom] - Return</li>
+  <li>Event [Cage fight] - ambush (existing) Now only can be triggered after fights</li>
+  <li>Event [Vincent] - Talk about girl in cage (existing) Moved outside story so it's not forced</li>
+  <li>Event [Sex] - Reverse bj. (MC giving blowjob) (contr. decker-666)</li>
+  <li>New item: Church blueprint (No use yet)</li>
+  <li>Event [Rodger] - Rodger's secret</li>
+  <li>Continued work on NPC fight cage system - Still in progress. About 50% done</li>
+  <li>Event [Base] - NPC marry NPC (Deny or approve)</li>
+  <li>Event [NPC wedding] - Wife tax</li>
+  <li>Event [Sex] - Person now might decline sex IF she/he is married to someone else</li>
+  <li>Event [Barn] - Dry clothes. (Chance to unlock locked analslut trait) (For supporters)</li>
+  <li>Event [Sex] - Threesome (MFF option. Male SUB). (contr. decker-666)</li>
+  <li>Event [Base] - First settlers</li>
+  <li>Cheatmenu - added option to add crossbow blueprint</li>
+  <li>Event [Car explore] - Car explore event - fuel dilemma (existing). Now will also check if you have fuel in inventory.</li>
+</ul>
+</div></div>
+
+
+<div class="tab"><input type="radio" id="v047" name="rd">
+<label class="tab-label" for="v047"><span class="glyph vc-icon-top">&#57862;</span> 0.47 <span class="glyph vc-icon-top">&#57748;</span> 2 <span class="glyph vc-icon-top">&#57751;</span> 15 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+  <li>Typos</li>
+  <li>Failed childbirth sometimes not showing image</li>
+</ul>
+
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+  <li>Streets NPC list - will show stats same as guest house.</li>
+  <li>Customize [Portrait] - Added more female Asian portraits.</li>
+  <li>Bounty hunter - Option to bring transfemales and males to basement.</li>
+  <li>Started work on NPC fight cage system - Still in progress. About 25% done.</li>
+  <li>Modding - Now option to customize also images specified by breast size (female.breasts-big/small folder name).</li>
+  <li>Sex [Lick nipples] - New action to lick nipples (Different images for different breast sizes).</li>
+  <li>Customize [Tattoos] - Two more tattoos added.</li>
+  <li>Bathroom head image removed and replaced with background image.</li>
+  <li>With bounty hunter reputation increase, increases speed of finding persons quicker.</li>
+  <li>Sex [Fingering] - NPCs with squirter trait additional scene.</li>
+  <li>Relationship - If guest leaves or dies, other NPC friends will take happiness penalty.</li>
+  <li>New item: Crossbow blueprint (Exploring).</li>
+  <li>New item: Crossbow + arrows.</li>
+  <li>Fight - Now you can use crossbow. 60% to pick up arrows after won fight (If using on NPC with low HP, might kill him).</li>
+  <li>Event [Explore] - Wicked family daughter. For supporters additional scene.</li>
+</ul>
+</div></div>
+
+
+
+<div class="tab"><input type="radio" id="v046" name="rd">
+<label class="tab-label" for="v046"><span class="glyph vc-icon-top">&#57862;</span> 0.46 <span class="glyph vc-icon-top">&#57748;</span> 10 <span class="glyph vc-icon-top">&#57751;</span> 15 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+  <li>Custom packs not showing images</li>
+  <li>When flaccid dick, horny increasing.</li>
+  <li>Giving Isabel termination potion, showed she died sometimes.</li>
+  <li>Garage. Could use car without fuel</li>
+  <li>Fuck scene showed incorrect arousal increase for fingering and few other scenes.</li>
+  <li>Pussy lick option showed even with chastity belt</li>
+  <li>Nightclub gloryhole. NPCs will have higher sub, not forced.</li>
+  <li>Moving guest to basement decreased 50 relationship instead of 30</li>
+  <li>Storage didn't show dumbbell additional icons</li>
+  <li>Sex. When starting sex, arousal will drop to 79 if above it so on first action there is no instant climax.</li>
+</ul>
+
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+  <li>Event [Fight] - After lost fight, if you have a companion, she might get forced to have sex.</li>
+  <li>Nursery - added sleeping mechanics</li>
+  <li>Event [Sleep] - If gay content enabled, will show male sex images instead</li>
+  <li>Event [Sex] - Reverse anal. (If gay content enabled. (Fuck MC)) (contr. decker-666)</li>
+  <li>Event [Guesthouse] - Surprise relieve</li>
+  <li>Event [Bedroom] - Invite NPC to your bedroom to sleep.</li>
+  <li>Event [Bar] - A strange offer</li>
+  <li>Event [Underground city] - Ambush</li>
+  <li>Event [Explore] - Bite in neck</li>
+  <li>Inventory - dumbbell renamed to kettlebell and added unique icon.</li>
+  <li>Event [Isabel] - Date (For supporters)</li>
+  <li>Event [Basement] - Party additional option - orgy.</li>
+  <li>Event [Tribe camp] (existing) - If Octavia's kidnapped quest is in progress, increased chance to trigger from 15% to 45%.</li>
+  <li>Fuck - NPCs with the analslut trait will increase arousal, just 80% less.</li>
+  <li>Fuck - Licking. MC horny level capped at 60</li>
+</ul>
+</div></div>
+
+
+<div class="tab"><input type="radio" id="v045" name="rd">
+<label class="tab-label" for="v045"><span class="glyph vc-icon-top">&#57862;</span> 0.45 <span class="glyph vc-icon-top">&#57748;</span> 10 <span class="glyph vc-icon-top">&#57751;</span> 18 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+    <li>Garage - fuel was consumed without exploring</li>
+    <li>Garage - death race stadium event triggered all the time</li>
+    <li>Basement offer people to other people relationships/happy drops below -100</li>
+    <li>Typos</li>
+    <li>Breeder & Infertile together (worked if breeder was first trait but not if Infertile was)</li>
+    <li>Event [Lone survivor] - Stole only food from your backpack not cabin</li>
+    <li>Event [Snake pit] - error (Didn't set sick days)</li>
+    <li>Event [Lost child] - after fight and capture, mother was virgin</li>
+    <li>Males showing virgin icon</li>
+    <li>Bathhouse title error when pressing on guest sometimes</li>
+</ul>
+
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+    <li>Customize - name colors will now be shown in guesthouse and basement list</li>
+    <li>Removed Octavia's SUB/DOM route choosing. (Only DOM (MC) will stay)</li>
+    <li>New trait: milker. Can produce milk even not being pregnant</li>
+    <li>Sex - New action: Pussy fingering</li>
+    <li>Sex - Males kissing</li>
+    <li>Reworked SFW mod. Still work in progress but with time only NSFW images/videos will be hidden and not all. (contrib. alexiusp)</li>
+    <li>Customize - Allow to change names for kids</li>
+    <li>Sex [Gloryhole] - Added pussy option</li>
+    <li>Customize [NPC edit] - can change eyes color</li>
+    <li>Event [Wife] - Option to fuck her in wedding dress (contrib. decker-666)</li>
+    <li>Event [Guest] - Option to fuck in basement (contrib. decker-666)</li>
+    <li>New items: dumbbell upgraded versions (Higher strength training but with chance to get injury) (contrib. NilsPeterAndersson)</li>
+    <li>Milk barn takes electricity into account. If settlement produces less than consumes, milk machines won’t work</li>
+    <li>If MC goes to bed horny, his energy will be impacted</li>
+    <li>Sex [Fingering] - Will also increase MC horny stats a bit</li>
+    <li>Base management - build walls [decreases chance of stealing events]</li>
+    <li>Event [Kitchen] - Breakfast (For supporters)</li>
+    <li>Multiple child births on the same day if hospital is built. (contrib. NilsPeterAndersson)</li>
+</ul>
+</div></div>
+
+
+
+<div class="tab"><input type="radio" id="v044" name="rd">
+<label class="tab-label" for="v044"><span class="glyph vc-icon-top">&#57862;</span> 0.44 <span class="glyph vc-icon-top">&#57748;</span> 0 <span class="glyph vc-icon-top">&#57751;</span> 21 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+    <li>Event [Cage fight] - Introduction</li>
+    <li>Event [Cage fight] - Milk orders</li>
+    <li>New location: [Cage fight shop] - Option to sell milk</li>
+    <li>Event [Cage fight] - Rival fight #1</li>
+    <li>Event [Cage fight] - Ambush (repeatable)</li>
+    <li>Event [Cage fight] - Rival fight #2</li>
+    <li>Event [Vincent] - Milk barn introduction (+ Option in base building to build it)</li>
+    <li>Event [Base building] (existing) - Decreased trigger from 140 days to 100.</li>
+    <li>New location [Milk barn]</li>
+    <li>New basement people assign option - milk barn (produces 1 mil per 3 days)</li>
+    <li>Event [Explore] - (existing) If woman found, instead of walking she might be pleasuring herself.</li>
+    <li>Guesthouse - NPC's will go to sleep (each at different time at late night)</li>
+    <li>Event [Guest house] - Sleeping guest. (Right now for women only)</li>
+    <li>Event [Car Explore] - race stadium introduction</li>
+    <li>New location: Race stadium shop (chance to buy car parts)</li>
+    <li>Event [Bathhouse] - Relaxing (For supporters)</li>
+    <li>In npc list view added virgin icon (contr. decker-666)</li>
+    <li>Event [Mistress punish] (existing) - Option to take over (contr. decker-666)</li>
+    <li>Event [NPC marry] (existing) - Option for more fun (moves to default sex) (contr. decker-666)</li>
+    <li>Event [Explore] - Finding woman (existing). Chance that she will be pleasuring herself</li>
+    <li>Added mechanics for extended packs (Will be able to add additional images to default images without updating actions.js each update)</li>
+</ul>
+</div></div>
+
+
+
+<div class="tab"><input type="radio" id="v043" name="rd">
+<label class="tab-label" for="v043"><span class="glyph vc-icon-top">&#57862;</span> 0.43 <span class="glyph vc-icon-top">&#57748;</span> 5 <span class="glyph vc-icon-top">&#57751;</span> 20 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+    <li>Custom pack. If NPC was named as pack, images didn't work</li>
+    <li>Typos</li>
+    <li>Blair and Laura morning events triggered with flaccid penis.</li>
+    <li>Gloryhole removed kissing action</li>
+    <li>Pack - Asa Akira. Fixed cum in pussy image (Need to re-download pack)</li>
+</ul>
+
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+    <li>Transfemale mistress (contr. decker-666)</li>
+    <li>Eve shower visit. If joined, will end in cabin, not outside</li>
+    <li>Npc market - when selling, all inventory will be moved to MC backpack.</li>
+    <li>Settlement shop open time changed from 08:00-16:00 to 08:00-18:00</li>
+    <li>Coloring for name in basement and guest house lists. (contr. alexiusp)</li>
+    <li>Guesthouse npc list. Added submission stats</li>
+    <li>If the hospital is built, there is a 10% chance of giving birth to twins.</li>
+    <li>Basement. List will use same view as Guesthouse (stats icons)</li>
+    <li>Blair [Kitchen] - Will use same view as other characters (customizable)</li>
+    <li>Event [Explore] - Random npc. Chance to learn npc skills while you talk.</li>
+    <li>Cheatmenu: Added option to give revolver (For supporters)</li>
+    <li>Streetworkers with masochist or cumslut trait won't take happiness penalty.</li>
+    <li>Settings [SFW mode] - Hides all images and videos</li>
+    <li>Childbirth - Now customizable images</li>
+    <li>More sex images for ebony race</li>
+    <li>[Pack] - Lana Rhoades</li>
+    <li>Punish - choke option</li>
+    <li>Event [Kitchen] - Wet T-Shirt (Only can be trigger on rainy days) (For supporters)</li>
+    <li>Cheatmenu [NPC edit] - Edit race (For supporters)</li>
+    <li>Cheatmenu [NPC edit] - When Octavia/Isabel/Blair approached, option to edit their stats too.</li>
+</ul>
+</div></div>
+
+
+
+<div class="tab"><input type="radio" id="v042" name="rd">
+<label class="tab-label" for="v042"><span class="glyph vc-icon-top">&#57862;</span> 0.42 <span class="glyph vc-icon-top">&#57748;</span> 4 <span class="glyph vc-icon-top">&#57751;</span> 17 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+  <li>Breeder and Infertile traits together</li>
+    <li>Punish typos</li>
+    <li>Laura won't be able to give breeder trait if NPC has infertile trait</li>
+    <li>Negan journal help</li>
+</ul>
+
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+    <li>Event [Octavia] - Betrayal</li>
+    <li>Event [Octavia] - Blackthorn camp</li>
+    <li>Event [Octavia] - Blackthorn camp fun</li>
+    <li>New perk - Temporary impotence (+ Fuck limitations)</li>
+    <li>Event [Explore] - Snake pit (Triggers if with companions)</li>
+    <li>Receiving MC perk will show also notification about it</li>
+    <li>Event [Explore] - Hospital (existing). Chance to find massage table blueprint</li>
+    <li>Event [Bathhouse] - Massage + new fuck location (massage table)</li>
+    <li>Event [Octavia] - Blackthorn big plans</li>
+    <li>Event [Octavia] - Annihilation</li>
+    <li>Event [Laura] - Exploration</li>
+    <li>Event [Laura] - First entry</li>
+    <li>Event [Dom] - Dom's place</li>
+    <li>Companion list now will show custom portraits (Experimental)</li>
+    <li>Event [Guest house] - morning view (For supporters)</li>
+    <li>Event [Sex] - Option to cum on pussy</li>
+    <li>Added more images for default sex scene</li>
+</ul>
+</div></div>
+
+
+
+<div class="tab"><input type="radio" id="v041" name="rd">
+<label class="tab-label" for="v041"><span class="glyph vc-icon-top">&#57862;</span> 0.41 <span class="glyph vc-icon-top">&#57748;</span> 14 <span class="glyph vc-icon-top">&#57751;</span> 20 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+    <li>Event [Explore] - mysterious scream. Duplicate enemy</li>
+    <li>Childbirth. Name couldn't be changed.</li>
+    <li>lastInteractionDay npc error. Won't happen for new npcs anymore</li>
+    <li>Library. Reading book error if no female guest is living with MC.</li>
+    <li>Nightclub. Going outside. Enemy female wasn't the same you were dancing with.</li>
+    <li>Family tree in settlement management (contr. NilsPeterAndersson)</li>
+    <li>Isabel - pregnancy speed potion didn't work.</li>
+    <li>Sandstorm & heat wave events will trigger only if have guests.</li>
+    <li>Blair marry error if no guests.</li>
+    <li>Typos</li>
+    <li>Event [Blair & Ashley] - Triggered even if you failed to find her.</li>
+    <li>Male cum on feet images missing</li>
+    <li>Packs were working strange. Now packs should work as before. (if pack do not have image in that location, it will use default folder from packs folder, not global images)</li>
+    <li>Nightclub npcs visited bathhouse in their working time</li>
+</ul>
+
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+    <li>Marry trans females. Also wedding images are moddable now.</li>
+    <li>Males NPC info will show if nipples are pierced.</li>
+    <li>Males and trans now have custom portraits (Old female portraits need to be re-choosen again)</li>
+    <li>Buttplug rotation can be set by gender (contr. NilsPeterAndersson)</li>
+    <li>Event [Fire place] - House party (existing). Males will attend house party too.</li>
+    <li>Event [Nightclub] - Now while dancing (if settings enabled) you can meet trans too.</li>
+    <li>Basement person "Release" moved under NPC view.</li>
+    <li>Cheatmenu [NPC edit] - Option to edit female/trans breasts size. (For supporters)</li>
+    <li>Cheatmenu [NPC edit] - Option to edit sexualities (What genders likes) (For supporters)</li>
+    <li>Won't be able to give breeder trait (via Laura) if npc has already it locked.</li>
+    <li>Event [Childbirth] - Females with breeder chance is less chance to die and +10% for successful birth.</li>
+    <li>Rewrited guesthouse npc list. Now it uses icons + more info about npc (Experimental). + male beauty is visible too</li>
+    <li>Base building - Now you can build living homes (for settlers) (No use yet)</li>
+    <li>Event [Explore] - Meet girl. Now you will have chance to find also males and trans (if trans settings are enabled)</li>
+    <li>Milking will use 10 energy (previous was 30 energy)</li>
+    <li>Customize [Male] - added few customization images</li>
+    <li>Fight - Chance for enemies and allies to break their knives</li>
+    <li>Guest submission will slowly decrease if you do not interact with them more than 5 days.</li>
+    <li>New blueprint: Massage table blueprint (No use yet)</li>
+    <li>New blueprint: School (No use yet)</li>
+    <li>[Bedroom] - Sleepover. (+Chance to remove analslut from locked traits + in cheatmenu) (For supporters)</li>
+</ul>
+</div></div>
+
+
+
+<div class="tab"><input type="radio" id="v040" name="rd">
+<label class="tab-label" for="v040"><span class="glyph vc-icon-top">&#57862;</span> 0.40 <span class="glyph vc-icon-top">&#57748;</span> 5 <span class="glyph vc-icon-top">&#57751;</span> 18 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+    <li>Morning messages hooker found dead object.</li>
+    <li>family.isBloodToMc error</li>
+    <li>Cheatmenu: set all guest relationship. Moved back to public access</li>
+    <li>Fixed fight ally attack power (They were too powerful)</li>
+    <li>Gloryhole random use could overwrite character variables (Creating Blair bug or any other unique character)</li>
+</ul>
+
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+    <li>Event [Travel] - Tribe medallion (existing). Higher chance to trigger when Octavia is kidnapped</li>
+    <li>Event [NPC] - Offer drink (existing). If pregnant, woman might decline the offer.</li>
+    <li>Event [Explore] - Hospital (existing). Added chance to find blueprint of hospital.</li>
+    <li>New location: [Hospital] (Build in base building view). Sick people will be moved there.</li>
+    <li>New job - doctor</li>
+    <li>Event [Hospital] - New sex location with new images (later will add more)</li>
+    <li>Event [Base attack] - Bigger base attack with a car. Chance to lose more.</li>
+    <li>Event [Explore] - The Lost Child (existing). Added option to approach parents</li>
+    <li>Event [Nightclub] - Invite to wc. (existing). Added new option to capture her</li>
+    <li>Event [Weather] - Heat wave. If heat wave triggers it can last from 4-6 days. In those days greenhouse/garden doesn't produce anything AND people will consume twice as much food)</li>
+    <li>Event [Weather] - Sand storm. Can't go outside your camp that day. Also, people working in outside camp jobs won't work that day.</li>
+    <li>Event [Hospital] - Fix bleeding and fun. (Doctor (female) need to have 50+ horny) (For supporters)</li>
+    <li>Event [Cabin] - Fallen tree. One of your forest workers is crushed by a tree.</li>
+    <li>Event [Childbirth] (existing) - Will happen automatically if hospital is built AND doctor assigned</li>
+    <li>NPC relationship between. Made some changes and created match function that will calculate if they like each other. (In next event update will add event where guest asks your permission to marry another person)</li>
+    <li>Automatization - Sex worker auto rule now has levels not just on|off (contr. NilsPeterAndersson)</li>
+    <li>Event [Isabel/Blair] - Dates. If you cum inside, chance that they will get pregnant.</li>
+    <li>Event [Blair] - Ashley visit (Can trigger on Saturday evenings if you have saved Ashley)</li>
+</ul>
+</div></div>
+
+
+<div class="tab"><input type="radio" id="v039" name="rd">
+<label class="tab-label" for="v039"><span class="glyph vc-icon-top">&#57862;</span> 0.39 <span class="glyph vc-icon-top">&#57748;</span> 2 <span class="glyph vc-icon-top">&#57751;</span> 20 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+    <li>Auto item management took away body armor from scavengers.</li>
+    <li>Shower gave too much energy</li>
+</ul>
+
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+  <li>Street job will take into account beauty.</li>
+  <li>Customize [Portraits] - added custom portraits for black and latina females.</li>
+  <li>Customize [Portraits] - Reworked that they are not per hair color but only race. So all portraits will be available for that specific race.</li>
+  <li>Customize [Portraits] - Now you can add link to your own image and use any other portrait you want.</li>
+  <li>Added chance that giving pregnancy termination potion could give a chance to cause "Infertile" trait.</li>
+  <li>Cheatmenu: Added "Set all guest submission to max" (For supporters)</li>
+  <li>Only guests not related to MC will trigger "Take virginity" event.</li>
+  <li>Give day off for nightclub workers (Also in settlement management)</li>
+  <li>Started to work on base management (In future will be able to build defenses, living homes, energy production/consumption, etc).</li>
+  <li>Event [Vincent] - Base management introduction</li>
+  <li>Growth potion. Now you can choose how much years to speed up.</li>
+  <li>Rewrote enemy generation part. Now with MC higher reputation, there is a bigger chance enemies will be with knives.</li>
+  <li>Bigger chance to trigger nightclub gloryhole job event. Chance increases with MC reputation.</li>
+  <li>Multiple packs performance. For some people with a LOT of packs enabled game became slower. Made changes so actions are not loaded on each passage load. Hopefully that should impact that speed.</li>
+  <li>Finished implementing relationship between NPC's (Right now positive IF they work in the same job, except street workers). In next event update will try to add event where they ask to marry someone if they like each other.</li>
+  <li>New skill: Teacher (No use yet)</li>
+  <li>Event [Basement] - Punish (existing). Added golden shower option.</li>
+  <li>Rewrote morning messages. Now they will be grouped by jobs. Also very minimal should increase performance.</li>
+  <li>Event [Isabel] - Car date. (For supporters)</li>
+  <li>Cheatmenu: Add body armor (For supporters)</li>
+</ul>
+</div></div>
+
+
+<div class="tab"><input type="radio" id="v038" name="rd">
+<label class="tab-label" for="v038"><span class="glyph vc-icon-top">&#57862;</span> 0.38 <span class="glyph vc-icon-top">&#57748;</span> 2 <span class="glyph vc-icon-top">&#57751;</span> 16 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+    <li>Event [Shopkeeper stealing] (existing). Sometimes had error and not showing npc</li>
+    <li>Event [Shopkeeper stealing]. One of the videos wasn't working properly</li>
+</ul>
+
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+  <li>Event [Nightclub] - Bathroom introduction</li>
+  <li>New location - Nightclub bathroom</li>
+  <li>Event [Nightclub] - Use gloryhole (new sex location) (repeatable)</li>
+  <li>Event [Nightclub] - New job opportunity</li>
+  <li>New job - Nightclub</li>
+  <li>Event [Guests] - Offer them a drink</li>
+  <li>NPC info. Added info about drunkenness.</li>
+  <li>Event [Dom] - Underground city chaos</li>
+  <li>Event [Car explore] - Robbers justice</li>
+  <li>Event [Car explore] - Fuel dilemma (For supporters additional event)</li>
+  <li>Event [Basement] - Basement all workout together</li>
+  <li>Event [Scavenging] - If npc has knife/body armor and high enough strength, you can find her while she still fights the enemies.</li>
+  <li>Changed sex actions logic. Instead of fallback to bedroom (if images are missing), it will prioritize location (so if black girls don't have images from x location, it will show white girl (otherwise it was strange that for example car sex scenes used bedroom images instead))</li>
+  <li>New trait: Infertile. Can't get pregnant (have children)</li>
+  <li>New sex action: Kissing (Only females for now)</li>
+  <li>Started to work on NPC relationship system (They will like/dislike each other). No visible content yet (Later will be used in events (They will ask your permission to marry, etc). Suggestions welcome for simple but effective system for that. Right now main idea is that people who work in the same job (For example gardeners) will have positive relationship increase)</li>
+</ul>
+</div></div>
+
+
+
+<div class="tab"><input type="radio" id="v037" name="rd">
+<label class="tab-label" for="v037"><span class="glyph vc-icon-top">&#57862;</span> 0.37 <span class="glyph vc-icon-top">&#57748;</span> 7 <span class="glyph vc-icon-top">&#57751;</span> 20 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+    <li>Typos</li>
+    <li>Cheatmenu: Fixed hottub blueprint.</li>
+    <li>Isabel's orientation and submission NaN.</li>
+    <li>Library reading book gave +20 energy instead of taking away.</li>
+    <li>Release NPC from basement companion error.</li>
+    <li>Octavia ultimatum event. Companions will be left behind.</li>
+    <li>Event: Common capital triggered for with males.</li>
+</ul>
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+    <li>Mistress fuck scenes. Added NPC horny meter.</li>
+    <li>Scavenging. Added 10% chance that body armor could be one of the items.</li>
+    <li>Settings will be saved in save file. (Won't need to change them each time you load the game).</li>
+    <li>Workout with transfemale.</li>
+    <li>Customize - Change NPC name color.</li>
+    <li>Scavenging (NPC's). Books limited to 50. (Won't find more if will go over limit).</li>
+    <li>When in nursery giving growth potion and children reach 18. MC stays in nursery.</li>
+    <li>Customize [Clothes] - Removed texts and now you can press on images.</li>
+    <li>Doll - chastity belt visible.</li>
+    <li>Doll - piercings visible (rather small and not noticeable (If you have an idea how to make them more visible - contact me).</li>
+    <li>NPC sex stats. (Under more info).</li>
+    <li>NPC view (when talking). Showing if married or pregnant.</li>
+    <li>If NPC is naked, there is a 50% chance that her submission might increase (max: 20).</li>
+    <li>Forest. When collecting wood or food. Companions will help you sometimes.</li>
+    <li>Unique character "view" (Right now only option to customize). Added for Isabel for testing.</li>
+    <li>Force chastity belt if submission too low.</li>
+    <li>Working on the street with a chastity belt won't take away virginity and no chance to get pregnant BUT gained money will be 3x less.</li>
+    <li>Customize [Tattoos] - Allow to add tattoos. (For now only one).</li>
+    <li>Event [Falling satellite] (Existing) - Changed guest min from 8 to 6 AND increased chance from 5 to 10%.</li>
+    <li>Event [Shop] - Stealing shopkeeper (For supporters additional option) (Shopkeeper needs to have less than 50 submission).</li>
+</ul>
+</div></div>
+
+
+<div class="tab"><input type="radio" id="v036" name="rd">
+<label class="tab-label" for="v036"><span class="glyph vc-icon-top">&#57862;</span> 0.35 <span class="glyph vc-icon-top">&#57748;</span> 6 <span class="glyph vc-icon-top">&#57751;</span> 16 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+  <li>Milking error</li>
+  <li>Typos</li>
+  <li>Eve champagne event. Leaving still showed morning scene.</li>
+  <li>Youth district not available if only library was built.</li>
+  <li>Family tree husband newline.</li>
+  <li>Event [Laura] - Toxic rain. Horny didn't reset.</li>
+</ul>
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+  <li>Event [Dom] - Isabel beg</li>
+  <li>Event [Dom] - City chaoss</li>
+  <li>Event [Isabel] - Escape</li>
+  <li>Event [Isabel] - New home</li>
+  <li>Event [Isabel] - fuck in guesthouse (repeatable)</li>
+  <li>Event [Explore] - Teacher (existing). Added option to kill him if strength above 150. (Event won't trigger anymore)</li>
+  <li>Event [Cabin] - Invited lone survivor misbehave</li>
+  <li>Event [Basement] - Guest asks to fuck npc in basement.</li>
+  <li>Event [Basement] - Guest asks to fuck npc - threesome (For supporters)</li>
+  <li>Library read book - now need 20 energy.</li>
+  <li>Underground shop - added back button</li>
+  <li>Cheatmenu: Added options to add library & hottub blueprints</li>
+  <li>Event [Cabin] - Virgin merchant</li>
+  <li>Event [Fire place] - Falling satellite</li>
+  <li>Event [Guesthouse] - Milk guests if pregnant</li>
+</ul>
+</div></div>
+
+
+<div class="tab"><input type="radio" id="v035" name="rd">
+<label class="tab-label" for="v035"><span class="glyph vc-icon-top">&#57862;</span> 0.35 <span class="glyph vc-icon-top">&#57748;</span> 11 <span class="glyph vc-icon-top">&#57751;</span> 23 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+  <li>Event [Interrupt guest sex] - sometimes threw error and didn't find NPCs.</li>
+  <li>Cheatmenu: edit sometimes was with error because NPC was missing strength stats.</li>
+  <li>Set NPC relationship limit to 100 (Should be fixed on next encounter).</li>
+  <li>NPC fuck. Girl horny when fast clicking was not resetted fast enough (decreased /2).</li>
+  <li>Slave/Guest wash was bugged and beauty slowly increased over the limit.</li>
+  <li>Won't be able to offer slave who wears chastity belt.</li>
+  <li>Event: Common capital sometimes NPCs were showing without relationship stats.</li>
+  <li>Typos.</li>
+  <li>Slave party. Was the same NPC for different people.</li>
+  <li>Missing mistress no anal (not enough stats) image.</li>
+  <li>While reading book time didn't increase.</li>
+</ul>
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+  <li>New item: Body armor (Decreases damage from knife).</li>
+  <li>Workbench: Added body armor.</li>
+  <li>Customize. Wardrobe. Button to remove all clothes.</li>
+  <li>Hunting. If intelligence high enough. Button to skip it.</li>
+  <li>Hunter job. Don't need to give bow manually. If you assign to job it will automatically also give bow.</li>
+  <li>Slave market VIP room times changed from 15:00-17:00 to 14:00-18:00.</li>
+  <li>In Octavia's rescue mission changed chance for enemy to have a knife from 100% to 80%.</li>
+  <li>Added that with anal you can reach NPC 100 corruption too (before that it was only with fisting).</li>
+  <li>Customize [Custom pack]. Now you don't need to rename NPC anymore. Just set what pack you want to use.</li>
+  <li>Scavengers can find books.</li>
+  <li>NPCs can use cosmetics once a day.</li>
+  <li>If you are married with NPC, it will show a ring icon in list view.</li>
+  <li>Added NPC last interaction day (For future use. For example, wives will get annoyed if you don't give them any attention, etc).</li>
+  <li>Give Blair pregnancy speed potion (kitchen -> talk).</li>
+  <li>Event: guard caught intruder (existing). Changed % from 5 to 3.</li>
+  <li>In lost fights, MC will lose more caps if we have more than 500.</li>
+  <li>Scavengers now will have 50% chance that a gas mask is one of the items they can find.</li>
+  <li>Nursery. Added back button top (Same as in guesthouse/basement).</li>
+  <li>MC Shop good management. Added option to manage metal and cheap necklace.</li>
+  <li>Event [Explore] - Waterfall (another) (contr. NilsPeterAndersson).</li>
+  <li>Guide updates (contr. NilsPeterAndersson).</li>
+  <li>New pack: Asa Akira (contr. smokrader).</li>
+  <li>Event: Hottub relaxation (For supporters).</li>
+</ul>
+</div></div>
+
+
+<div class="tab"><input type="radio" id="v034" name="rd">
+<label class="tab-label" for="v034"><span class="glyph vc-icon-top">&#57862;</span> 0.34 <span class="glyph vc-icon-top">&#57748;</span> 9 <span class="glyph vc-icon-top">&#57751;</span> 22 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+  <li>Negan quest couldn't progress if Sanctuary was opened through slave market route.</li>
+  <li>Mistress sex wrong text.</li>
+  <li>NPC marry error fix.</li>
+  <li>Not 100% sure BUT false positive in patches shouldn't be there anymore. (Didn't have consistent result before so can't be 100% sure but if not - will continue to work on it).</li>
+  <li>Base attack. Was incorrect enemy count in text.</li>
+  <li>Eve champagne event. Captured woman slave didn't lose virginity if used.</li>
+  <li>Basement events didn't trigger.</li>
+  <li>Transfemale hooker caps transformed to NaN.</li>
+  <li>Without starting game, pressing on packs forwarded to game.</li>
+</ul>
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+  <li>Event [Slave market - Sanctuary] - Alternative route to open sanctuary via selling slaves. (contr. NilsPeterAndersson)</li>
+  <li>Events [Guest with guest] (existing) - Added option to ask for a creampie (contr. decker-666)</li>
+  <li>Custom portraits replaced with transparent background (contr. Thomas Muller 0.0)</li>
+  <li>Event [Car explore] - attack car</li>
+  <li>Event [Waterfall girl] (existing) - added option to capture enemies.</li>
+  <li>Added new zone/district under MC settlement and moved there nursery. (Plan is to put there all not often visited places BUT related to learning (school/library, etc))</li>
+  <li>Event [Workshop] - Build library</li>
+  <li>Event [Library] - Read book (if you have) + some horny guest might approach (Max int to 100) (Existing event in church max will work till 50 int, exploring teacher to 60)</li>
+  <li>Cheatmenu: Option to increase slave/guest corruption to max (For supporters)</li>
+  <li>Bathhouse image moved to background image</li>
+  <li>Event [Workshop] - Build hot tub (With a chance guest might approach)</li>
+  <li>Event [Hottub] - Relax in hottub (% chance to increase max energy to 140 or taking away beaten (body hurts) perk)</li>
+  <li>Added option to take a shower in bathhouse</li>
+  <li>Event [Shower] - While taking shower in bathouse, chance that npc will join.</li>
+  <li>Basement, Forest, Greenhouse replaced pregnancy same as guest house (better mobile view)</li>
+  <li>Event [Scavenging didn't come home] (existing). Now also males and trans will go missing.</li>
+  <li>Event [Basement] - slave party introduction</li>
+  <li>Event [Basement] - slave party (repeatable) + invite slave to bedroom</li>
+  <li>Event [Settlement] - Help plow field for Rodger (if have horse)</li>
+  <li>Wrote a script for "update only". From now on, if no major changes will be changed, always there also will be only update files.</li>
+  <li>Event [Library] - Read book (extended) (For supporters)</li>
+  <li>Added Anna Belle pack (contr. Klamar)</li>
+</ul>
+</div></div>
+
+
+<div class="tab"><input type="radio" id="v033">
+<label class="tab-label" for="v033"><span class="glyph vc-icon-top">&#57862;</span> 0.33 <span class="glyph vc-icon-top">&#57748;</span> 11 <span class="glyph vc-icon-top">&#57751;</span> 35 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+  <li>Hopefully fixed Octavia overwrite random NPC (Couldn't reproduce without save BUT made changes in code)</li>
+  <li>With VIP slave market sometimes npc's generated 17yo</li>
+  <li>Sometimes Blair could overwrite guest. (Couldn't reproduce changed in code few places)</li>
+  <li>Cheatmenu: Bathhouse event trigger only available if bathhouse has been built.</li>
+  <li>Typos (contr. dcosmic1)</li>
+  <li>Slave added as companion. If you kill slave, companion list error.</li>
+  <li>Octavia giving medallion. Sometimes showed wrong reputation amount given</li>
+  <li>When capturing bounty, in guest house were added two npcs. One bounty and one of your last npc/character visited (Might maybe even be the problem why someone had Octavia's/Blair in guesthouse too)</li>
+  <li>NPC info. Bald hair changed to bald head</li>
+  <li>MC horny meter not filling to 100%</li>
+  <li>On base attack, wrong guards/guests were helping.</li>
+</ul>
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+  <li>Deflower, deflower with strapon, milking, no anal moved to actions (Can be modded now)</li>
+  <li>Increased slave market VIP room request chance from 20 to 30%</li>
+  <li>Shop location header moved as background image.</li>
+  <li>Guests and slaves who have miscarriage on street will take happiness and relationship penalty.</li>
+  <li>In girl tooltip (in events, etc). Added info if she's a virgin</li>
+  <li>In Laura's morning sample event added skip button.</li>
+  <li>Assign trans slaves to work as hookers</li>
+  <li>Street workers chance to die will take into account strength and not endurance</li>
+  <li>Woman wearing chastity belt do not have fuck options to fuck pussy and lick it.</li>
+  <li>Fuck scenes. Added NPC horny meter.</li>
+  <li>Male on male. Added cum in throat images</li>
+  <li>Blair will always generate with medium breasts size and same traits (Breeder, Cumslut and Deepthroat)</li>
+  <li>Explore wolves event. Bleeding will happen only if you kill less than 3 of them.</li>
+  <li>Renamed mods to packs (In future idea is that mods could be actual mods that customizes game without having to modify game files (js injection)) [Now players can create new packs and without modifying .html file add them under packs/packs.js]</li>
+  <li>Added Veronica Leal pack</li>
+  <li>Customize. Custom portaits for females (For portrait and say dialogs)</li>
+  <li>Bounty hunter. Added caught NPC info.</li>
+  <li>Event [Guesthouse] - Caught trans on trans. (contr. decker-666)</li>
+  <li>Workbench. Added current amount of items</li>
+  <li>Added cloth and towel to managable shop items (Now your shopkeeper can buy/sell them automatically)</li>
+  <li>Event [Explore] - Hospital (existing). Added chance to find towels.</li>
+  <li>Decreased forest hunting target from 10 to 9 to it be successful</li>
+  <li>Male on male. Cum on feet and cum on back images added</li>
+  <li>New sex action. Anal fisting. Need analslut trait and 90+ anal (contr. decker-666)</li>
+  <li>Cheatmenu [Edit NPC]: Added option to change name and age (For supporters)</li>
+  <li>Guesthouse for mobile view. (Still experimenting). Changed pregnancy to icon and smaller text and moved throw out inside npc view.</li>
+  <li>Increased Travel event - tribe camp from 5% to 8% (while traveling to settlement (medallions))</li>
+  <li>More code cleanup and removing unnecessary global variables. (Should impact game performance)</li>
+  <li>Added multiple sex action texts (contr. dcosmic1)</li>
+  <li>Event: [Guesthouse] - Ask a guest to fuck someone. (contr. decker-666)</li>
+  <li>Slave market. Now you will be able to buy last slave before market closes.</li>
+  <li>Event [Explore] - Mysterious scream. (For supporters additional scenes) (also added in cheatmenu to trigger)</li>
+  <li>Explore event The Dying Elderly Survivor (existing). Extended options (contr. NilsPeterAndersson)</li>
+  <li>In fights. If have companions. Less chance that they will hit you.</li>
+</ul>
+</div></div>
+
+
+
+<div class="tab"><input type="radio" id="v032" name="rd">
+<label class="tab-label" for="v032"><span class="glyph vc-icon-top">&#57862;</span> 0.32 <span class="glyph vc-icon-top">&#57748;</span> 14 <span class="glyph vc-icon-top">&#57751;</span> 20 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+  <li>Typos and text fixes. (contr. KK-Walker/LizJ)</li>
+  <li>Negan 4 slaves vs fuel. Didn't take all companions away.</li>
+  <li>Negan car steal event. Npc error/didn't display names</li>
+  <li>Greenhouse. Added pregnancy info in list</li>
+  <li>Slave move to guesthouse button was visible without guesthouse available.</li>
+  <li>Male buttplug info wasn't visible.</li>
+  <li>Only virgin girls who like guys will ask to take their virginity.</li>
+  <li>Vincent shop. Max relationship per buy is 5 relationship.</li>
+  <li>Captured wanted person could use all the time (Now will use only till 2am)</li>
+  <li>Typo in cum_on_stomach actions folder. (Some locations didn't show correct cum images)</li>
+  <li>Nightclub dance. Dance together button even if you were alone</li>
+  <li>Event [Toxic waste] - error if had slave companion</li>
+  <li>Wanted event [Mother] - Sometimes she was a virgin</li>
+  <li>Offer guy slave to trans slave - missing videos.</li>
+</ul>
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+  <li>VIP room. Removed eye color requirement.</li>
+  <li>Automatization. Added rest/work button for all NPCs working on the street (contr. 3ANilsPeterAndersson)</li>
+  <li>Garage will use also storage inventory. (contr. 3ANilsPeterAndersson)</li>
+  <li>Event [Negan] - Slaves for fuel event. (Repeatable)</li>
+  <li>Event [Travel] - Trapper horse cart (Repeatable)</li>
+  <li>Event [Octavia] - Give tribe medallion. (Repeatable)</li>
+  <li>New item: Chastity belt (contr. decker-666)</li>
+  <li>Event [Travel] - Tribe campfire (Repeatable)</li>
+  <li>Cheatmenu: Option to give tribe medallion (For supporters)</li>
+  <li>Event [Octavia] - Captured</li>
+  <li>Event [Octavia] - Saved</li>
+  <li>Increased performance (decreased max prev button click to 3 and rewrote a lot of global variables to local (Will continue in the future and later add cleanup on save load for existing saves too)</li>
+  <li>Event [Nightclub] - Drink with trans (contr. decker-666)</li>
+  <li>Help page and start guide updates. (contr. 3ANilsPeterAndersson)</li>
+  <li>Event [Octavia] - Fuck her when you bring wolf pelts (after saving her) (Repeatable)</li>
+  <li>New item: Library blueprint (Location not implemented yet (Planned in 0.34)</li>
+  <li>Event [Explore] - Urban Echoes (find library blueprint)</li>
+  <li>New item: book (Will be used to increase intelligence in the library)</li>
+  <li>Event: [Eve] - Unexpected shower visit (Repeatable)</li>
+  <li>Event: [Explore] - Wicked family (For supporters additional scene)</li>
+</ul>
+</div></div>
+
+
+
+<div class="tab"><input type="radio" id="v031" name="rd">
+<label class="tab-label" for="v031"><span class="glyph vc-icon-top">&#57862;</span> 0.31 <span class="glyph vc-icon-top">&#57748;</span> 5 <span class="glyph vc-icon-top">&#57751;</span> 26 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+    <li>Pregnancy on street. Didn't check if is already pregnant and resetet pregnancy</li>
+    <li>[Event] Car explore - If nothing was found and companion didn't wanted to have fun - error.</li>
+    <li>Children stats. Removed "more info", submission, traits stats.</li>
+    <li>Morning messages from scavengers. Fixed item display name</li>
+    <li>Fights. Enemy inventory wasn't taken into account (knives)</li>
+</ul>
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+    <li>Baby merchant. Added kid gender color</li>
+    <li>In game new section (mods) (Works locally)</li>
+    <li>Standalone mod [Riley Reid]</li>
+    <li>New item: condom (Contraception for girls working on streets) (Can buy in underground city)</li>
+    <li>If offer slave to other slave has nymphomaniac trait, relationship won't decrease.</li>
+    <li>Slave market - allow to sell also males and trans + gender color.</li>
+    <li>Storage/NPC inventory transfer - increased font size.</li>
+    <li>Slaves as companions. (Won't help you in fight and in the future will try to escape while traveling if low submission)</li>
+    <li>Event [Event: The uninvited couple] - will trigger only after 30 days.</li>
+    <li>Fireplace - Group workout is not available from 18:00 to 20:30 (added one more hour)</li>
+    <li>Added +10 caps to slave base value in market</li>
+    <li>Event [Basement escape] (existing). Rewrote. Instead of checking ALL slaves, will check only slaves with low submission (Higher chance to trigger the event)</li>
+    <li>In slave npc view added button to move her/him to the guesthouse</li>
+    <li>Captured enemies after fights have 50% chance to have higher submission.</li>
+    <li>NPC hair reworked. Better quality and replaced as SVG. That means in the future opens option to also customize hair style (short/mid/long?). (For now all NPC's will have long hair)</li>
+    <li>Cheatmenu: Edit NPC (change traits/traitsLocked/skills/beauty/anal/strength/relationship/submission stats) (For supporters)</li>
+    <li>Morning messages. Removed NPC's types (slave/guest) and job types.</li>
+    <li>Changed Vincent relationship increase if buying from his shop. (Won't increase +1 but will take into account also quantity) (contr. KK-Walker)</li>
+    <li>Added some missing sex action texts (contr. decker-666)</li>
+    <li>Event [Guesthouse] - Guests (female with male) having sex. (contr. decker-666)</li>
+    <li>Event [Guesthouse] - Guests (male with male) having sex. (contr. decker-666)</li>
+    <li>Event [Guesthouse] - Guests (male with trans) having sex. (contr. decker-666)</li>
+    <li>Added default missing asian and black sex images (contr. decker-666)</li>
+    <li>Fights. If defeaded ally gets stabbed with knife twice or more he will get % of chance to die.</li>
+    <li>Settings. Separated lesbian and gay content. (contr. decker666)</li>
+    <li>Newly generated NPC's will use all available clothes from wardrobe.</li>
+</ul>
+</div></div>
+
+
+
+<div class="tab"><input type="radio" id="v030" name="rd">
+<label class="tab-label" for="v030"><span class="glyph vc-icon-top">&#57862;</span> 0.30 <span class="glyph vc-icon-top">&#57748;</span> 7 <span class="glyph vc-icon-top">&#57751;</span> 24 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+  <li>Typos</li>
+  <li>Punish heOrShe error</li>
+  <li>Tits bar event. Could fuck her without money</li>
+  <li>Laura give breeder trait. Removes from locked traits if exist.</li>
+  <li>Typo corrections and grammar changes (contr. KK-Walker)</li>
+  <li>Dom event (mother and two daughters). Basement / guesthouse limit check</li>
+  <li>Event [Dig grave] - intelligence increased without choosing to help</li>
+</ul>
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+  <li>Dumbbell added to automatization (contr. NilsPeterAndersson)</li>
+  <li>Event [Fucking in car] - default sex actions in new location</li>
+  <li>Event [Vincent] - first car ride</li>
+  <li>Event [Car explore] - Nothing found. Suggest having fun (only female images for now)</li>
+  <li>Girls working on the street can get pregnant from their clients.</li>
+  <li>Event [Wood cabin] - Girl is pregnant from a client.</li>
+  <li>NPC customization. Added 4 shoes, 1 top, 2 accessories, 2 panties (contr. Zerorad)</li>
+  <li>Childbirth. Female child will get her mother's traits + one more</li>
+  <li>Event [Car explore] - Girl at the gas station</li>
+  <li>Event [Car explore] - Injured guy</li>
+  <li>Event [House party] (existing) - champagne and food will be checked also in storage.</li>
+  <li>Event [Bedroom] - Maid surprise.</li>
+  <li>Event [Slave market] - VIP requests introduction</li>
+  <li>Location: [Slave market VIP room] (Sell girls for VIP clients)</li>
+  <li>Event [Bathhouse] - Hot tub talk.</li>
+  <li>New item: Blueprint [Hot tub] (Not available yet) (Probably will add in 0.32 with that location)</li>
+  <li>Event [Fireplace] - Evening chat</li>
+  <li>Slave market - higher submission stats for slaves you're buying. (Even more if you have premium slaves)</li>
+  <li>If a girl asks to cum inside and you do that - additional relationship + happiness</li>
+  <li>Event [Guesthouse] - Take virginity (Also changes NPC orientation to like men) (For supporters)</li>
+  <li>Cheatmenu: Option to add fuel and car parts (For supporters)</li>
+  <li>[Sex] Male/Trans - added footjob (contr. decker666)</li>
+  <li>Males can now be assigned as a mistress too (contr. decker666)</li>
+  <li>New age based pregnancy chance formula: 18-24 = 24%, 25-39 = 16%, 40-59 = 8%; breeder x2 + fertility potion x2. (contr. decker666)</li>
+</ul>
+</div></div>
+
+
+
+<div class="tab"><input type="radio" id="v029" name="rd">
+<label class="tab-label" for="v029"><span class="glyph vc-icon-top">&#57862;</span> 0.29 <span class="glyph vc-icon-top">&#57748;</span> 4 <span class="glyph vc-icon-top">&#57751;</span> 32 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+  <li>NPC say bubble. Fixed portrait</li>
+  <li>Fight won. Check if basement available to capture someone</li>
+  <li>Fight won. Removed inventory (showed bugged) from enemies.</li>
+  <li>Male avatar missing</li>
+</ul>
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+  <li>Groping in garden (added relationship increase limit 50 and text)</li>
+  <li>Added pregnancy days in NPC info view</li>
+  <li>Customize. Undress girls fully</li>
+  <li>Sex. Added throatpie cum action</li>
+  <li>Reduced groping energy spent from 20 to 5.</li>
+  <li>NPC info - locked traits. With intelligence 50+ will see (also changed locked count from 3 to 2)</li>
+  <li>Sex. When you're about to cum, girl might ask to cum inside her.</li>
+  <li>Companions limit set to 6</li>
+  <li>Cheat menu: Option to increase all slave submission (For supporters)</li>
+  <li>Event [Blair - morning surprise] - Will trigger only if maid as assigned</li>
+  <li>Mushroom moon text will show only after Vincent has told you about potion (contr. Magnus Castor)</li>
+  <li>Slave suicide change % calculation will take into account submission stats (Lower chance if submission gets higher) (contr. decker666)</li>
+  <li>Finished standalone mods (Information will follow how to create them) (tl;dr; - instead of downloading mod pack with 2-3gb files, people will be able to download specific things (for example specific girl model packs, gay content, even some scifi (if someone creates it) (Usually single mod (folder) size is 20-30mb max)</li>
+  <li>Reworked NPC visual breasts. Now all races should have the same color as body + in the future chance to show different sizes.</li>
+  <li>Childbirth. Daughter will get mother skills + one more AND all children will be straight.</li>
+  <li>You can go to the underground city until 2 am</li>
+  <li>Customize. Added option to wear panties.</li>
+  <li>Customize. 3 new clothes.</li>
+  <li>Customize. Added belly button (less awkward look)</li>
+  <li>Garage. Added a background image</li>
+  <li>Event [Male workout] - Workout together will males</li>
+  <li>NPC visual. Trans woman undressed will show dick</li>
+  <li>NPC visual. Woman pussy visible</li>
+  <li>Customize. Added accessories category (+1 item fishnet stockings)</li>
+  <li>Mechanics to fix and refill car. (In the next event update will add 1-2 events for car as a minimum)</li>
+  <li>Shop merchant economics. Each shop merchant will have a limited amount of money which increases/decreases each day.</li>
+  <li>Sanctuary shop - option to sell gas masks</li>
+  <li>New item: Dumbbell. Allow NPCs to workout on their own</li>
+  <li>Added party check for girls living in the guest house</li>
+  <li>Punish actions time consumed changed from 60 minutes to 15 minutes</li>
+  <li>Compressed some videos/action images. (Size smaller than 0.28 release)</li>
+  <li>Event [House party] - Additional foursome (For supporters)</li>
+</ul>
+</div></div>
+
+
+
+<div class="tab"><input type="radio" id="v028" name="rd">
+<label class="tab-label" for="v028"><span class="glyph vc-icon-top">&#57862;</span> 0.28 <span class="glyph vc-icon-top">&#57748;</span> 7 <span class="glyph vc-icon-top">&#57751;</span> 25 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+  <li>Firefox doll size (increased to 150%)</li>
+  <li>Basement slave offer. If declined - leave button missing</li>
+  <li>Family tree. If npc father was released - error.</li>
+  <li>If girls assigned to streets. Will lose virginity</li>
+  <li>Fighting. If a lot companions - went outside screen and ally overlap.</li>
+  <li>Squirter when getting orgasm didn't show additional scene.</li>
+  <li>If childbirth was not successful girl still was pregnant.</li>
+</ul>
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+    <li>Event [Cabin] - Common capital (existing). Added option to split money between girls (contr. decker666)</li>
+    <li>New fuck mechanics. Some fixes + if girl gets orgasm, her happiness increases (contr. decker666)</li>
+    <li>Events (Existing) - In some random events added option to invite girl (contr. NilsPeterAndersson)</li>
+    <li>Event [Negan] - Introduction</li>
+    <li>Event [Negan] - Done deal</li>
+    <li>Event [Explore] - Hospital (existing) added option to find gas mask</li>
+    <li>Event [Dom] - Fuel delivery to Isabel (forced sex choice)</li>
+    <li>Event [Explore] - Hospital (existing) Option to find gas mask there</li>
+    <li>Started to work in standalone mods (Would be able to enable only mods you want to (for example more pregnancy images, more gay images, etc)</li>
+    <li>Settlement management. Street worker happiness stats + option to give girls days off (contr. NilsPeterAndersson)</li>
+    <li>Event [Shower] - Taken.</li>
+    <li>Event [Workout] (existing) - will use new fuck view</li>
+    <li>Event [Laura] - Morning sample</li>
+    <li>Event [Vincent] - Note.</li>
+    <li>Exploring will use only 30 not 60 base energy.</li>
+    <li>Reworked drinking (drunk) mechanism (contr. decker666)</li>
+    <li>Automatization updates (Streetworker automatic rest, automatic buttplug) (contr. NilsPeterAndersson)</li>
+    <li>Event [Basement] - Female slave escape (alternative)</li>
+    <li>Cheat menu: Bathhouse threesome event trigger (For supporters)</li>
+    <li>Settlement info. Added info how much food is produced/consumed. (contr. NilsPeterAndersson)</li>
+    <li>Event [Mistress fuck] (existing) reworked (contr. decker666)</li>
+    <li>Event [Nightclub] - Buy a drinks (foursome) (For supporters)</li>
+    <li>Mistress fuck scenes use new fuck mechanism (contr. decker666)</li>
+    <li>Addition of missing generic sex action text (contr. decker666)</li>
+    <li>Nonfemale fucking will use new mechanics (contr. decker666)</li>
+</ul>
+</div></div>
+
+
+
+<div class="tab"><input type="radio" id="v027" name="rd">
+<label class="tab-label" for="v027"><span class="glyph vc-icon-top">&#57862;</span> 0.27 <span class="glyph vc-icon-top">&#57748;</span> 6 <span class="glyph vc-icon-top">&#57751;</span> 33 <span class="vc-top-fill"></span></label>
+<div class="tab-content">
+<h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
+<ul>
+  <li>Only not virgin slaves who are horny will ask to fuck them (Basement)</li>
+  <li>Fixed auto bandages if you have a doctor or have bandages in inventory</li>
+  <li>Character/slave/guest random overwrites while using growth potion</li>
+  <li>Typos (contr. Seeedaum)</li>
+  <li>Vincent car steal event. Wrong guests were killed</li>
+  <li>Male fuck - titfuck was available</li>
+</ul>
+
+<h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>
+<ul>
+  <li>Reworked NPC visual (body and breasts part). In the future opens all kinds of possibilities. Visual tits size, tattoos, scars, etc. Skin color can be custom in the future (Changes allow setting girls' skin tone to any)</li>
+  <li>5 new clothes (tops) for girls</li>
+  <li>Customize girl clothes</li>
+  <li>Can give axe to NPCs to increase bonuses if assigned to the forest</li>
+  <li>Increased how much your store can buy/sell for most used items (food/rope/plastic, etc)</li>
+  <li>Moved guesthouse, workbench, nursery head images to the background</li>
+  <li>Replaced male dolls with corresponding skin tone</li>
+  <li>Gardener skill gives a bigger bonus</li>
+  <li>Cheat menu: Option to increase all NPC happiness to max</li>
+  <li>Settlement stats (bedroom)</li>
+  <li>Settlement customize (change name/color/flag)</li>
+  <li>Back button in the top of the guesthouse/basement/greenhouse</li>
+  <li>Workout reworking to moddable folder (contr. decker666)</li>
+  <li>Sex chance will take into account horny, submission, etc. (Now guys who are not gay but have 100 submission will have a 50% chance to say yes, instead of 0 as before) (contr. decker666)</li>
+  <li>After won fight additional info about defeated enemies (approx age and beauty)</li>
+  <li>Added moon phases. When collecting mushrooms, chance to find also food (for you and companions) (contr. NilsPeterAndersson)</li>
+  <li>NPC info. Hide some fields under "More info" link. Not all stats/info about NPC is relevant</li>
+  <li>NPC girls added creampie count</li>
+  <li>Reworked happiness. Fewer penalties and more ways to gain it</li>
+  <li>Reduced travel time inside (x2) Underground city</li>
+  <li>Bathhouse schedule. Enabled male & trans NPCs. They will also use the shower automatically</li>
+  <li>While looking for berries, regarding moon phase, option to see wolf and hunt him (contr. NilsPeterAndersson)</li>
+  <li>Learnable "cook" skill (When 100 days work in the kitchen)</li>
+  <li>In NPC, you can see stats how many days they have worked in x job</li>
+  <li>Learnable cumslut trait (cum 100 times in her mouth)</li>
+  <li>Reworked default sex scenes with NPCs. (Right now only will be enabled for guests for testing and your reviews) (Thanks to decker666 for ideas)</li>
+  <li>More learnable traits: cumslut, deepthroat, nymphomaniac (contr. decker666)</li>
+  <li>Sad guests will leave (-50 happiness) (contr. NilsPeterAndersson)</li>
+  <li>Offer slave guy to slave trans girl (contr, saman853)</li>
+  <li>Event: [Explore] (existing. Added a chance to find gas mask in a police car)</li>
+  <li>Settlement automatization (Gives automatically items for specific jobs, etc). (contr. NilsPeterAndersson)</li>
+  <li>Event: Lesbian sex (contr. decker666)</li>
+  <li>Event [Cabin]: Late dance (For supporters)</li>
+</ul>
+</div></div>
+
+
+<div class="tab"><input type="radio" id="v026" name="rd">
+<label class="tab-label" for="v026"><span class="glyph vc-icon-top">&#57862;</span> 0.26 <span class="glyph vc-icon-top">&#57748;</span> 7 <span class="glyph vc-icon-top">&#57751;</span> 25 <span class="vc-top-fill"></span></label>
 <div class="tab-content">
 <h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
 <ul>
@@ -58,7 +1251,7 @@ at css some explanation for icons //-->
 </div></div>
 
 
-<div class="tab"><input type="radio" id="v023" name="rd">
+<div class="tab"><input type="radio" id="v025" name="rd">
 <label class="tab-label" for="v025"><span class="glyph vc-icon-top">&#57862;</span> 0.25 <span class="glyph vc-icon-top">&#57748;</span> 5 <span class="glyph vc-icon-top">&#57751;</span> 29 <span class="vc-top-fill"></span></label>
 <div class="tab-content">
 <h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
@@ -107,7 +1300,7 @@ at css some explanation for icons //-->
 
 
 
-<div class="tab"><input type="radio" id="v023" name="rd">
+<div class="tab"><input type="radio" id="v024" name="rd">
 <label class="tab-label" for="v024"><span class="glyph vc-icon-top">&#57862;</span> 0.24 <span class="glyph vc-icon-top">&#57748;</span> 6 <span class="glyph vc-icon-top">&#57751;</span> 20 <span class="vc-top-fill"></span></label>
 <div class="tab-content">
 <h3><span class="glyph vc-icon-con">&#57748;</span>FIXES:</h3>
@@ -130,7 +1323,7 @@ at css some explanation for icons //-->
   <li>Events, multiple [NPC gay content] - Now you can meet males in the nightclub and also wash them. (contr. decker666)</li>
   <li>New gender: trans woman (contr. decker666)</li>
   <li>Moddable wash folder (cont. decker666)</li>
-  <li>Event [Octavia]: Wolf pelt (repeatable). Bring wofl pelts to her for small reward (For DOM and SUB route). Chance to increase her sub or relationship.</li>
+  <li>Event [Octavia]: Wolf pelt (repeatable). Bring wolf pelts to her for small reward (For DOM and SUB route). Chance to increase her sub or relationship.</li>
   <li>Event [Bathhouse]: Threesome (repeatable)</li>
   <li>Event [Dom]: (Isabel) Gas shortage</li>
   <li>Event [Rodger]: The testing of the faith.</li>
@@ -233,7 +1426,7 @@ at css some explanation for icons //-->
   <li>Event: New Character (Dr. Finch (Laura)) (scientist) [Toxic rain]</li>
   <li>Event: Laura [Successful test]</li>
   <li>New item: growth potion (in 0.22 release only few test vials. Mechanics will be in 0.23)</li>
-  <li>Nursery: Gender colors + option to click on childs</li>
+  <li>Nursery: Gender colors + option to click on children</li>
   <li>Event: Laura [Growth vials]</li>
   <li>Cheat menu: Set all slave relationship to max (For supporters)</li>
   <li>Compressed all videos. (50% size decrease (Hopefully works on ios as videos were only compressed and not converted to other format (Still uses H.264))</li>  
@@ -253,7 +1446,7 @@ at css some explanation for icons //-->
   <li>Fixed bug when sometimes after fucking female guest you were thrown back to slave options</li>
   <li>After cum in guy face, redirect to girl view</li>
   <li>Error after fucking girl in the nightclub</li>
-  <li>Family tree. Didn't show properly mother and father (only childs worked)</li>
+  <li>Family tree. Didn't show properly mother and father (only children worked)</li>
 </ul>
 
 <h3><span class="glyph vc-icon-con">&#57751;</span>FEATURES:</h3>

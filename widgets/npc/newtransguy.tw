@@ -1,0 +1,25 @@
+:: Widget newtransguy [widget]
+<<widget newtransguy>>
+	<<include 'Guy names'>>
+	<<set _gender = 3>>	
+	<<include 'newnpc'>>
+
+	<<set
+		_npc.virgin = false,
+		_npc.orgasms = 0
+	>>
+
+	<<if (setup.getAge(_npc) <= 20 && setup.percentageChance(50))>>
+		<<set _npc = setup.setToVirgin(_npc)>>
+	<</if>>
+
+	<<if setup.percentageChance(50)>>
+		<<set _npcTraits = 1>>
+		<<if setup.percentageChance(30)>>
+			<<set _npcTraits = 2>>
+		<</if>>
+		<<set _npc.traits = setup.getRandomTraits(_npc, _npcTraits)>>
+	<</if>>
+
+	<<set $tmpGuy = _npc>>
+<</widget>>

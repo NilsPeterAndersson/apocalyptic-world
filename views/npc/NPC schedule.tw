@@ -15,7 +15,7 @@
 		to: '20:00',
 		p: 10
 	},
-	scavenger: {
+	scavenging: {
 		from: '20:00',
 		to: '23:00',
 		p: 30
@@ -29,6 +29,11 @@
 		from: '10:00',
 		to: '12:00',
 		p: 20
+	},
+	nightclub: {
+		from: '19:00',
+		to: '02:00',
+		p: 60
 	}
 }
 >>
@@ -36,7 +41,7 @@
 <<for _scheduleGuestI, _scheduleGuest range $guests>>
 	<<capture _scheduleGuestI, _scheduleGuest>>
 		<<set $guests[_scheduleGuestI].location = ''>>
-		<<if _scheduleGuest.gender || setup.getAge(_scheduleGuest) < 18>>
+		<<if setup.getAge(_scheduleGuest) < 18>>
 			<<continue>>
 		<</if>> 
 
@@ -55,7 +60,7 @@
 				<</if>>
 				<<set $guests[_scheduleGuestI].washDays = 2>>
 				<<set $guests[_scheduleGuestI].location = 'bathhouse'>>
-				<<setNpcStats 'guest' _scheduleGuestI 'happy' 2>>
+				<<setNpcStats 'guest' _scheduleGuestI 'happy' 3>>
 		<</if>>
 	<</capture>>
 <</for>>
@@ -63,7 +68,7 @@
 <<for _scheduleSlaveI, _scheduleSlave range $slaves>>
 	<<capture _scheduleSlaveI, _scheduleSlave>>
 		<<set $slaves[_scheduleSlaveI].location = ''>>
-		<<if _scheduleSlave.gender || setup.getAge(_scheduleSlave) < 18>>
+		<<if setup.getAge(_scheduleSlave) < 18>>
 			<<continue>>
 		<</if>>
 
@@ -83,7 +88,7 @@
 				<<set $slaves[_scheduleSlaveI].washDays = 2>>
 				<<set $slaves[_scheduleSlaveI].location = 'bathhouse'>>
 
-				<<setNpcStats 'slave' _scheduleSlaveI 'happy' 2>>
+				<<setNpcStats 'slave' _scheduleSlaveI 'happy' 3>>
 		<</if>>
 	<</capture>>
 <</for>>

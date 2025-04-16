@@ -8,7 +8,7 @@
 	<<pickup $backpack "wood" _getWood>>
  <center>[img[setup.ImagePath+'places/forest/chop_wood'+ Math.floor(Math.random() * 2)+'.webp']]</center>
  <br /><br />
- <strong>You managed to get <<=_getWood>> wood because you used axe.</strong>
+ <strong>You managed to get <<=_getWood>> wood thanks to your axe.</strong>
 <<else>>
 	<<set _getWood = Math.min(Math.round(2 * ($player.strength / 10), 0), 10)>>
 	<<set _getWood = Math.max(_getWood, 2)>>
@@ -19,8 +19,23 @@
  <strong>You managed to get <<=_getWood>> wood.</strong>
 <</if>>
 <br /><br />
+<<for _companionKey, _companion range $player.companions ?? {}>>
+	<<if setup.percentageChance(30)>>
+		<<set _companion = setup.companionGet(_companionKey)>>
+		<<=setup.displayName(_companion)>> managed to collect 1 wood.
+		<br />
+		<<pickup $backpack 'wood' 1>>
+		<<set _companionWood = true>>
+	<</if>>
+<</for>>
+<<if _companionWood>>
+	<br />
+<</if>>
+<<addmins 120>>
+<<include 'Forest - new moon include'>>
+<<include 'Forest - full moon include'>>
 [[Back|Outside]]
 
-<<addmins 180>>
+
 
 

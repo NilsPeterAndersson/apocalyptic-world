@@ -1,0 +1,179 @@
+:: Mistress fuck [sex]
+<<set _girlGuest = setup.getPersonsForLocation($guests, 'mistress')>>
+<<set $guests[_girlGuest[0]].location = 'mistress'>>
+<<set $tmpGirl.location = 'basement-mistress.' + setup.genderPath($guests[_girlGuest[0]])>>
+
+<<set _sexActions = {
+    mistress_handjob: {
+        title: 'Handjob',
+        minAction: 10,
+        show: [1,2].includes($guests[_girlGuest[0]].gender),
+        maxCorruption: 20
+    },
+    mistress_footjob: {
+        title: 'Footjob',
+        minAction: 20,
+        show: [1,2].includes($guests[_girlGuest[0]].gender),
+        maxCorruption: 30
+    },
+    mistress_titjob: {
+        title: 'Titjob',
+        minAction: 30,
+        show: [1,2].includes($guests[_girlGuest[0]].gender) && ['medium', 'big'].includes($tmpGirl.breasts ?? ''),
+        maxCorruption: 40
+    },
+    mistress_face_strapon: {
+        title: 'Face strapon',
+        minAction: 30,
+        show: $guests[_girlGuest[0]].gender == 0 && $tmpGirl.gender == 1,
+        maxCorruption: 40
+    },
+    mistress_pussy_lick: {
+        title: 'Lick pussy',
+        minAction: 30,
+        show: !$tmpGirl.gender,
+        maxCorruption: 40,
+        positive: true
+    },
+    mistress_licked: {
+        title: 'Sit on face',
+        minAction: 40,
+        show: $guests[_girlGuest[0]].gender == 0,
+        maxCorruption: 50
+    },
+    mistress_bj: {
+        title: 'Blowjob',
+        minAction: 40,
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('cumslut'),
+        maxCorruption: 50,
+        stats: 'bj'
+    },
+    mistress_rimjob: {
+        title: 'Rimjob',
+        minAction: 40,
+        maxCorruption: 50
+    },
+    mistress_dp: {
+        title: 'Deepthroat',
+        minAction: 50,
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('deepthroat'),
+        maxCorruption: 60,
+        positive: (($tmpGirl.traits ?? []).includes('deepthroat') && $tmpGirl.horny <= 79),
+        stats: 'dp'
+    },
+    mistress_pussy: {
+        title: 'Fuck pussy',
+        minAction: 50,
+        show: typeof $tmpGirl.pussy !== 'undefined',
+        maxCorruption: 60,
+        positive: (!($tmpGirl.traits ?? []).includes('analslut') && !$tmpGirl.virgin),
+        stats: 'pussy'
+    },
+    mistress_anal_fingering: {
+        title: 'Finger ass',
+        minAction: 60,
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
+        maxCorruption: 70,
+        positive: (($tmpGirl.traits ?? []).includes('analslut') && $tmpGirl.anal >= 10),
+        stats: 'anal'
+    },
+    mistress_anal: {
+        title: 'Fuck ass',
+        minAction: 70,
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut'),
+        maxCorruption: 90,
+        positive: (($tmpGirl.traits ?? []).includes('analslut') && $tmpGirl.anal >= 20),
+        stats: 'anal'
+    },
+    mistress_anal_fisting: {
+        title: 'Fist asshole',
+        minAction: 90,
+        orConditionTrue: ($tmpGirl.traits ?? []).includes('analslut') && $tmpGirl.anal >= 90,
+        maxCorruption: 100,
+        positive: (($tmpGirl.traits ?? []).includes('analslut') && $tmpGirl.anal >= 90),
+        stats: 'anal'
+    }
+}>>
+
+<<if typeof $sexAction !== 'undefined'>>
+    <<addmins 5>>
+    <<energy -3>>
+
+    <<set _hornyGained = 10>>
+    <<horny _hornyGained>>
+	<<set _showSex = true>>
+
+    <<if $sexAction === 'mistress_anal'>>
+        <<include 'Mistress fuck anal'>>
+        <br />
+    <</if>>
+
+    <<if _showSex>>
+	    <<actionImage $tmpGirl $sexAction>>
+        <br />
+        <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
+            <<set $tmpGirl.horny = Math.min($tmpGirl.horny + 20, 100)>>
+        <</if>>
+        <<set _npcHorny = clone($tmpGirl.horny)>>
+        <<showmeter '$npcHornyBar' '_npcHorny / 100'>>
+        <<updatemeter '$npcHornyBar' `_npcHorny / 100`>>
+        <br />
+        <<if $sexForced && !$tmpGirl.traits.includes('masochist') && $tmpGirl.sub !== 100>>
+            <<set
+                $tmpGirl.sub = Math.min($tmpGirl.sub + 2, 100),
+                $tmpGirl.relationship = Math.max($tmpGirl.relationship - 5, -100),
+                $tmpGirl.happy = Math.max($tmpGirl.happy - 5, -100)
+            >>
+            <<=setup.pronounceWhat($tmpGirl, true)>> asks for mercy!<strong> (Submission + 2, Happy / Relationship - 5)</strong>
+        <<else>>
+            <<set
+                $tmpGirl.relationship = Math.min($tmpGirl.relationship + 1, 100),
+                $tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100)
+            >>
+            <<=setup.pronounceWhat($tmpGirl, true)>> welcomes the attention.<strong> (Happy / Relationship + 1)</strong>
+        <</if>>
+         <br />
+    <</if>>
+
+    <<if (_sexActions[$sexAction] ?? false) && $tmpGirl.corruption < (_sexActions[$sexAction].maxCorruption2 ?? 100)>>
+        <<set $tmpGirl.corruption = Math.min($tmpGirl.corruption + 1, 100)>>
+		<<=setup.pronounceWhat($tmpGirl, true)>> is getting more corrupted.<strong> (Corruption + 1)</strong>
+        <br />
+    <</if>>
+
+    <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
+		<<=setup.pronounceWhos($tmpGirl, true)>> body reacts positively. <strong>(Horny + 20)</strong>
+		<br />
+		
+		<<if $tmpGirl.horny >= 100>>
+            <<include 'Mistress fuck squirt'>>
+			<<=setup.displayName($tmpGirl, true)>> has an orgasm!<strong> (Happy / Relationship + 5)</strong>
+			<br />
+			<<set
+				$tmpGirl.relationship = Math.min($tmpGirl.relationship + 5, 100),
+				$tmpGirl.happy = Math.min($tmpGirl.happy + 5, 100)>>
+            <<if typeof $tmpGirl.orgasms !== 'undefined'>>
+                <<set $tmpGirl.orgasms++>>
+            <</if>>
+		<</if>>	
+    <</if>>
+
+    <<if _sexActions[$sexAction]?.stats>>
+        <<set $tmpGirl[_sexActions[$sexAction].stats]++>>
+    <</if>>
+    <<if $sexAction === 'mistress_pussy'>>
+        <<set $tmpGirl.virgin = false>>
+    <</if>>
+
+    <<include 'Mistress fuck traits'>>
+
+    <<if $tmpGirl.horny >= 100>>
+        <<script>>
+        setTimeout(function () {
+            variables().tmpGirl.horny = 0;
+        }, 400);
+        <</script>>
+    <</if>>
+<</if>>
+<br />
+<<include 'Mistress fuck buttons'>>

@@ -3,7 +3,7 @@
 <br /><br />
 
 <center>
-	[img[setup.ImagePath+'places/nightclub/nightclub_ambush_recognize.jpg']]
+	<<image 'places/nightclub/nightclub_ambush_recognize.jpg' 'sfw'>>
 </center>
 <br /><br />
 They are ready to attack you, but just before that, one of them tells the others to stop. He has heard and seen you. They decide not to harm you after all and apologize to you.
@@ -12,7 +12,7 @@ They are ready to attack you, but just before that, one of them tells the others
 <<if !$tmpGirl.gender;>>
 	<<linkreplace 'Grab girl by hand'>>
 		<center>
-			[img[setup.ImagePath+'places/nightclub/nightclub_ambush_recognize_grab_hand.jpg']]
+			<<image 'places/nightclub/nightclub_ambush_recognize_grab_hand.jpg' 'sfw'>>
 		</center>
 		<br /><br />
 		The other men glance at what you are doing but decide to ignore it and quickly walk away, leaving the girl alone with you.
@@ -30,14 +30,14 @@ They are ready to attack you, but just before that, one of them tells the others
 			<br /><br />
 			You completely ignore both her and the person observing you from a distance. You stand behind her and thrust your hard dick inside her pussy as she's bent over.
 			<br /><br />
-			She resists for a few more minutes but after that gets relaxed and starts to enjoy it. Another few minutes later she asks you to get on your back so she can ride you. 
+			She resists for a few more minutes but after that gets relaxed and starts to enjoy it. Another few minutes later she asks you to get on your back so she can ride you.
 			<br /><br />
 			<<video '/nightclub/ambush4'>>
 			<br /><br />
-			After powerful 10 minutes, you finally feel that you are close and without saying anything, you finish inside her.
+			After a few intense minutes of mind-numbing pleasure, you finally feel that you are close and without saying anything, you finish inside her.
 			<br /><br />
 			<center>
-				[img[setup.ImagePath+'places/nightclub/nightclub_ambush_recognize_creampie.webp']]
+				<<image 'places/nightclub/nightclub_ambush_recognize_creampie.webp'>>
 			</center>
 			<br /><br />
 		<</linkreplace>>
@@ -45,7 +45,7 @@ They are ready to attack you, but just before that, one of them tells the others
 		  <<link 'Capture her'>>
 			<<energy 30>>
 			<<run $slaves.push($tmpGirl)>>
-			<<goto 'Outside'>>
+			<<goto 'Basement'>>
 		  <</link>>
 		<</if>>
 	<</linkreplace>>

@@ -1,0 +1,31 @@
+:: Isabel room [bg-guesthouse]
+<h1 class="ptitle">ISABEL</h1>
+<br /><br />
+
+<<if !$characters.isabel.quests.temp_home>>
+    <<goto 'Isabel - new home'>>
+<<elseif (($characters.isabel.quests.temp_home_day ?? 0) + 14) < $game.day && !$characters.isabel.quests.check_city>>
+    <<goto 'Isabel - Check underground city'>>
+<<elseif $characters.isabel.quests.check_city && !$characters.isabel.quests.pregnant && $characters.isabel.pregnancy >= 10>>
+    <<goto 'Isabel - pregnant'>>
+<</if>>
+
+<<isabel>>
+    Hey! How it's going?
+<</isabel>>
+<br /><br />
+<<link 'Approach her'>>
+    <<set $charId = 'isabel'>>
+	<<unset $slaveId, $guestId, $childId>>
+	<<set $tmpGirl = $characters.isabel>>
+    <<set $tmpGirl.location = 'bedroom'>>
+	<<set $tmpGirlBack = 'Isabel room'>>
+    <<set $tmpGirlViewBack = 'NPC view - character'>>
+	<<goto 'NPC view - character'>>
+<</link>>
+<<link 'Date'>>
+    <<goto 'Isabel - date'>>
+<</link>>
+<<link 'Leave'>>
+    <<goto 'Guest house'>>
+<</link>>

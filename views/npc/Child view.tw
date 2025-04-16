@@ -1,20 +1,29 @@
 :: Child view [girlview sex no-redirect] {"position":"4010,103","size":"100,100"}
 <<if $backpack.has('growth_potion')>>
 	<<link 'Give growth potion'>>
-		<<goto 'Give growth potion'>>
+		<<dialog 'Give growth potion'>>
+			How much years <<=setup.displayName($tmpGirl)>> should grow?
+			<br />
+			<<textbox '$yearsGrow' 1>>
+			<<link 'Give' 'Give growth potion'>>
+				<<dialogclose>>
+			<</link>>	
+		<</dialog>>
 	<</link>>
 <</if>>
+<<link 'Customize'>>
+	<<goto 'NPC customize'>>
+<</link>>
  <<link 'Leave'>>
 	<<if typeof $slaveId !== 'undefined'>>
 		<<set $slaves[$slaveId] = $tmpGirl>>
 	<<elseif typeof $guestId !== 'undefined'>>
 		<<set $guests[$guestId] = $tmpGirl>>
-	<<elseif typeof $charId !== 'undefined'>>
-		<<set $characters[$charId] = $tmpGirl>>
 	<<elseif typeof $childId !== 'undefined'>>
 		<<set $nursery[$childId] = $tmpGirl>>
 	<</if>>
-	<<run delete $slaveId, $charId, $guestId, $childId>>
+	<<unset $slaveId, $charId, $guestId, $childId>>
+
 	<<if $tmpGirlBack>>
 		<<goto $tmpGirlBack>>
 	<<else>>

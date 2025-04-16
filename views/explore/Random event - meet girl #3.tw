@@ -1,27 +1,77 @@
-:: Random event - meet girl #3 {"position":"5742,16","size":"100,100"}
+:: Random event - meet girl #3
 <h1 class="ptitle">FOREST</h1>
 <br /><br />
+
+<<set _npcGenderOptions = [0, 1]>>
+<<if settings.transEnabled>>
+	<<set _npcGenderOptions.push(2)>>
+<</if>>
+
+<<set _npcGender = setup.getRandomElement(_npcGenderOptions)>>
+<<if _npcGender === 0>>
+	<<newgirl>>
+<<elseif _npcGender === 1>>
+	<<newguy>>
+	<<set $tmpGirl = $tmpGuy>>
+<<elseif _npcGender === 2>>
+	<<newtransgirl>>
+<</if>>
+<<set $tmpGirl.location = 'forest'>>
+
+<<set _npcDataMapped = [
+	{
+		default: {
+			text: "You notice a girl walking through the forest and decide to check out what she's doing",
+			img: 'found_female',
+		},
+		masturbate: {
+			text: "As you peer through the foliage, you spot a figure—a woman sitting on a fallen tree in a small clearing. Her legs are spread wide as she pleasures herself.",
+			textTop: "As you move quietly, you suddenly hear a faint rustling noise not far ahead. Instinctively, you freeze, crouching low, your senses heightened. You inch closer, careful to avoid stepping on any dry twigs that might give away your position"
+		}
+	},
+	{
+		default: {
+			text: "You notice a guy walking through the forest and decide to check out what he's doing.",
+			img: "found_male",
+		}
+	},
+	{
+		default: {
+			text: "You notice a slightly masculine girl walking through the forest and decide to check out what she's doing.",
+			img: "found_transfemale",
+		}
+	}
+]>>
+
+<<set _type = (!_npcGender && setup.percentageChance(30) ? 'masturbate' : 'default')>>
+<<if _type === 'masturbate'>>
+	<<set $tmpGirl.horny = 100>>
+<</if>>
+
+<<set _npcData = _npcDataMapped[$tmpGirl.gender][_type]>>
+<<if _npcData.textTop>>
+	<<=_npcData.textTop>>
+	<br /><br />
+<</if>>
 <center>
- [img[setup.ImagePath+'places/explore/found_girl.jpg']]
- </center>
- <br /><br />
-You notice a girl walking through the forest and decide to check out what she's doing.
- <br /><br />
+	<<if _type === 'masturbate'>>
+		<<actionImage $tmpGirl 'masturbate'>>
+	<<else>>
+ 		[img[setup.ImagePath+'places/explore/' + _npcData.img + '.jpg']]
+	<</if>>
+</center>
+<br /><br />
+<<=_npcData.text>>
+<br /><br />
 
 <<link 'Go closer'>>
-	<<newgirl>>
-	<<set $tmpGirl.location = 'forest'>>
 	<<set $tmpGirl.rape to true>>
-	<<set $tmpGirlCapture to true>>
-	<<if setup.getAge($tmpGirl) < 40 && randomInteger(1,4) === 1>>
-		<<set $tmpGirl.pregnancy = randomInteger(10, 100)>>
-		<<set $tmpGirl.virgin = false>>
-	<</if>>
-	<<run delete $slaveId, delete $guestId, delete $charId>>
+	<<set $tmpGirlCapture = true>>
+	<<set $tmpGirlInvite = true>>
+	<<unset $tmpGirlViewBack>>
+	<<unset $slaveId, $guestId, $charId, $childId>>
 	<<set $tmpGirlBack = 'Outside'>>
-	<<goto [[Girl view]]>>
+	<<goto [[NPC view]]>>
 <</link>>
 
 [[Leave|Outside]]
-
-

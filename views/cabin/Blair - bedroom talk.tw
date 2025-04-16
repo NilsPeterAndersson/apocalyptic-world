@@ -16,15 +16,15 @@
 
 <<video '/bedroom/blair_talk'>>
 <br /><br />
-<<set $talkedAbout = either('her cold room in farm', 'your warm bed', 'comfortable sheets')>>
-You talked about <<=$talkedAbout>>.
+<<set _talkedAbout = either('her cold room in farm', 'your warm bed', 'comfortable sheets')>>
+You talked about <<=_talkedAbout>>.
 <br /><br />
 
 <<if $characters.blair.relationship < 20>>
   <<set $characters.blair.relationship +=2>>
   <strong>Blair relationship increased by 2</strong>
 <<else>>
-	<strong>You can't increase relationship with Blair with this action anymore</strong>
+	<strong>You can't increase your relationship with Blair with this action anymore.</strong>
 <</if>>
 <br /><br />
 <<if $characters.blair.quests.sex>>
@@ -32,27 +32,27 @@ You talked about <<=$talkedAbout>>.
 	  <<set $tmpGirl = $characters.blair>>
 	  <<set $tmpGirl.location = 'bedroom'>>
 	  <<set $tmpGirlCapture to false>>
+	  <<set $tmpGirlInvite to false>>
 	  <<set $tmpGirl.rape to false>>
-	  <<run delete $slaveId>>
-	  <<run delete $guestId>>
+	  <<unset $slaveId, $guestId, $childId>>
 	  <<set $charId = 'blair'>>
 	  <<set $tmpGirlViewBack = 'Sleep eval'>>
 	  <<set $tmpGirlBack = 'Sleep eval'>>
-	  <<goto 'Girl fuck'>>
+	  <<fuck $tmpGirl>>
   <</link>>
 <</if>>
 <<if $characters.blair.quests.basement>>
 	<<link 'Take her to the basement'>>
 		<<set $tmpGirl = $characters.blair>>
 	  	<<set $tmpGirl.location = 'basement'>>
-	  	<<set $tmpGirlCapture to false>>
 	  	<<set $tmpGirl.rape to false>>
-	  	<<run delete $slaveId>>
-	  	<<run delete $guestId>>
+	  	<<set $tmpGirlCapture to false>>
+		<<set $tmpGirlInvite to false>>
+	  	<<unset $slaveId, $guestId, $childId>>
 	  	<<set $charId = 'blair'>>
 	  	<<set $tmpGirlViewBack = 'Sleep eval'>>
 	  	<<set $tmpGirlBack = 'Sleep eval'>>
-	  	<<goto 'Girl fuck'>>
+		<<fuck $tmpGirl>>
 	<</link>>
 <</if>>
 <<link 'Sleep'>>

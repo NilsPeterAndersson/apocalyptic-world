@@ -1,22 +1,26 @@
 :: Greenhouse [Place] {"position":"1319,407","size":"100,100"}
-<h1 class="ptitle">GREENHOUSE</h1>
+<h1 class="ptitle">
+	<<backButton 'Wood cabin'>>		
+	GREENHOUSE
+</h1>
 <div id="place-head">
 [img[setup.ImagePath+'places/cabin/greenhouse_head.jpg']]
 </div>
 <h3>Workers</h3>
-<<set $assignedToGreenhouse = false>>
+<<set _assignedToGreenhouse = false>>
 <<set _girlsCompetition = []>>
 <<set _guestGirlsInGreenhouse = []>>
+<<set _isHeatWave = $weather?.heatWave ?? false>>
 <table id="slaves">
 	<<for _i to 0; _i lt $slaves.length; _i++>>
 		<<capture _i>>
-		<<if $slaves[_i].assignedTo != 'garden' || !timeBetween('08:00', '16:00') || typeof $slaves[_i].sick !== 'undefined'>>
+		<<if $slaves[_i].assignedTo != 'garden' || !timeBetween('08:00', '16:00') || typeof $slaves[_i].sick !== 'undefined' || _isHeatWave>>
 			<<continue>>
 		<</if>>
 		<<if !$slaves[_i].gender>>
 			<<run _girlsCompetition.push('slave:' + _i)>>
 		<</if>>
-		<<set $assignedToGreenhouse = true>>
+		<<set _assignedToGreenhouse = true>>
         <<set _genderClass = 'gender-' + setup.genderClass($slaves[_i])>>
 		<tr>
 			<td style="width: 300px">
@@ -25,18 +29,20 @@
                         <<set $tmpGirl to $slaves[_i]>>
                         <<set $tmpGirl.location = 'garden'>>
                         <<set $tmpGirlBack = 'Greenhouse'>>
-                        <<set $tmpGirlCapture to false>>
                         <<set $tmpGirl.rape to false>>
+                        <<set $tmpGirlCapture to false>>
+						<<set $tmpGirlInvite to false>>
                         <<run delete $guestId>>
                         <<set $slaveId = _i>>
-                        <<set $tmpGirlViewBack = (!$slaves[_i].gender ? 'Girl' : 'Guy') + ' view'>>
+                        <<set $tmpGirlViewBack = 'NPC view'>>
                         <<goto `$tmpGirlViewBack`>>
                       <</link>>
                   </span>
+				<<=setup.npcListInfo($slaves[_i])>>
 			</td>
 			<td>
 				<<if [0,2].includes($slaves[_i].gender) && setup.getAge($slaves[_i]) >= 17>>
-					Beauty score: <<print $slaves[_i].beauty>>
+					Beauty: <<print $slaves[_i].beauty>>
 				<</if>>
 			</td>
 			<td>
@@ -47,10 +53,10 @@
 	<</for>> 
 	<<for _gardenGuestI, _gardenGuest range ($guests ?? [])>>
 		<<capture _gardenGuestI, _gardenGuest>>
-		<<if _gardenGuest.assignedTo != 'garden' || !timeBetween('08:00', '16:00')>>
+		<<if _gardenGuest.assignedTo != 'garden' || !timeBetween('08:00', '16:00') || typeof _gardenGuest.sick !== 'undefined' || _isHeatWave>>
 			<<continue>>
 		<</if>>
-		<<set $assignedToGreenhouse = true>>
+		<<set _assignedToGreenhouse = true>>
 		<<if !_gardenGuest.gender>>
 			<<run _girlsCompetition.push('guest:' + _gardenGuestI)>>
 			<<run _guestGirlsInGreenhouse.push(_gardenGuestI)>>
@@ -60,22 +66,24 @@
 			<td style="width: 300px">
             		<span @class="''+_genderClass+''">
                           <<link _gardenGuest.name>>
-                          <<set $tmpGirlViewBack = 'Girl view - guest'>>
+                          <<set $tmpGirlViewBack = 'NPC view - guest'>>
                           <<set $tmpGirl to _gardenGuest>>
                           <<set $tmpGirl.location = 'garden'>>
                           <<set $tmpGirlBack = 'Greenhouse'>>
                           <<set $tmpGirlCapture to false>>
+						  <<set $tmpGirlInvite to false>>
                           <<set $tmpGirl.rape to false>>
                           <<run delete $slaveId>>
                           <<set $guestId to _gardenGuestI>>
-                          <<set $tmpGirlViewBack = (!_gardenGuest.gender ? 'Girl' : 'Guy') + ' view - guest'>>
+                          <<set $tmpGirlViewBack = 'NPC view - guest'>>
                           <<goto `$tmpGirlViewBack`>>
 				  <</link>>
                   </span>
+				<<=setup.npcListInfo(_gardenGuest)>>
 			</td>
 			<td>
 				<<if [0,2].includes(_gardenGuest.gender) && setup.getAge(_gardenGuest) >= 17>>
-					Beauty score: <<print _gardenGuest.beauty>>
+					Beauty: <<print _gardenGuest.beauty>>
 				<</if>>
 			</td>
 			<td>
@@ -86,8 +94,8 @@
 	<</for>>
 </table>
 
-<<if !$assignedToGreenhouse>>
-	No girls are working at the moment...
+<<if !_assignedToGreenhouse>>
+	No one is working here at the moment...
 <</if>>
 <<if isMetChar('laura') && $characters.laura.quests.successful_test && ($characters.laura.quests.lastTestDay + 20) < $game.day && !$characters.laura.quests.breeder_trait>>
 	<<set $characters.laura.quests.breeder_trait = true>>

@@ -1,0 +1,226 @@
+:: NPC view - guest [sex no-redirect girlview] {"position":"5010,145","size":"100,100"}
+<<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
+<<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
+<<set _himOrHer = setup.pronounceWho($tmpGirl)>>
+
+<<if !$tmpGirl.talked>>
+	<<link 'Talk'>>
+		<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 3, 100)>>
+		<<if $tmpGirl.relationship > 100>>
+  			<<set $tmpGirl.relationship = 100>>
+ 		<</if>>
+		<<set $tmpGirl.talked = true>>
+		<<addmins 15>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<goto 'NPC talk'>>
+	<</link>>
+<</if>>
+
+<<if !$tmpGirl.gender && timeBetween('22:00', '03:00')>>
+	<<link 'Invite to spend night in your bedroom'>>
+		<<goto 'Bedroom - invite to sleep in bedroom'>>
+	<</link>>
+<</if>>
+
+<<if !$tmpGirl.gender && $tmpGirl.location === 'garden' && $player.energy >= 20>>
+	<<set $tmpGirlViewBack = 'NPC view - guest'>>
+	[[Grope|Grope]]
+<</if>>
+
+<<if $player.energy > 30 && $tmpGirl.location !== 'garden'>>
+	<<set _linkName = 'Fuck ' + _himOrHer>>
+	<<link `_linkName`>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<if setup.percentageChance(setup.sexChance($tmpGirl))>>
+			<<fuck $tmpGirl>>
+		<<else>>
+			<<goto 'Mc fuck - no'>>
+		<</if>>
+	<</link>>
+<</if>>
+
+<<if $player.energy > 30 && $tmpGirl.location !== 'garden' && typeof $tmpGirl.family !== 'undefined' && typeof $tmpGirl.family.husband !== 'undefined' && setup.NpcInHome($tmpGirl)>>
+	<<if $tmpGirl.family.husband === 'mc'>>
+		<<set _linkName = 'Fuck ' + _himOrHer + ' in ' + _hisOrHer + ' wedding dress'>>
+		<<link `_linkName`>>
+			<<set $tmpGirlViewBack = 'NPC view - guest'>>
+			<<set $oldTmpGirlLocation = $tmpGirl.location>>
+			<<set $tmpGirl.location = 'wedding'>>
+			<<if setup.percentageChance(setup.sexChance($tmpGirl))>>
+				<<fuck $tmpGirl>>
+			<<else>>
+				<<goto 'Mc fuck - no'>>
+			<</if>>
+		<</link>>
+	<</if>>
+<</if>>
+
+<<if $player.energy > 30 && $tmpGirl.location !== 'garden' && ($tmpGirl.traits ?? []).includes('masochist') && setup.NpcInHome($tmpGirl)>>
+	<<set _linkName = 'Fuck ' + _himOrHer + ' in the basement'>>
+	<<link `_linkName`>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<set $oldTmpGirlLocation = $tmpGirl.location>>
+		<<set $tmpGirl.location = 'basement'>>
+		<<if setup.percentageChance(setup.sexChance($tmpGirl))>>
+			<<fuck $tmpGirl>>
+		<<else>>
+			<<goto 'Mc fuck - no'>>
+		<</if>>
+	<</link>>
+<</if>>
+
+<<if $player.energy > 30 && $tmpGirl.location !== 'garden' && $tmpGirl.location !== 'gloryhole' && !$tmpGirl.gender && setup.NpcInHome($tmpGirl)>>
+	<<set _linkName = 'Fuck ' + _himOrHer + ' in a threesome'>>
+	<<link `_linkName`>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<script>>
+			Dialog.setup("Guesthouse - Ask for threesome", "Guesthouse - Ask for threesome");
+			Dialog.wiki(Story.get("Guesthouse - Ask for threesome choose").processText());
+			Dialog.open();
+		<</script>>
+	<</link>>
+<</if>>
+
+<<if setup.NpcInHome($tmpGirl)>>
+	<<set _linkName = 'Ask '+ _himOrHer +' to fuck someone'>>
+	<<link `_linkName`>>
+		<<addmins 15>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<script>>
+			Dialog.setup("Guesthouse - Ask to fuck", "Guesthouse - Ask to fuck");
+			Dialog.wiki(Story.get("Guesthouse - Ask to fuck someone choose").processText());
+			Dialog.open();
+		<</script>>
+	<</link>>
+<</if>>
+
+<<if !($player.companions['guest:' + $guestId] ?? false) && Object.keys($player.companions ?? {}).length < $companionsLimit>>
+	<<link 'Add as companion'>>
+		<<companionAdd 'guest' $guestId>>
+		<<assignedTo $tmpGirl 'companion'>>
+		<<goto `passage()`>>
+	<</link>>
+<</if>>
+
+<<if !$tmpGirl.assignedTo && !($player.companions['guest:' + $guestId] ?? false)>>
+	<<link 'Assign to'>>
+		<<dialog 'Assign to'>>
+			<<include 'Guest view assign to'>>	
+		<</dialog>>
+	<</link>>
+<</if>>
+
+<<if $tmpGirl.assignedTo>>
+	<<link "Remove assigned job ($tmpGirl.assignedTo)">>
+		<<assignedTo $tmpGirl 'none'>>
+		<<goto `passage()`>>
+	<</link>>
+<</if>>
+
+<<include 'Button - rest or work'>>
+
+<<if !$tmpGirl.gender && !$tmpGirl.milked && $player.energy >= 10 && $backpack.has('breast_pump') && ($tmpGirl.pregnancy > 60 || ($tmpGirl.traits ?? []).includes('milker')) && setup.NpcInHome($tmpGirl)>>
+	  <<link 'Milk her'>>
+			<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		  	<<goto 'Girl milk'>> 
+	  <</link>>
+	<</if>>	
+
+<<if ($game.hotShower ?? false) && $player.energy >= 10 && setup.NpcInHome($tmpGirl)>>
+	<<link 'Invite to your shower'>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<goto 'Event: Guest invite shower'>>
+	<</link>>
+<</if>>
+
+<<if !$tmpGirl.workout && $player.energy >= 10 && setup.NpcInHome($tmpGirl)>>
+	<<link 'Workout together'>>
+		<<set $tmpGirl.workout = true>>
+		<<energy -10>>
+		<<goto 'NPC - workout together'>>
+	<</link>>
+<</if>>
+
+<<include 'NPC view - massage table invite'>>
+
+<<if setup.cabinInventory.has('champagne') && !$tmpGirl.gender>>
+	<<link 'Offer her a drink'>>
+		<<goto 'NPC offer drink'>>
+	<</link>>
+<</if>>
+
+<<if !$tmpGirl.gender && $tmpGirl.pregnancy && $tmpGirl.pregnancy >= 7>>
+	<<if $backpack.has('pregnancy_potion')>>
+		<<link 'Give pregnancy termination potion'>>
+			<<goto 'Girl - pregnancy potion'>>
+		<</link>>
+	<</if>>
+	<<if $backpack.has('pregnancy_speed_potion')>>
+		<<link 'Give pregnancy speed potion'>>
+			<<goto 'Girl - pregnancy speed potion'>>
+		<</link>>
+	<</if>>
+<</if>>
+
+<<if [0, 2].includes($tmpGirl.gender) && $game.canMarry && !$tmpGirl.married && $backpack.has('wedding_ring') && $tmpGirl.relationship >= 80 && setup.NpcInHome($tmpGirl)>>
+	<<set _linkName = 'Marry ' + _himOrHer>>
+	<<link `_linkName`>>
+		<<set $tmpGirlViewBack = 'NPC view - guest'>>
+		<<set $oldTmpGirlLocation = $tmpGirl.location>>
+		<<goto 'NPC marry'>>
+	<</link>>
+<</if>>
+
+<<if !$tmpGirl.gift>>
+	<<link 'Give gift'>>
+		<<script>>
+			Dialog.setup("NPC gift", "NPC gift");
+			Dialog.wiki(Story.get("NPC gift").processText());
+			Dialog.open();
+		<</script>>
+	<</link>>
+<</if>>
+
+<<link 'Customize'>>
+	<<goto 'NPC customize'>>
+<</link>>
+
+<<if $slaves.length < $basementLimit && setup.NpcInHome($tmpGirl)>>
+	<<set _linkName = 'Move ' + _himOrHer + ' to the basement cell'>>
+	<<link `_linkName`>>
+		<<assignedTo $tmpGirl 'none'>>
+		<<goto 'Guest move to basement'>>
+	<</link>>
+<</if>>
+
+<<if setup.NpcInHome($tmpGirl)>>
+	<<link 'Throw out'>>
+		<<dialog 'Throw out'>>
+			Are you sure you want to throw <<=($tmpGirl.gender ? 'him' : 'her')>> out?
+			<br />
+			<<link 'Yes' 'Guest house'>>
+				<<assignedTo $tmpGirl 'none'>>
+				<<guestLeft $guestId>>
+				<<dialogclose>>
+				<<set $player.reputation-->>
+				<<set $player.goodwill-->>
+			<</link>>	
+		<</dialog>>
+	<</link>>
+<</if>>
+	
+ <<link 'Go back'>>
+	<<if typeof $slaveId !== 'undefined'>>
+		<<set $slaves[$slaveId] = $tmpGirl>>
+	<<elseif typeof $guestId !== 'undefined'>>
+		<<set $guests[$guestId] = $tmpGirl>>
+	<<elseif typeof $charId !== 'undefined'>>
+		<<set $characters[$charId] = $tmpGirl>>
+	<</if>>
+	<<unset $slaveId, $guestId, $charId>>
+	<<if $tmpGirlBack>>
+		<<goto $tmpGirlBack>>
+	<<else>>
+		<<goto 'Outside'>>
+	<</if>>
+<</link>>

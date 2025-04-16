@@ -1,22 +1,21 @@
 :: Widget - nighclub [widget] {"position":"25,1083","size":"100,100"}
 <<widget nightclub_suggest_bathroom_link>>
-  <<link 'Suggest to go to bathroom together'>>
-  	<<run delete $slaveId>>
-	<<run delete $guestId>>
-	<<run delete $charId>>
+  <<link 'Suggest to go to the bathroom together'>>
+	<<unset $slaveId, $guestId, $charId>>
   	<<if random(0, 3) === 0>>
 		<<goto 'Nightclub - outside ask'>>
 	<<else>>
-	  <<if ($tmpGirl.relationship + $tmpGirl.drunk * 10) < 60>>
-		  <<goto 'Nightclub - girl decline'>>
-	  <<else>>
-		  <<set $tmpGirlCapture to false>>
+	  <<if setup.percentageChance(setup.sexChance($tmpGirl))>>
+			<<unset $guestId, $slaveId, $charId>>
 		  <<set $tmpGirl.rape to false>>
+		  <<set $tmpGirlCapture to false>>
+		  <<set $tmpGirlInvite to false>>
 		  <<set $tmpGirlBack = 'Nightclub - invite'>>
 		  <<set $tmpGirlViewBack = $tmpGirlBack>>
 		  <<set $orgasmsBefore = $tmpGirl.orgasms>>
-		  <<set _passageName = (!$tmpGirl.gender ? 'Girl' : 'Guy') + ' fuck'>>
-		  <<goto _passageName>>
+		  <<fuck $tmpGirl>>
+	  <<else>>
+  		  <<goto 'Nightclub - girl decline'>>
 	  <</if>>
 	<</if>>
   <</link>>

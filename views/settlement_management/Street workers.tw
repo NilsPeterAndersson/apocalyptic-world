@@ -1,0 +1,175 @@
+:: Settlement management - street_workers [management include]
+
+<h1>People with unhappy jobs</h1>
+
+<br/><br/>
+
+<<set _workersByHappyLvl = {
+    very_sad:   {slaves: [], guests: []},
+    sad:        {slaves: [], guests: []},
+    normal:     {slaves: [], guests: []},
+    happy:      {slaves: [], guests: []},
+    very_happy: {slaves: [], guests: []}
+}>>
+<<set _unhappy_jobs = ['milk_barn', 'nightclub', 'quarry', 'streets']>>
+<<set _workers = {
+    slaves: setup.getNpcsForLocations($slaves, _unhappy_jobs),
+    guests: setup.getNpcsForLocations($guests, _unhappy_jobs),
+}>>
+<<set _sick = []>>
+<<set _count = _workers.slaves.length + _workers.guests.length>>
+
+<<for _persons, _npcs range _workers>>
+    <<for _npc range _npcs>>
+        <<set _happyLevel = setup.getNpcHappyLevel(_npc)>>
+        <<set _workersByHappyLvl[_happyLevel][_persons].push(_npc)>>
+        <<if _npc.sick>>
+            <<set _sick.push(_npc)>>
+        <</if>>
+    <</for>>
+<</for>>
+
+<<set _happyLvlHuman = {
+    very_sad:   'Very sad',
+    sad:        'Sad',
+    normal:     'Normal',
+    happy:      'Happy',
+    very_happy: 'Very happy'
+}>>
+
+<<if _count>><table class="mc-stats-table">
+    /* should sand storm affect milk barn? -- don't care for now -- sand storm is rare */
+     <<set _badWeather = /*$weather?.heatWave || */ $weather?.sandStorm>>
+    <<if _badWeather>>
+        <<set _text = 
+            $weather?.heatWave  ? "Heat wave in progress! Your workers can't work in this heat'": 
+            $weather?.sandStorm ? "Sandstorm in progress! Your workers can't go outside" : 
+                "<span style=\"color: red\">Undefined bad weather in progress! -- This shouldn't happen</span>">>
+        <tr>
+            <td></td>
+            <td colspan="3">Note: _text<br/>anyway so why not count this day as a day off?</td>
+            <td align="right">
+                <<button 'Rest for all!'>>
+                    <<for _persons, _npcs range _workers>>
+                        <<for _npc range _npcs>>
+                            <<set _npc.rest = {
+                                days: setup.getNpcHappyLevel(_npc) === 'very_sad' ? 3 : 2,
+                                desc: 'Day off resting',
+                                id: 'resting'
+                            }>>
+                        <</for>>
+                    <</for>>
+                    <<goto 'Settlement management'>>
+                <</button>>
+            </td>
+        </tr>
+    <</if>>
+
+    <<if _sick.length>>
+        <tr>
+            <td></td>
+            <td colspan="3">Note: Some unhappy workers are sick! As the sick don't work so why not count this day as a day off?</td>
+            <td align="right">
+                <<button 'Rest for sick!'>>
+                    <<for _npc range _sick>>
+                        <<set _npc.rest = {
+                            days: setup.getNpcHappyLevel(_npc) === 'very_sad' ? 3 : 2,
+                            desc: 'Day off resting',
+                            id: 'resting'
+                        }>>
+                    <</for>>
+                    <<goto 'Settlement management'>>
+                <</button>>
+            </td>
+        </tr>        
+    <</if>>
+
+    <<for _happyLevel, _object range _workersByHappyLvl>>
+        <<for _persons, _npcs range _object>>
+            <<if _npcs.length>>
+                <<capture _npcs>>
+                    <tr>
+                        <td><<happyIcon _happyLevel>></td>
+                        <td colspan="2">_happyLvlHuman[_happyLevel] _persons</td>
+                        <td></td>
+                        <td align="right">
+                            <table><tr><td>
+                                <<button 'Work!'>>
+                                    <<for _npc range _npcs>>
+                                        <<run delete _npc.rest>>
+                                    <</for>>
+                                    <<goto 'Settlement management'>>
+                                <</button>>
+                                </td><td> || </td><td>
+                                <<button 'Rest!'>>
+                                    <<for _npc range _npcs>>
+                                        <<set _npc.rest = {
+                                            days: setup.getNpcHappyLevel(_npc) === 'very_sad' ? 3 : 2,
+                                            desc: 'Day off resting',
+                                            id: 'resting'
+                                        }>>
+                                    <</for>>
+                                    <<goto 'Settlement management'>>
+                                <</button>>
+                            </td></tr></table>
+                        </td>
+                    </tr>
+                <</capture>>
+                <<for $tmpGirl range _npcs>>
+                    <<capture $tmpGirl, _restId, _workId, _statusId>>
+                        <<set _showSick = $tmpGirl.sick ? ' [sick]' : ''>>
+                        <tr>
+                            <td/>
+                            <td/>
+                            <td>$tmpGirl.name<<=_showSick>></td>
+                            <td>
+                                <<set _statusId = 'status_' + $tmpGirl.id>>
+                                <div @id="_statusId">
+                                    <<if def $tmpGirl.rest>>
+                                        ... has a day off (<<=$tmpGirl.assignedTo>>)
+                                    <<else>>
+                                        ... is working (<<=$tmpGirl.assignedTo>>)
+                                    <</if>>
+                                </div>
+                            </td>
+
+                            <td align="right">
+                                <<set _restId = 'rest_' + $tmpGirl.id>>
+                                <<set _workId = 'work_' + $tmpGirl.id>>
+                                <<if def $tmpGirl.rest>>
+                                        <<set _r2w = 'block', _w2r = 'none'>>
+                                    <<else>>
+                                        <<set _r2w = 'none', _w2r = 'block'>>
+                                <</if>>
+
+                                <div @id="_restId" @style="'display:' + _r2w">
+                                    <<link 'Enough rest! - Back to work'>>
+                                        <<run delete $tmpGirl.rest>>
+                                        <<run $('#' + _restId).hide()>>
+                                        <<run $('#' + _workId).show()>>
+                                        <<replace `'#' + _statusId`>>... is working<</replace>>
+                                    <</link>>
+                                </div>
+                                <div @id="_workId" @style="'display:' + _w2r"> 
+                                    <<link 'Hard work? - Take a day off'>>
+                                        <<set $tmpGirl.rest = {
+                                            days: setup.getNpcHappyLevel($tmpGirl) === 'very_sad' ? 2 : 1,
+                                            desc: 'Day off resting',
+                                            id: 'resting'
+                                        }>>
+                                        <<run $('#' + _restId).show()>>
+                                        <<run $('#' + _workId).hide()>>
+                                        <<replace `'#' + _statusId`>>... has a day off<</replace>>
+                                    <</link>>
+                                </div>
+
+                              </td>
+                        </tr>
+                    <</capture>>
+                <</for>>
+            <</if>>
+        <</for>>
+    <</for>>
+</table><<else>>
+    You don't have workers with unhappy jobs!
+<</if>>

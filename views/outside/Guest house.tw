@@ -1,10 +1,22 @@
-:: Guest house [Place] {"position":"1219,769","size":"100,100"}
-<h1 class="ptitle">GUEST HOUSE</h1>
-<div id="place-head">
-[img[setup.ImagePath+'places/cabin/guesthouse_head.jpg']]
+:: Guest house [Place bg-guesthouse] {"position":"1219,769","size":"100,100"}
+<h1 class="ptitle">
+	<<backButton 'Wood cabin'>>
+	GUEST HOUSE
+</h1>
+<div id="characters-in-location">
+	<<if (_charactersInLocation['guesthouse'] ?? []).includes('isabel')>>
+		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/isabel.png"]]</div>'>>
+			<<goto 'Isabel room'>>
+		<</link>>
+	<</if>>
+	<<if (_charactersInLocation['guesthouse'] ?? []).includes('octavia')>>
+		<<link '<div class="char-in-location">[img[setup.ImagePath+"people/octavia/avatar.png"]]</div>'>>
+			<<goto 'Octavia room'>>
+		<</link>>
+	<</if>>
 </div>
 <<if ($game.location.lab ?? false)>>
-	<br /><br />
+	<br />
 	<<link 'Lab'>>
 		<<goto 'Lab'>>
 	<</link>>
@@ -16,102 +28,125 @@
 <</if>>
 Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 
+<<set _isHeatWave = $weather?.heatWave ?? false>>
+<<set _isSandStorm = $weather?.sandStorm ?? false>>
+
 <<set _guests18yoWomen = []>>
+<<set _guests18yoMen = []>>
+<<set _guests18yoTransWomen = []>>
+
+<<set _sleepingChance = 0>>
+<<if timeBetween('22:00', '23:00')>>
+	<<set _sleepingChance = 10>>
+<<elseif timeBetween('23:00', '23:59')>>
+	<<set _sleepingChance = 20>>
+<<elseif timeBetween('23:59', '01:00')>>
+	<<set _sleepingChance = 40>>
+	<<elseif timeBetween('01:00', '02:00')>>
+	<<set _sleepingChance = 60>>
+<</if>>
+
 <<if ($guests ?? []).length < 1>>
 	<div style="margin-top: 20px;">
 		You have no guests...
 		<br /><br />
 	</div>
 <<else>>
-	<table id="slaves">
+	<table id="slaves" class="npc-list">
 	<<for _guestI, _guest range $guests>>
 		<<capture _guestI, _guest>>
 			<<set _isSick = (typeof _guest.sick !== 'undefined')>>
+			<<set _isRest = (typeof _guest.rest !== 'undefined')>>
+			<<set _dayOff = _isSick || _isRest>>
 			<<set _genderClass = 'gender-' + setup.genderClass(_guest)>>
-			<<if _guest.assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick>>
+			<<set _customColorStyle = ''>>
+			<<if typeof _guest.color !== 'undefined' >>
+				<<set _customColorStyle = ' npc-color color-' + _guest.color >>
+			<</if>>
+
+			<<if _guest.assignedTo === 'garden' and timeBetween('08:00', '16:00') && !_isSick && !_isHeatWave>>
 				<<continue>>
-			<</if>>	
-			<<if _guest.assignedTo === 'forest' and timeBetween('08:00', '16:00') && !_isSick>>
+			<</if>>
+			<<if _guest.assignedTo === 'forest' and timeBetween('08:00', '16:00') && !_isSick && !_isSandStorm>>
 				<<continue>>
-			<</if>>	
+			<</if>>
 			<<if _guest.assignedTo === 'kitchen' and timeBetween('08:00', '22:00') && !_isSick>>
 				<<continue>>
-			<</if>>	
+			<</if>>
 			<<if _guest.assignedTo === 'mistress' and timeBetween('12:00', '22:00') && !_isSick>>
 				<<continue>>
 			<</if>>
-			<<if _guest.assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_isSick>>
+			<<if _guest.assignedTo === 'streets' and timeBetween('14:00', '06:00') && !_dayOff && !_isSick && !_isSandStorm>>
 				<<continue>>
 			<</if>>
-			<<if _guest.assignedTo === 'scavenging' and timeBetween('12:00', '20:00') && !_isSick>>
+			<<if _guest.assignedTo === 'scavenging' and timeBetween('12:00', '20:00') && !_isSick && !_isSandStorm>>
 				<<continue>>
 			<</if>>
-			<tr>
-				<td style="width: 300px">
+			<<if _guest.assignedTo === 'nightclub' and timeBetween('20:00', '04:00') && !_isSick && !_isSandStorm>>
+				<<continue>>
+			<</if>>
+			<<if _guest.assignedTo === 'hospital' and timeBetween('08:00', '22:00')>>
+				<<continue>>
+			<</if>>
+			<<if _guest.assignedTo === 'maid' and timeBetween('10:00', '15:00')>>
+				<<continue>>
+			<</if>>
+			<<if _guest.assignedTo === 'garage' and timeBetween('10:00', '18:00')>>
+				<<continue>>
+			<</if>>
+			<<if ($game.location.hospital ?? false) && _isSick>>
+				<<continue>>
+			<</if>>
+			<<if setup.percentageChance(_sleepingChance)>>
+				<<set _guest.sleeping = true>>
+			<</if>>
+			<tr class="item">
+				<td style="min-width: 25%">
 					<<if setup.getAge(_guest) < 18>>
-						<span @class="''+_genderClass+''">
+						<span @class="_genderClass + _customColorStyle">
 							<<link _guest.name>>
 								<<set $guestId = _guestI>>
-								<<run delete $slaveId, $charId>>
+								<<unset $slaveId, $charId, $childId>>
 								<<set $tmpGirl = _guest>>
 								<<set $tmpGirlBack = 'Guest house'>>
+								<<set $tmpGirlViewBack = 'Child view'>>
 								<<goto 'Child view'>>
 							<</link>>
 						</span>
 					<<else>>
 						<<if !_guest.gender>>
 							<<run _guests18yoWomen.push(_guestI)>>
+						<<elseif _guest.gender == 1>>
+							<<run _guests18yoMen.push(_guestI)>>
+						<<elseif _guest.gender == 2>>
+							<<run _guests18yoTransWomen.push(_guestI)>>
 						<</if>>
-						<span @class="''+_genderClass+''">
+						<span @class="_genderClass + _customColorStyle">
 							<<link _guest.name>>
-							  <<set $tmpGirl to _guest>>
-							  <<set $tmpGirl.location = 'bedroom'>>
-							  <<set $tmpGirlBack = 'Guest house'>>
-							  <<set $tmpGirlCapture to false>>
-							  <<set $tmpGirl.rape to false>>
-							  <<set $guestId = _guestI>>
-							  <<run delete $slaveId>>
-							  <<set $tmpGirlViewBack = (!_guest.gender ? 'Girl' : 'Guy') + ' view - guest'>>
-							  <<goto `$tmpGirlViewBack`>>
+								<<set $tmpGirl to _guest>>
+								<<set $tmpGirl.location = 'bedroom'>>
+								<<set $tmpGirlBack = 'Guest house'>>
+								<<set $tmpGirl.rape to false>>
+								<<set $tmpGirlCapture to false>>
+								<<set $tmpGirlInvite to false>>
+								<<set $guestId = _guestI>>
+								<<unset $slaveId>>
+								<<set $tmpGirlViewBack = 'NPC view - guest'>>
+								<<if _guest.sleeping && !_guest.gender>>
+									<<goto 'Guesthouse - guest sleeping'>>
+								<<elseif timeBetween('20:00', '24:00') && !_guest.gender && _guest.horny > 80 && setup.percentageChance(40)>>
+									<<goto 'Guesthouse - guest masturbating'>>
+								<<else>>
+							  		<<goto `$tmpGirlViewBack`>>
+								<</if>>
 							<</link>>
 						</span>
-						
-						<<if _guest.pregnancy >= 7>>
-						  (pregnant <<=_guest.pregnancy>> days)
-						<</if>>
-						<<if _isSick>>
-							 (sick)
-						<</if>>
+
+						<<=setup.npcListInfo(_guest, _isSick, _isRest)>>
 					<</if>>
 				</td>
 				<td>
-					<<if [0,2].includes(_guest.gender) && setup.getAge(_guest) >= 17>>
-						Beauty score: <<=_guest.beauty>>
-					<</if>>
-				</td>
-				<td>
-					Age: <<=setup.getAge(_guest)>>
-				</td>
-				<td>
-					<<if _guest.assignedTo>>
-						(<<=_guest.assignedTo>>)
-				 	 <<elseif typeof $player.companions['guest:' + _guestI] !== 'undefined'>>
-						(companion)
-				 	 <</if>>
-				</td>
-				<td>
-					<<link 'Throw out'>>
-					  <<dialog 'Throw out'>>
-						  Are you sure you want to throw <<=(_guest.gender ? 'him' : 'her')>> out?
-						  <br />
-						  <<link 'Yes' 'Guest house'>>
-							  <<guestRemove _guestI>>
-							  <<dialogclose>>
-							  <<set $player.reputation-->>
-							  <<set $player.goodwill-->>
-						  <</link>>	
-					  <</dialog>>
-					<</link>>
+					 <<npcListView _guest _guestI 'guest'>>
 				</td>
 			</tr>
 		<</capture>>
@@ -119,11 +154,86 @@ Free beds left: <strong><<=_guestHouseLimitShow>></strong>
 	</table>
 <</if>>
 
+<<set _virginList = setup.getAvailablePersons18yoVirgins($guests)>>
+<<set _guestsNoChastityBelt = setup.propertyMatchIndexes($guests, 'chastityBelt', true, '!=')>>
+<<set _hornyGuests = setup.propertyMatchIndexes($guests, 'horny', 25, '>=')>>
+<<set _guestsLikesGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGirls'), _guestsNoChastityBelt, _hornyGuests])>>
+<<set _guestsLikesGuys = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesGuys'), _guestsNoChastityBelt, _hornyGuests])>>
+<<set _guestsLikesTGirls = setup.commonValues([setup.propertyMatchIndexes($guests, 'likesTGirls'), _guestsNoChastityBelt, _hornyGuests])>>
+
 <<if !($locationEvents.guesthouse ?? false)>>
-	<<if timeBetween('23:00', '02:00') && _guests18yoWomen && setup.percentageChance(10)>>
+	<<if (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 2 && setup.percentageChance(10) && timeBetween('08:00', '09:00') && $weather?.weather == 'sun' && recall($suppCode)>>
+		<<set $tmpEvent = {
+			id: setup.getRandomElement(setup.getAvailablePersons18yo($guests)[0])
+		}>>
+		<<goto 'Guest house - morning view'>>
+	<<elseif timeBetween('23:00', '02:00') && _guests18yoWomen.length && setup.percentageChance(10)>>
 		<<set $tmpEvent = setup.getRandomElement(_guests18yoWomen)>>
 		<<set $locationEvents.guesthouse = true>>
 		<<goto 'Guesthouse [Event] - sleeping beauty'>>
+	<<elseif timeBetween('21:00', '02:00') && _guests18yoWomen.length && setup.percentageChance(0)>>
+		<<set $tmpEvent = {
+			id: setup.getRandomElement(_guests18yoWomen)
+		}>>
+		<<if $guests[$tmpEvent.id].horny > 50>>
+			<<set $locationEvents.guesthouse = true>>
+			<<set $guests[$tmpEvent.id].horny += 20>>
+			<<goto 'Guest house - surprise releave'>>
+		<</if>>
+	<<elseif settings.lesbiansEnabled && setup.commonValues([_guestsLikesGuys, _guestsLikesGirls, _guests18yoWomen]).length > 1 && setup.commonValues([_guestsLikesGirls, _guests18yoMen]).length > 0 && setup.percentageChance(10)>>
+		<<set $tmpEvent = [setup.commonValues([_guestsLikesGuys, _guestsLikesGirls, _guests18yoWomen]), setup.commonValues([_guestsLikesGirls, _guests18yoMen])]>>
+		<<set $locationEvents.guesthouse = true>>
+		<<unset $randEvent>>
+		<<goto 'Guesthouse [Event] - male on females'>>
+	<<elseif setup.commonValues([_guestsLikesGuys, _guests18yoWomen]).length > 0 && setup.commonValues([_guestsLikesGirls, _guests18yoMen]).length > 1 && setup.percentageChance(10)>>
+		<<set $tmpEvent = [setup.commonValues([_guestsLikesGuys, _guests18yoWomen]), setup.commonValues([_guestsLikesGirls, _guests18yoMen])]>>
+		<<set $locationEvents.guesthouse = true>>
+		<<unset $randEvent>>
+		<<goto 'Guesthouse [Event] - males on female'>>
+	<<elseif settings.lesbiansEnabled && setup.commonValues([_guestsLikesGirls, _guests18yoWomen]).length > 1 && setup.percentageChance(10)>>
+		<<set $tmpEvent = setup.commonValues([_guestsLikesGirls, _guests18yoWomen])>>
+		<<set $locationEvents.guesthouse = true>>
+		<<unset $randEvent>>
+		<<goto 'Guesthouse [Event] - female on female'>>
+	<<elseif setup.commonValues([_guestsLikesGuys, _guests18yoWomen]).length > 0 && setup.commonValues([_guestsLikesGirls, _guests18yoMen]).length > 0 && setup.percentageChance(10)>>
+		<<set $tmpEvent = [setup.commonValues([_guestsLikesGuys, _guests18yoWomen]), setup.commonValues([_guestsLikesGirls, _guests18yoMen])]>>
+		<<set $locationEvents.guesthouse = true>>
+		<<unset $randEvent>>
+		<<goto 'Guesthouse [Event] - male on female'>>
+	<<elseif settings.transEnabled && setup.commonValues([_guestsLikesGuys, _guests18yoTransWomen]).length > 0 && setup.commonValues([_guestsLikesTGirls, _guests18yoMen]).length > 0 && setup.percentageChance(10)>>
+		<<set $tmpEvent = [setup.commonValues([_guestsLikesGuys, _guests18yoTransWomen]), setup.commonValues([_guestsLikesTGirls, _guests18yoMen])]>>
+		<<set $locationEvents.guesthouse = true>>
+		<<unset $randEvent>>
+		<<goto 'Guesthouse [Event] - male on transfemale'>>
+	<<elseif settings.gaysEnabled && setup.commonValues([_guestsLikesGuys, _guests18yoMen]).length > 1 && setup.percentageChance(20)>>
+		<<set $tmpEvent = setup.commonValues([_guestsLikesGuys, _guests18yoMen])>>
+		<<set $locationEvents.guesthouse = true>>
+		<<unset $randEvent>>
+		<<goto 'Guesthouse [Event] - male on male'>>
+	<<elseif settings.transEnabled && setup.commonValues([_guestsLikesTGirls, _guests18yoWomen]).length > 0 && setup.commonValues([_guestsLikesGirls, _guests18yoTransWomen]).length > 0 && setup.percentageChance(10)>>
+		<<set $tmpEvent = [setup.commonValues([_guestsLikesTGirls, _guests18yoWomen]), setup.commonValues([_guestsLikesGirls, _guests18yoTransWomen])]>>
+		<<set $locationEvents.guesthouse = true>>
+		<<unset $randEvent>>
+		<<goto 'Guesthouse [Event] - transfemale on female'>>
+	<<elseif settings.transEnabled && setup.commonValues([_guestsLikesTGirls, _guests18yoTransWomen]).length > 1 && setup.percentageChance(10)>>
+		<<set $tmpEvent = setup.commonValues([_guestsLikesTGirls, _guests18yoTransWomen])>>
+		<<set $locationEvents.guesthouse = true>>
+		<<unset $randEvent>>
+		<<goto 'Guesthouse [Event] - transfemale on transfemale'>>
+	<<elseif recall($suppCode) && (_virginList[0] ?? []).length && setup.percentageChance(10)>>
+		<<set _npcId = setup.getRandomElement(_virginList[0])>>
+		<<if !($guests[_npcId].quests ?? {}).take_virginity && $guests[_npcId].likesGuys && !setup.family.isBloodToMC($guests[_npcId])>>
+			<<set $locationEvents.guesthouse = true>>
+			<<set $tmpEvent = {
+				id: setup.getRandomElement(_virginList[0])
+			}>>
+			<<goto 'Guesthouse [Event] - take virginity'>>
+		<</if>>
+	<<elseif setup.commonValues([_guestsLikesGirls, _hornyGuests, _guests18yoMen]).length > 0 && setup.percentageChance(5)>>
+		<<set $tmpEvent = [setup.commonValues([_guests18yoWomen]), setup.commonValues([_guestsLikesGirls, _hornyGuests, _guests18yoMen])]>>
+		<<set $locationEvents.guesthouse = true>>
+		<<unset $randEvent>>
+		<<goto 'Guesthouse [Event] - male on female forced'>>
 	<</if>>
 <</if>>
 

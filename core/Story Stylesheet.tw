@@ -4,14 +4,14 @@
 }
 
 #textbox--testcode {
- 	background: #111; 
+ 	background: #111;
 }
 
 #notify {
- z-index:9999999999; 
+ z-index:9999999999;
 }
 .img-no-w img {
- 	max-height: none !important; 
+ 	max-height: none !important;
 }
 
 .wanted-unique {
@@ -28,11 +28,11 @@
 }
 
 .passage video {
- 	width: 100%; 
+ 	width: 100%;
 }
 
 .say img {
- 	max-width: 20% !important; 
+ 	max-width: 20% !important;
   	min-height: auto !important;
     max-height: 111px;
 }
@@ -57,10 +57,21 @@
 }
 
 @media only screen and (max-width: 800px) {
-  	.o-text { 
+  	.o-text {
 	 	font-size: 10px !important;
 	  	padding-top: 10px !important;
   	}
+
+    .menu-grid .menu-col .grid-chars img {
+      transform: scale(0.7);
+      transform-origin: 70% 0;
+    }
+
+    .menu-grid .menu-col .grid-chars img {
+      height: 28px !important;
+      margin-right: 0px !important;
+      width: auto !important;
+    }
 }
 
 div#companions-list {
@@ -77,9 +88,10 @@ div#companions-list {
 }
 
 .companion div.girl_info_picture {
-	 margin-left: -28px;
-  	zoom: 57%;
-  	margin-top:-9px;
+    margin-left: -34px;
+    margin-top: 5px;
+    transform: scale(0.7);
+    transform-origin: 70% 0;
 }
 
 .trait.tooltip {
@@ -112,7 +124,7 @@ div#ingame-ui-buttons-side a, div#ingame-ui-buttons-side a:hover {
 }
 
 div#ingame-ui-buttons-side.cheatmenu a {
- 	border-bottom: 1px solid #000 !important; 
+ 	border-bottom: 1px solid #000 !important;
 }
 
 div#ingame-ui-buttons-side a:first-of-type, div#ingame-ui-buttons-side a:first-of-type:hover {
@@ -153,7 +165,7 @@ div#ingame-ui-buttons-side a:hover {
 }
 
 #support a:hover {
- 	background: #D3AF1F !important; 
+ 	background: #D3AF1F !important;
   	border: 1px solid #2c3e50 !important;
   	color: #2c3e50 !important;
 }
@@ -162,7 +174,7 @@ div#ingame-ui-buttons-side a:hover {
     width: 50px;
 }
 .perk-item img {
- 	width: 100%; 
+ 	width: 100%;
 }
 .tooltip {
   position: relative;
@@ -193,23 +205,11 @@ div#ingame-ui-buttons-side a:hover {
 .trait.tooltip .tooltiptext {
     width: 169px;
     top: 22px;
-    font-size: 11px; 
+    font-size: 11px;
 }
 
 .tooltip:hover .tooltiptext {
   visibility: visible;
-}
-
-#fight-enemies {
-  	display: flex;
-    justify-content: space-evenly;
-}
-
-.enemy-div {
- 	position: relative;
-    height: 270px;
-  	width: 200px; 
-  	text-align: center;
 }
 
 .workbench-item table {
@@ -223,7 +223,7 @@ div#ingame-ui-buttons-side a:hover {
 }
 
 .passage .wanted-link .link-internal {
- 	width: 70%; 
+ 	width: 70%;
 }
 
 .wanted-type {
@@ -272,7 +272,7 @@ div#ingame-ui-buttons-side a:hover {
 }
 
 #ui-dialog {
-  max-width: 55em; 
+  max-width: 55em;
   width: 93%;
 }
 .menu-grid .menu-col {
@@ -281,7 +281,6 @@ div#ingame-ui-buttons-side a:hover {
 
 .menu-grid .menu-col .grid-chars {
     position: absolute;
-    z-index: 999;
     top: -10px;
   	right: -5px;
 }
@@ -295,6 +294,7 @@ div#ingame-ui-buttons-side a:hover {
     width: 40px;
     border-radius: 30px;
     border: 1px solid white;
+    z-index: 40;
 }
 
 
@@ -307,7 +307,7 @@ div#passage-farm-shop td {
 }
 
 div[data-tags="sex"] #passages img {
-	text-align: center; 
+	text-align: center;
 }
 
 #welcome img {
@@ -325,7 +325,7 @@ div[data-tags="sex"] #passages img {
 }
 
 .workbench-item h3 {
- 	margin-bottom: 5px; 
+ 	margin-bottom: 5px;
 }
 table#girl_info td {
     padding-right: 70px;
@@ -373,10 +373,10 @@ table#girl_info td {
 }
 
 #place-head img {
- display: block;  
-  margin-left: auto; 
-  margin-right: auto; 
-  width: 100%; 
+ display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
   border-radius: 5px;
 }
 
@@ -401,7 +401,7 @@ h1.ptitle {
   border-radius: 5px;
 }
 .passage .menu-grid a.link-internal:hover .menucont img {
- 	opacity: 1; 
+ 	opacity: 1;
 }
 .menu-grid {
     display: flex;
@@ -450,9 +450,9 @@ h1.ptitle {
   opacity: 0.6;
 }
 
-html { 
+html {
   background-size: cover;
-  background-attachment: fixed; 
+  background-attachment: fixed;
 }
 
 body {
@@ -542,6 +542,22 @@ table#slaves a, table#fight-table a {
     display: inline;
 }
 
+.no-style a {
+	background: none !important;
+  color: #68d !important;
+  box-shadow: none !important;
+  width: auto !important;
+  display: inline !important;
+  padding: 0 !important;
+}
+
+.say .say_custom_portrait img {
+    margin: 0px !important;
+    border: 0px !important;
+    margin-left: -24px !important;
+    margin-top: -10px !important;
+}
+
 table#slaves a:hover, table#fight-table a:hover {
 	background: none;
   	color: #8af;
@@ -588,7 +604,7 @@ table#slaves a:hover, table#fight-table a:hover {
 }
 
 .text {
-  color: white; 
+  color: white;
   position: absolute;
   text-align: center;
   bottom: 40px;
@@ -615,7 +631,7 @@ table#slaves a:hover, table#fight-table a:hover {
   background: white;
   vertical-align: middle;
 }
-  
+
 .innertext::before {
   margin-right: 16px;
 }
@@ -625,12 +641,20 @@ table#slaves a:hover, table#fight-table a:hover {
 }
 
 /* Simple Inventory, for SugarCube 2, by Chapel
-v3.0.0-beta1, 2022-07-25, 19f255d958852e55a8a3afcde5c53331f0d938e8 */
-ul.simple-inventory-list{margin:0 auto;padding:0}.simple-inventory-listing{list-style:none;padding:.3rem .3rem .3rem 1rem;display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr}.simple-inventory-listing:nth-child(2n){background-color:#000}.simple-inventory-listing>a,.simple-inventory-listing>span{display:inline-block}.all-listing.simple-inventory-listing{border-top:1px solid #fafafa;background-color:transparent}.drop-link{color:#e33}.drop-link:active,.drop-link:focus,.drop-link:hover{color:#f88}
+v3.0.0, 2024-02-20, 1d95a49488446cafefaa956e53345395394e4b51 */
+ul.simple-inventory-list{margin:0 auto;padding:0}.simple-inventory-listing{list-style:none;padding:.3rem .3rem .3rem 1rem;display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr}.simple-inventory-listing:nth-child(2n){background-color:#000}.simple-inventory-listing>a,.simple-inventory-listing>span{display:inline-block}.all-listing.simple-inventory-listing{border-top:1px solid #fafafa;background-color:transparent}.drop-link{color:#e33}.drop-link:active,.drop-link:focus,.drop-link:hover{color:#f88}.simple-inventory-filter{text-align:right}.simple-inventory-filter input{display:inline-block}
 /* End Simple Inventory */
 
 /* notify.min.css, by chapel; for use with notify.js; v1.0.0 */
 #notify{position:fixed;display:block;width:16em;right:-20em;top:2em;padding:.5em;background-color:#fff;color:#000;-webkit-transition:right .3s;-moz-transition:right .3s;-o-transition:right .3s;transition:right .3s}#notify.open{right:0}
 /* end notify.min.css */
 
+
+#fast-travel {
+  display: flex;
+}
+
+#fast-travel a {
+    margin: 10px;
+}
 

@@ -13,12 +13,35 @@
  <<linkreplace 'Go inside hospital'>>
   <center>
  [img[setup.ImagePath+'places/explore/hospital_inside.jpg']]
- </center><br /><br />
- 	<<if randomInteger(1,2) === 1>>
+ </center>
+ <br /><br />
+	<<set _foundNothing = true>>
+	<<if !$player?.quests?.found_hospital_blueprint>>
+		<<set _foundNothing = false>>
+		<<set $player.quests.found_hospital_blueprint = true>>
+		<<pickup $backpack 'blueprint_hospital' 1>>
+		You found <strong class="iitem">small hospital blueprint</strong>!
+		<br /><br />
+	<<elseif !$player?.quests?.found_massage_table_blueprint>>
+		<<set _foundNothing = false>>
+		<<set $player.quests.found_massage_table_blueprint = true>>
+		<<pickup $backpack 'blueprint_massage_table' 1>>
+		You found <strong class="iitem">massage table blueprint</strong>!
+		<br /><br />
+	<</if>>
+	<<if setup.percentageChance(60)>>
 		<<pickup $backpack 'antibiotics' 2>>
 		You found <strong class="iitem">2</strong> bottles of <strong class="iitem">antibiotics</strong>
+	<<elseif setup.percentageChance(40)>>
+		<<pickup $backpack 'towel' 2>>
+		You found <strong class="iitem">2</strong> <strong class="iitem">towels</strong>
+	<<elseif setup.percentageChance(20)>>
+		<<pickup $backpack 'gas_mask' 1>>
+		You found <strong class="iitem">1</strong> <strong class="iitem">gas mask</strong>
 	<<else>>
-		You found nothing and decided to leave
+		<<if _foundNothing>>
+			You found nothing and decided to leave
+		<</if>>
 	<</if>>
 	<br /><br />
  <</linkreplace>>

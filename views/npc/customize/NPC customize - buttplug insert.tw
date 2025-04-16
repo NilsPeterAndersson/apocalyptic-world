@@ -1,0 +1,28 @@
+:: NPC customize - buttplug insert [girlview no-redirect]
+<h1 class="ptitle">BUTTPLUG</h1>
+<br />
+<<if $guestId !== null && $tmpGirl.sub < 20>>
+	<<=setup.displayName($tmpGirl)>> doesn't want to do that.
+	<br /><br />
+	<strong>Submission too low</strong>
+<<else>>
+	<<set $tmpGirl.buttplug = true>>
+	<<drop $backpack 'buttplug' 1>>
+	<br /><br />
+	<<if [0, 3].includes($tmpGirl.gender)>>
+		<center>
+			[img[setup.ImagePath+'game/misc/customize/buttplug_insert.webp']]
+		</center>
+	<<else>>
+		<center>
+			[img[setup.ImagePath+'game/misc/customize/buttplug_insert_male.webp']]
+		</center>
+	<</if>>
+	<br /><br />
+	<<=setup.displayName($tmpGirl)>> lays down and spreads <<=setup.pronounceWhos($tmpGirl)>> legs, <<=setup.pronounceWhat($tmpGirl)>> holds still as you slowly insert the buttplug inside <<=setup.pronounceWhos($tmpGirl)>> asshole. That feels uncomfortable but is generally tolerable.
+	<<addmins 30>>
+<</if>>
+<br /><br />
+<<link 'Back'>>
+	<<goto 'NPC customize'>>
+<</link>>

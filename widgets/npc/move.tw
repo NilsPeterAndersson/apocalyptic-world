@@ -1,0 +1,50 @@
+:: NPC move [widget]
+
+/* widgets calling widgets overwrites $args-variable,$args[0]...? 
+	use _args[] instead that works as intended? */
+
+<<widget moveSlaveToGuest>>
+    <<set _args[0].happy += 50>>
+	<<set _args[0].relationship += 20>>
+
+    <<if typeof $guests === 'undefined'>>
+        <<set $guests = []>>
+    <</if>>
+	<<set _companionKey = 'slave:' + _args[1]>>
+	<<if ($player.companions ?? {})[_companionKey]>>
+		<<companionRemoveItem _companionKey>>
+		<<companionAdd 'guest' $guests.length>>
+		<<assignedTo _args[0] 'companion'>>
+	<</if>>
+	/* guests can only have some jobs */
+	<<if !['none', 'garden', 'nightclub'].includes(_args[0].assignedTo ?? 'none')>>
+		<<assignedTo _args[0] 'none'>>
+	<</if>>
+
+	/* guests can only have some jobs */
+	<<if !['milk_farm'].includes(_args[0].assignedTo ?? 'none')>>
+		<<assignedTo _args[0] 'none'>>
+	<</if>>
+
+	<<companionRearange _companionKey>>
+	<<run $slaves.splice(_args[1], 1)>>
+	<<run $guests.push(_args[0])>>
+<</widget>>
+
+<<widget moveGuestToSlave>>
+	<<set _companionKey = 'guest:' + _args[1]>>
+	<<if ($player.companions ?? {})[_companionKey]>>
+		<<companionRemoveItem _companionKey>>
+		<<companionAdd 'slave' $slaves.length>>
+		<<assignedTo _args[0] 'companion_slave'>>
+
+	<</if>>
+	/* slaves can only have some jobs */
+	<<if !['none', 'garden', 'streets'].includes(_args[0].assignedTo ?? 'none')>>
+		<<assignedTo _args[0] 'none'>>
+	<</if>>
+
+	<<companionRearange _companionKey>>
+	<<run $guests.splice(_args[1], 1)>>
+	<<run $slaves.push(_args[0])>>
+<</widget>>

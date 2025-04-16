@@ -1,10 +1,10 @@
 :: Guest view assign to {"position":"2149,98","size":"100,100"}
 Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <br /><br />
-<<if $tmpGirl.relationship > 30 && setup.assignedToCount('garden') < $workersLimitGarden>>
+<<if $tmpGirl.relationship >= 30 && setup.assignedToCount('garden') < $workersLimitGarden>>
 	<div>
 	  <<link 'Assign to garden'>>
-		  <<set $tmpGirl.assignedTo = 'garden'>>
+		  <<assignedTo $tmpGirl 'garden'>>
 		  <<set $tmpGirl.gardenDay = 0>>
 		  <<dialogclose>>
 		  <<goto `$tmpGirlViewBack`>>
@@ -15,7 +15,7 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <<if !setup.getPersonsForLocation($guests, 'kitchen').length && !$tmpGirl.assignedTo>>
 	<div>
 	  <<link 'Assign to kitchen'>>
-		  <<set $tmpGirl.assignedTo = 'kitchen'>>
+		  <<assignedTo $tmpGirl 'kitchen'>>
 		  <<dialogclose>>
 		  <<goto `$tmpGirlViewBack`>>
 	  <</link>>
@@ -25,27 +25,37 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <<if [0,2].includes($tmpGirl.gender) && !setup.getPersonsForLocation($guests, 'maid').length && !$tmpGirl.assignedTo>>
 	<div>
 	  <<link 'Assign as maid'>>
-		  <<set $tmpGirl.assignedTo = 'maid'>>
+		  <<assignedTo $tmpGirl 'maid'>>
 		  <<dialogclose>>
 		  <<goto `$tmpGirlViewBack`>>
 	  <</link>> (Gives additional energy while taking a nap)
+	</div>
+<</if>>
+
+<<if setup.getPersonsForLocation($guests, 'hospital').length < ($workersLimitHospital ?? 3)  && !$tmpGirl.assignedTo && $game?.location?.hospital && ($tmpGirl.skills ?? []).includes('doctor')>>
+	<div>
+	  <<link 'Assign to hospital'>>
+		  <<assignedTo $tmpGirl 'hospital'>>
+		  <<dialogclose>>
+		  <<goto `$tmpGirlViewBack`>>
+	  <</link>> (Decreases people sickness days and automatically heals MC if bleeding)
 	</div>
 <</if>> 
 
 <<if !setup.getPersonsForLocation($guests, 'shop').length && !$tmpGirl.assignedTo && ($game.location.shop ?? false) && ($tmpGirl.skills ?? []).includes('shopkeeper')>>
 	<div>
 	  <<link 'Assign to shop'>>
-		  <<set $tmpGirl.assignedTo = 'shop'>>
+		  <<assignedTo $tmpGirl 'shop'>>
 		  <<dialogclose>>
 		  <<goto `$tmpGirlViewBack`>>
 	  <</link>> (Will work in shop and sell/buy items for you automatically)
 	</div>
 <</if>>
 
-<<if !$tmpGirl.gender && !setup.getPersonsForLocation($guests, 'mistress').length && !$tmpGirl.assignedTo && ($tmpGirl.traits ?? []).includes('sadistic')>>
+<<if [0,1,2].includes($tmpGirl.gender) && !setup.getPersonsForLocation($guests, 'mistress').length && !$tmpGirl.assignedTo && ($tmpGirl.traits ?? []).includes('sadistic')>>
 	<div>
 	  <<link 'Assign as mistress'>>
-		  <<set $tmpGirl.assignedTo = 'mistress'>>
+		  <<assignedTo $tmpGirl 'mistress'>>
 		  <<dialogclose>>
 		  <<goto `$tmpGirlViewBack`>>
 	  <</link>> (Keeps slaves in order. Increases submission for them)
@@ -54,15 +64,21 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 
 <div>
   <<link 'Assign to forest'>>
-	  <<set $tmpGirl.assignedTo = 'forest'>>
+	  <<assignedTo $tmpGirl 'forest'>>
 	  <<dialogclose>>
 		  <<goto `$tmpGirlViewBack`>>
   <</link>> (Provides you with wood)
 </div>
 
-<<if($tmpGirl.skills ?? []).includes('woodcraft') && setup.npcInventoryHas($tmpGirl, 'bow')>>
+<<set $automatization ??= {}>>
+<<set _itemcount = setup.automatization.job_tools.mc.includes('bow') ? 2 : 1>> /* save one for the MC */
+<<set _autoHunterOk = ($automatization.hunter ?? false) && setup.cabinInventory.has('bow', _itemcount)>>
+<<if ($tmpGirl.skills ?? []).includes('woodcraft') && (setup.npcInventoryHas($tmpGirl, 'bow') || _autoHunterOk) && setup.assignedToCount('hunter') < ($workersLimitHunter ?? 8)>>
 	<<link 'Assign as hunter'>>
-	  	<<set $tmpGirl.assignedTo = 'hunter'>>
+		<<if !setup.npcInventoryHas($tmpGirl, 'bow')>>
+			<<run setup.cabinInventory.to_npc($tmpGirl, 'bow', 1)>>
+		<</if>>
+		<<assignedTo $tmpGirl 'hunter'>>
 	  	<<dialogclose>>
 		<<goto `$tmpGirlViewBack`>>
   	<</link>> (Provides you with food or wolf pelts)
@@ -71,25 +87,66 @@ Where do you want to assign <<=setup.pronounceWho($tmpGirl)>>?
 <</if>>
 
 <div>
+	<<if ($game.location.quarry ?? false)>>
+		<<set $automatization ??= {}>>
+		<<set _item = 'pickaxe'>>
+		<<set _itemcount = setup.automatization.job_tools.mc.includes(_item) ? 2 : 1>> /* save one for the MC */
+		<<set _autoMiningOk = ($automatization.job ?? false) && setup.cabinInventory.has(_item, _itemcount)>>
+		<<if setup.npcInventoryHas($tmpGirl, _item) || _autoMiningOk>>
+			<<link 'Assign to quarry'>>
+				<<assignedTo $tmpGirl 'quarry'>>
+				<<dialogclose>>
+				<<goto `$tmpGirlViewBack`>>
+			<</link>> (Provides you with coal and stone)
+		<<else>>
+			Assign to quarry [Need pickaxe] (Provides you with coal and stone)
+		<</if>>
+	<</if>>
+</div>
+<<if ($game.location.garage ?? false) && setup.assignedToCount('garage') < 1>>
+	<div>
+		<<if ($tmpGirl.skills ?? []).includes('mechanic')>>
+			<<link 'Assign to garage'>>
+				<<assignedTo $tmpGirl 'garage'>>
+				<<dialogclose>>
+				<<goto `$tmpGirlViewBack`>>
+			<</link>> (Helps to maintain and fix car)
+		<<else>>
+			Assign to garage (Helps to maintain and fix car)
+		<</if>>
+	</div>
+<</if>>
+<div>
   <<link 'Assign to scavenging'>>
-	  <<set $tmpGirl.assignedTo = 'scavenging'>>
+	  <<assignedTo $tmpGirl 'scavenging'>>
 	  <<dialogclose>>
 	  <<goto `$tmpGirlViewBack`>>
   <</link>> (Provides you with plastic, glass, rope, etc)
 </div>
 
+<div>
 <<if $tmpGirl.relationship >= 50 && [0,2].includes($tmpGirl.gender) && !$tmpGirl.assignedTo>>
 	<<link 'Assign to streets'>>
-		<<set $tmpGirl.assignedTo = 'streets'>>
+		<<assignedTo $tmpGirl 'streets'>>
 		<<dialogclose>>
 		<<goto `$tmpGirlViewBack`>>
 	<</link>> (Earns you money as hooker)
+<</if>>
+</div>
+<<if $player?.quests?.gloryholeJob && $tmpGirl.relationship >= 70 && [0,2].includes($tmpGirl.gender) && !$tmpGirl.assignedTo>>
+	<div>
+		<<link 'Assign to nightclub'>>
+			<<assignedTo $tmpGirl 'nightclub'>>
+			<<dialogclose>>
+			<<goto `$tmpGirlViewBack`>>
+		<</link>> (Earns you money with gloryholes)
+	</div>
 <</if>>
 
 <<if $tmpGirl.strength >= 30>>
 	<div>
 	  <<link 'Assign as guard'>>
-		  <<set $tmpGirl.assignedTo = 'guard'>>
+		  <<assignedTo $tmpGirl 'guard'>>
 		  <<dialogclose>>
 		  <<goto `$tmpGirlViewBack`>>
 	  <</link>> (Decreases the chance of someone breaking in and stealing, and sometimes might catch intruders)

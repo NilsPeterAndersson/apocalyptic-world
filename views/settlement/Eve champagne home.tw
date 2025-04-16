@@ -1,21 +1,23 @@
 :: Eve champagne home {"position":"2701,2664","size":"100,100"}
 <h1 class="ptitle">CITY</h1>
 <br /><br />
-<center>
-	[img[setup.ImagePath+'places/settlement/rodger_bottles_dressup.webp']]
-</center>
-<br /><br />
-The next morning, as you wake up, you see that Eve is getting dressed.<br />
-She looks at you with a smile on her face.
-<br /><br />
-<<eve>>
-Good morning. We should get back
-<</eve>>
-<br /><br />
+<<if !$tmpEventWentHome>>
+	<center>
+		<<image 'places/settlement/rodger_bottles_dressup.webp'>>
+	</center>
+	<br /><br />
+	The next morning, as you wake up, you see that Eve is getting dressed.<br />
+	She looks at you with a smile on her face.
+	<br /><br />
+	<<eve>>
+	Good morning. We should get back
+	<</eve>>
+	<br /><br />
+<</if>>
 The journey back goes without any problems. After a couple of hours, you have already arrived back in the village, and Roger is waiting for you with open arms.
 <br /><br />
 <center>
-	[img[setup.ImagePath+'places/settlement/intro_tents.jpg']]
+	<<image 'places/settlement/intro_tents.jpg' 'sfw'>>
 </center>
 <br /><br />
 <<rodger>>
@@ -27,17 +29,23 @@ The journey back goes without any problems. After a couple of hours, you have al
 	<<set $characters.eve.corruption +=5>>
 	<strong>Corruption with Eve increased by 5</strong>
 <<else>>
-	<strong>Can't increase corruption anymore with this action</strong>
+	<strong>Can't increase Eve's corruption with this action anymore.</strong>
+<</if>>
+<<if $characters.rodger.relationship < 100>>
+	<<set $characters.rodger.relationship +=5>>
+	<strong>Relationship with Rdger increased by 5</strong>
+	<br />
 <</if>>
 <br />
 <<if $characters.eve.relationship < 35>>
 	<<set $characters.eve.relationship++>>
 	<strong>Relationship with Eve increased by 1</strong>
 <<else>>
-	<strong>Can't increase relationship anymore with this action</strong>
+	<strong>You can't increase your relationship with Eve with this action anymore.</strong>
 <</if>>
 <br /><br />
 <<link 'Leave'>>
+	<<unset $tmpEventWentHome>>
 	<<goto 'Settlement'>>
 <</link>>
 

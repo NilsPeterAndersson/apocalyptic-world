@@ -1,0 +1,43 @@
+:: Widget - automatization [automatization widget]
+
+<<widget assignedTo>>
+    /* 
+        Use this widget instead of set|unset npc.assignedTo 
+    
+        *Syntax:* `<<assignedTo npc job>>`
+
+        Use 'companion' as job for companionAdd
+        Use 'companion_slave' for slave companion, different toolbox from guest companion
+        Use 'none' as job when removing
+      */
+
+    <<set _npc = _args[0]>> /* or $tmpGirl */
+    <<set _job = _args[1] ?? 'none'>>
+
+    <<if /companion|none/.test(_job)>>
+        <<run delete _npc.assignedTo>>
+    <<else>>
+        <<set _npc.assignedTo = _job>>
+    <</if>>
+
+    <<set $automatization ??= {}>>
+    <<if ($automatization.job ?? false) || (($automatization.hunter ?? false) && _job == 'hunter')>>
+        <<for _item range setup.inventoryNpc>>
+            <<if ['condom', 'dumbbell', 'kettlebell', 'dumbestbell'].includes(_item)>>
+                <<continue>>
+            <</if>>
+            <<set _count = setup.npcInventoryCount(_npc, _item)>>
+            <<if _count < 0>>
+                <<set _count = 0>>
+            <</if>>
+            <<if (setup.automatization.job_tools[_job] ?? []).includes(_item)>>
+                <<set _itemcount = setup.automatization.job_tools.mc.includes(_item) ? 2 : 1>> /* save one for the MC */
+                <<if _count == 0 && setup.cabinInventory.has(_item, _itemcount)>>
+                    <<set setup.cabinInventory.to_npc(_npc, _item)>>
+                <<elseif _count > 1>>
+                    <<set setup.cabinInventory.from_npc(_npc, _item, _count-1)>>
+                <</if>>
+            <</if>>
+        <</for>>
+    <</if>>
+<</widget>>

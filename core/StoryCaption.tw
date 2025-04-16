@@ -11,14 +11,15 @@
 	</div></center>
 <br />
 <<set _uiBarGameDate = $gameDate.getDate() + ' ' + $gameDate.toLocaleString('default', { month: 'long' }) + ', ' + $gameDate.getFullYear()>>
+<<set _dayTimeImage = setup.ImagePath+'game/' + setup.getDayTimeName() + '.png'>>
 <div id="t1" class="grid-s-def">
 	<span class="grid-i-cs4 caut-bar"></span>
-	<span class="grid-i-rs3"><<timeCycle>>[img[setup.ImagePath+'game/' + variables().timeCycle + '.png']]<<timeCycle>></span>
+	<span class="grid-i-rs3">[img[_dayTimeImage]]</span>
 	<span class="grid-i-rs3 grid-i-pos-hc"><hr class="vdark"></span>
 	<span class="glyph">&#57414;</span><span><<timeDay>></span>
 	<span class="glyph">&#57429;</span><span><<time24hr>></span>
 	<span class="glyph" data-balloon-length="medium" @aria-label="'' + _uiBarGameDate + ''" data-balloon-pos="left">&#57425;</span>
-	<span class="glyph" data-balloon-length="medium" @aria-label="'' + _uiBarGameDate + ''" data-balloon-pos="left"> Day <<gameDay>></span>
+	<span class="glyph" data-balloon-length="medium" @aria-label="'' + _uiBarGameDate + ''" data-balloon-pos="left"> Day <<=$game.day>></span>
 	<span class="grid-i-cs4 caut-bar"></span>
 </div>
 
@@ -49,9 +50,9 @@
 	<span>END</span>
 	<span>INT</span>
 	<!--//##########################//-->
-	<span class="glyph" data-balloon-length="medium" aria-label="Determines your luck capturing girl or hiting power in fights" data-balloon-pos="right">&#58260;</span>
-	<span class="glyph" data-balloon-length="medium" aria-label="Determines how much defense you have in fights" data-balloon-pos="up-left">&#59506;</span>
-	<span class="glyph" data-balloon-length="medium" aria-label="For high-end crafting you need more intelegence" data-balloon-pos="up-right">&#57448;</span>
+	<span class="glyph" data-balloon-length="medium" aria-label="Determines your luck in capturing girls and your attack power in fights." data-balloon-pos="right">&#58260;</span>
+	<span class="glyph" data-balloon-length="medium" aria-label="Determines how much defense you have in fights." data-balloon-pos="up-left">&#59506;</span>
+	<span class="glyph" data-balloon-length="medium" aria-label="For high-end crafting you'll need more intelligence." data-balloon-pos="up-right">&#57448;</span>
 	<span>$player.strength</span>
 	<span><<=($player.endurance ?? 0)>></span>
 	<span>$player.int</span>
@@ -71,12 +72,20 @@
 </div>
 <<perkList>>
 
-<<if tags().includes('Place') && settings.fastTravelEnabled>>
+<<if tags().includes('Place') && settings.fastTravelEnabled && !$weather?.sandStorm>>
 	<div id="fast-travel">
 		<br /><br />
 		<<link '<div data-balloon-length="small" data-balloon-pos="up-right" aria-label="Fast travel to bedroom" class="fast-travel-item">[img[setup.ImagePath+"places/cabin/bedroom_icon.jpg"]]</div>'>>
 			<<addmins 10>>
 			<<goto 'Bedroom'>>
+		<</link>>
+		<<link '<div data-balloon-length="small" data-balloon-pos="up-right" aria-label="Fast travel to cabin" class="fast-travel-item">[img[setup.ImagePath+"places/cabin/cabin_icon.jpg"]]</div>'>>
+			<<addmins 10>>
+			<<goto 'Wood cabin'>>
+		<</link>>
+		<<link '<div data-balloon-length="small" data-balloon-pos="up-right" aria-label="Fast travel to outside" class="fast-travel-item">[img[setup.ImagePath+"places/cabin/outside_icon.jpg"]]</div>'>>
+			<<addmins 10>>
+			<<goto 'Outside'>>
 		<</link>>
 	</div>
 <</if>>
@@ -98,6 +107,10 @@
 		Dialog.wiki(Story.get("Changelog").processText());
 		Dialog.open();
 	  <</script>>
+  <</link>>
+
+  <<link "PACKS">>
+	  <<goto 'Packs'>>
   <</link>>
 </div>
 </div>

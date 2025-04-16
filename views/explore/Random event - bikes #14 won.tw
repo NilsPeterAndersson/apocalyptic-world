@@ -7,7 +7,7 @@
  [img[setup.ImagePath+'places/explore/random_event_motorcycle.webp']]
  </center>
 <br /><br />
-As you finish off guys around the girl you're prepared to fight other 4 but they just drive off without looking back.
+As you finish off the guys surrounding the girl, you're prepared to also fight the other 4, but they instead drive off without looking back.
 <br /><br />
 <<set $player.reputation++>>
 <strong>Your reputation increased by 1</strong>
@@ -20,8 +20,10 @@ As you finish off guys around the girl you're prepared to fight other 4 but they
  <br />
  She tells you that she's going to a place called <strong class="iitem">The Sanctuary</strong> before they jump us. She tells you that she really doesn't have a plan what to do...
  <br /><br />
- <<set 
+ <<set
+    $tmpGirl.rape = false,
  	$tmpGirlCapture = false,
+	$tmpGirlInvite = false,
  	$slaveId = null,
 	$charId = null
  >>

@@ -1,0 +1,150 @@
+:: NPC punish [sex no-redirect] {"position":"5016,355","size":"100,100"}
+<h1 class="ptitle">BASEMENT</h1>
+<br /><br />
+<<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
+<<set _heOrSheU = setup.pronounceWhat($tmpGirl, true)>>
+<<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
+<<set _himOrHer = setup.pronounceWho($tmpGirl)>>
+
+<<set _isMasochist = ($tmpGirl.traits ?? []).includes('masochist')>>
+<<set _relStats = 1>>
+<<set _subStats = 1>>
+<<set _punishView = 'punish'>>
+<<if !settings.gaysEnabled && $tmpGirl.gender == 1 >>
+	<<set _punishView = _punishView + '_hit'>>
+<</if>>
+<<set _punishSettings = {
+    paddle: { show: true, relStats: 2, subStats: 2, viewSuffix: '_paddle' },
+    beat: { show: true, relStats: 1, subStats: 1, viewSuffix: '_hit' },
+    piss: { show:true, relStats: 2, subStats: 2, viewSuffix: '_piss' },
+	choke: { show: !$tmpGirl.gender, relStats: 0, subStats: 3, viewSuffix: '_choke'}
+}>>
+
+<<set _punishTypeSettings = _punishSettings[$punishType] ?? { relStats: 1, subStats: 1, viewSuffix: '' }>>
+
+<<set _relStats = _punishTypeSettings.relStats>>
+<<set _subStats = _punishTypeSettings.subStats>>
+<<set _punishView += _punishTypeSettings.viewSuffix>>
+
+<<set _relChanged = true>>
+<<set _subChanged = true>>
+
+<<if _isMasochist && $punishType !== 'beat'>>
+    <<set _relStats = 0>>
+    <<set _relChanged = false>>
+<</if>>
+<<if $punishType !== $prevPunish>>
+	<<set $punishCount = 0>>
+<</if>>
+<<set $punishCount++>>
+<<set _dead = false>>
+<<if $punishType === 'choke' && $punishCount >= 3>>
+	<<set _dead = true>>
+	<<set _punishView = 'punish_dead'>>
+<</if>>
+<<if typeof $punishType === 'undefined'>>
+	<<if $tmpGirl.gender == 1>>
+		<center>
+		[img[setup.ImagePath+'places/basement/guy_punish.webp']]
+		</center>
+		<br /><br />
+	<</if>>
+	You enter <<=_hisOrHer>> basement cell, and <<=_heOrShe>> is already waiting for you. Fear is visible in <<=_hisOrHer>> eyes, while <<=_hisOrHer>> hands are tied behind <<=_hisOrHer>> back.
+<<else>>
+	<<actionImage $tmpGirl _punishView>>
+
+	<<set $tmpGirl.relationship -= _relStats>>
+	<<if $tmpGirl.relationship < -100>>
+		<<set $tmpGirl.relationship = -100>>
+		<<set _relChanged = false>>
+	<</if>>
+	<<set $tmpGirl.sub += _subStats>>
+	<<if $tmpGirl.sub > 100>>
+		<<set $tmpGirl.sub = 100>>
+		<<set _subChanged = false>>
+	<</if>>
+
+	<<addmins 15>>
+	<<energy -10>>
+	<<if _dead>>
+			You take a step back and look at her. You overdid and she's laying on the ground dead.
+	<<elseif $punishType == 'piss'>>
+		<strong>
+			You start to piss all over <<=setup.displayName($tmpGirl)>> face, <<=_heOrShe>> can't do anything because <<=_heOrShe>>'s tied up. <<=_heOrSheU>> tries to turn away and close <<=_hisOrHer>> eyes.
+		</strong>
+	<<elseif $punishType == 'beat'>>
+		<strong>
+			You've properly swung a few times and punched <<=setup.displayName($tmpGirl)>> right in the face, <<=_heOrShe>> can't do anything because <<=_heOrShe>>'s tied to a chair, but after a few punches, it seems like <<=_heOrShe>>'s slowly starting to give in.
+		</strong>
+	
+	<<elseif $punishType === 'choke'>>
+		<<if $punishCount < 1>>
+			You put your hands around <<=setup.displayName($tmpGirl)>> neck and choke her.
+		<<elseif $punishCount < 3>>
+			<<=setup.displayName($tmpGirl)>> eyes gets sleepy as she looks straight at you and tries to tell something.
+		<</if>>
+	<<elseif _isMasochist>>
+		<strong><<=setup.displayName($tmpGirl)>></strong> moans in enjoyment while looking over <<=_hisOrHer>> shoulder straight in your eyes.
+		<<set $tmpGirl.horny = Math.min($tmpGirl.horny + 10, 100)>>
+	<<else>>
+		<strong><<print $tmpGirl.name>></strong> yells in pain as you punish <<=_himOrHer>>. 
+	<</if>>
+	<<if _relChanged || _subChanged>>
+		<br /><br />
+	<</if>>
+	<<if _relChanged>>
+		<strong><<print $tmpGirl.name>></strong> relationship decreased by <<=_relStats>><br />
+	<</if>>
+	<<if _subChanged>>
+		<strong><<print $tmpGirl.name>></strong> submission increased by <<=_subStats>><br />
+	<</if>>
+<</if>>
+<br /><br />
+<<set $prevPunish = $punishType>>
+<<if !_dead>>
+<<if $player.energy >= 10 && hasTime(1)>>
+	<<if $tmpGirl.gender == 1>>
+		<<link 'Hit him'>>
+			<<set $punishType = 'beat'>>
+			<<goto `passage()`>>
+		<</link>>
+	<</if>>
+	<<if settings.gaysEnabled || !$tmpGirl.gender>>
+		<<link 'Punish (slap)'>>
+				<<set $punishType = 'slap'>>
+				<<goto `passage()`>>
+		<</link>>
+		<<if $backpack.has('paddle')>>
+			<<link 'Punish (paddle)'>>
+				<<set $punishType = 'paddle'>>
+				<<goto `passage()`>>
+			<</link>>
+		<</if>>
+  <</if>>
+  	<<set _linkName = 'Piss on ' + _himOrHer>>
+  	<<link _linkName>>
+		<<set $punishType = 'piss'>>
+		<<goto `passage()`>>
+	<</link>>
+	<<if [0, 2].includes($tmpGirl.gender)>>
+		<<set _linkName = 'Choke ' + _himOrHer>>
+		<<link _linkName>>
+			<<set $punishType = 'choke'>>
+			<<goto `passage()`>>
+		<</link>>
+	<</if>>
+<</if>>
+<<else>>
+	<<slaveRemove $slaveId>>
+<</if>>
+
+<<link 'Back'>>
+	<<unset $punishType, $prevPunish, $punishCount>>
+	<<if _dead>>
+		<<goto 'Basement'>>
+	<<else>>
+		<<goto 'NPC view'>>
+	<</if>>
+<</link>>
+
+

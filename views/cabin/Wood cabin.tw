@@ -1,4 +1,4 @@
-:: Wood cabin [Place] {"position":"953,626","size":"200,100"}
+:: Wood cabin [Place]
 <h1 class="ptitle"><<cabinName>></h1>
 <div class="menu-grid">   
   <<grid cabin bedroom Bedroom 'Your room'>>
@@ -23,14 +23,16 @@
   <<if ($game.location.bathhouse ?? false) && hasTime(0, 30)>>
     <<grid cabin bathhouse 'Bathhouse' 'Bathhouse' false 1>>
   <</if>>
-  <<if ($game.location.nursery ?? false) && hasTime(0, 30)>>
-    <<grid cabin nursery 'Nursery' 'Nursery' false 1>>
+  <<if ($game.location.youth_district ?? false) && hasTime(0, 30)>>
+    <<grid cabin youth_district 'Youth district' 'Youth district' false 1>>
   <</if>>
   <<if ($game.location.shop ?? false) && hasTime(0, 30)>>
     <<grid cabin shop 'Shop' 'Shop' false 1>>
   <</if>>
    <<grid cabin fireplace 'Fire place' 'Fire place'>>
-   <<grid cabin outside Outside Outside>>
+   <<set _isDisabled = ($weather?.sandStorm ? 30 : 0.5)>>
+   <<set _disabledDescription = 'Sand storm outside'>>
+   <<grid cabin outside Outside Outside 0 _isDisabled>>
    <<if ($game.location.garage ?? false) && hasTime(0, 30)>>
     <<grid cabin garage 'Garage' 'Garage' false 1>>
   <</if>>
@@ -43,8 +45,32 @@
 	<<set _percentageFoodForager = 1>>
 <</if>>
 
+<<if $tmpEventWedding && timeBetween('18:00', '22:00')>>
+	<<goto 'NPC between marry'>>
+<</if>>
+
 <<if !($locationEvents.cabin ?? false)>>
-	<<if $game.lone_survivor>>
+	<<if $characters?.octavia?.quests?.kidnapped_found && !$characters.octavia.quests.betrayal && 
+	(!$characters.octavia.quests.kidnapped_found_day || ($characters.octavia.quests.kidnapped_found_day + 5) < $game.day) && 
+	timeBetween('08:00', '16:00')
+	>>
+		<<goto 'Octavia - The Troubled Messenger'>>
+	<<elseif $characters?.octavia?.quests?.betrayal && !$characters.octavia.quests.betrayal2 && 
+		(($characters.octavia.quests.betrayal_day + 3) < $game.day) && 
+		timeBetween('08:00', '16:00')
+	>>
+		<<goto 'Octavia - Blackthorn camp'>>
+	<<elseif $characters?.octavia?.quests?.betrayal2 && !$characters.octavia.quests.next_move && 
+		(($characters.octavia.quests.betrayal2_day + 3) < $game.day) && 
+		timeBetween('08:00', '16:00')
+	>> 
+		<<goto 'Octavia - Annihilation'>>
+	<<elseif $characters?.isabel?.quests?.pregnant && ($characters.isabel.quests.pregnant_day + 5) <= $game.day && !$characters.isabel.quests.dom_return>>
+		<<goto 'Dom - return'>>
+	<<elseif timeBetween('21:30', '22:30') && $characters?.blair?.quests?.missing_friend_found && $characters.blair.quests.missing_friend_basement && $gameDate.getDay() === 6>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Blair - Ashley threesome'>>
+	<<elseif $game.lone_survivor>>
 		<<set $game.lone_survivor = false>>
 		<<set $locationEvents.cabin = true>>
 		<<if setup.percentageChance(20)>>
@@ -58,35 +84,41 @@
 	<<elseif setup.assignedToCount('garden') >= 4 && setup.percentageChance(5) && ($backpack.count('food') + $storage.count('food') ) > 0 && (!$game.rotten_rations_day || ($game.rotten_rations_day + 7) < $game.day)>>
 		<<set _kitchenAssigned = setup.getPersonsForLocation($guests, 'kitchen')>>
 		<<set _rottenFoodChance = 100>>
-		<<if _kitchenAssigned && ($guests[_kitchenAssigned[0]].skills ?? []).includes('cook')>>
+		<<if _kitchenAssigned[0].length && ($guests[_kitchenAssigned[0][0]].skills ?? []).includes('cook')>>
 			<<set _rottenFoodChance = 50>>
 		<</if>>
 		<<if setup.percentageChance(_rottenFoodChance)>>
 			<<set $locationEvents.cabin = true>>
 			<<goto 'Event: Rotten Rations'>>
 		<</if>>
-	<<elseif setup.getPersonsForLocation($guests, 'garden').length >= 2 && setup.percentageChance(1)>>
+	<<elseif (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 2 && setup.percentageChance(1)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Common capital'>>
 	<<elseif $game.cabinName && setup.percentageChance(5)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: A lone survivor'>>
-	<<elseif $game.cabinName && setup.percentageChance(2) && (!$game.baby_merchant_day || ($game.baby_merchant_day + 60) < $game.day)>>
+	<<elseif $game.cabinName && setup.percentageChance(1) && (!$game.baby_merchant_day || ($game.baby_merchant_day + 60) < $game.day)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Baby merchant'>>
+	<<elseif $game.cabinName && setup.percentageChance(1) && (!$game.virgin_merchant_day || ($game.virgin_merchant_day + 60) < $game.day)>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - virgin merchant'>>
 	<<elseif $game.cabinName && setup.percentageChance(1)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Base attack'>>
+	<<elseif $game.cabinName && setup.percentageChance(1) && $game.day > 100>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - Base attack with car'>>
 	<<elseif $game.cabinName && isMetChar('rodger') && ($characters.rodger.quests.horse ?? false) && !$player.horse && setup.percentageChance(1)>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Horse merchant'>>
-	<<elseif ($backpack.count('food') || $storage.count('food')) && setup.percentageChance(_percentageFoodForager)>>
+	<<elseif ($backpack.count('food') || $storage.count('food')) && setup.percentageChance(_percentageFoodForager) && setup.baseIntruderChance()>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: Food forager'>>
-	<<elseif ($backpack.count('food') || $storage.count('food')) && timeBetween('19:00', '23:00') && setup.percentageChance(_percentageUninvitedCouple)>>
+	<<elseif ($backpack.count('food') || $storage.count('food')) && timeBetween('19:00', '23:00') && setup.percentageChance(_percentageUninvitedCouple) && $game.day > 30 && setup.baseIntruderChance()>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: The uninvited couple'>>
-	<<elseif setup.getPersonsForLocation($guests, 'guard').length && setup.percentageChance(5) && timeBetween('08:00', '12:00')>>
+	<<elseif setup.getPersonsForLocation($guests, 'guard').length && setup.percentageChance(3) && timeBetween('08:00', '11:00') && setup.baseIntruderChance()>>
 		<<set $locationEvents.cabin = true>>
 		<<goto 'Event: guard caught intruder'>>
 	<<elseif isMetChar('laura') && !$characters.laura.quests.successful_test && $characters.laura.quests.metOnDay < ($game.day - 3)>>
@@ -97,8 +129,19 @@
 		<<goto 'Laura story - The shattered lab'>>
 	<<elseif isMetChar('laura') && ($game.location.lab ?? false) && !$characters.laura.quests.living>>
 		<<goto 'Laura story - New home'>>
-	<<else>>
-		
+	<<elseif !$locationEvents.cabin && (setup.getAvailablePersons18yo($guests)[0] ?? []).length >= 1 && setup.percentageChance(20) && recall($suppCode) && timeBetween('22:00', '00:00')>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event: Late dance'>>
+	<<elseif isMetChar('vincent') && ($game.location.garage ?? false) && !$characters.vincent.quests.military_base && ($characters.vincent.car_get_day + 3) < $game.day>>
+		<<goto 'Vincent - Strange note'>>
+	<<elseif timeBetween('08:00', '12:00') && isMetChar('eve') && $characters.rodger.quests.faith && (($characters.eve.quests.shower_day ?? 0) + 10) < $game.day && setup.percentageChance(10)>>
+		<<goto 'Eve - shower visit'>>
+	<<elseif timeBetween('20:00', '24:00') && $game.lone_survivor && setup.percentageChance(50) && (setup.getAvailablePersons18yo($slaves)[0] ?? []).length>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Event - A lone survivor fuck'>>
+	<<elseif timeBetween('16:00', '20:00') && setup.getPersonsForLocation($guests, 'forest').length > 1 && $weather?.weather !== 'storm' && setup.percentageChance(5)>>
+		<<set $locationEvents.cabin = true>>
+		<<goto 'Forest - fallen tree'>>
 	<</if>>
 <</if>>
 

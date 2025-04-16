@@ -3,7 +3,7 @@
 <br /><br />
 
 <center>
-[img[setup.ImagePath+'places/outside/workout_group.jpg']]
+	<<image 'places/outside/workout_group.jpg' 'sfw'>>
 </center>
 
 The villagers start to gather, each bringing their unique skills and experiences.
@@ -23,6 +23,8 @@ You  explain the plan for the workout, emphasizing the importance of coming toge
 		<<=_workoutGuest.name>>
 	</span> strength increased by 1
 	<br />
+	<<set $guests[_workoutGuestI].quests ??= {}>>
+	<<set $guests[_workoutGuestI].quests.lastInteractionDay = $game.day>>
 <</for>>
 <br />
 As the event draws to a close, the villagers gather around a makeshift bonfire. They share stories and laughter, forming connections that go beyond mere survival. They realize that, in this post-apocalyptic world, their strength lies not only in their physical abilities but also in their collective spirit.
@@ -54,7 +56,7 @@ As the event draws to a close, the villagers gather around a makeshift bonfire. 
 	<<linkreplace 'Cum'>>
 		<<horny_reset>>
 		<center>
-			[img[setup.ImagePath+'places/cabin/workout_group_cum.webp']]
+			<<image 'places/cabin/workout_group_cum.webp'>>
 		</center>
 		<br /><br />
 		One of the girls took the initiative and pressed her lips against your dick to catch everything that comes out of you.

@@ -1,43 +1,11 @@
-:: Bathhouse [Place] {"position":"1507,773","size":"100,100"}
-<<set _bathSchedule = {
-	garden: {
-		from: '16:00',
-		to: '20:00',
-		p: 30
-	},
-	forest: {
-		from: '16:00',
-		to: '08:00',
-		p: 30
-	},
-	kitchen: {
-		from: '12:00',
-		to: '20:00',
-		p: 10
-	},
-	scavenger: {
-		from: '20:00',
-		to: '23:00',
-		p: 50
-	},
-	mistress: {
-		from: '23:00',
-		to: '24:00',
-		p: 100
-	},
-	streets: {
-		from: '08:00',
-		to: '12:00',
-		p: 50
-	}
-}>>
-
+:: Bathhouse [Place bg-bathhouse]
 <h1 class="ptitle">BATHHOUSE</h1>
-<div id="place-head">
-[img[setup.ImagePath+'places/cabin/bathhouse_head.jpg']]
+<br />
+<<if $game.location.hottub ?? false>>
+<div class="menu-grid">   
+  <<grid bathhouse hottub 'Hottub' 'Hottub'>>
 </div>
-<br /><br />
-
+<</if>>
 <<set _peopleInBathhouse = {}>>
 <table id="slaves">
 	<<for _bathGuestI, _bathGuest range $guests>>
@@ -58,12 +26,13 @@
                         <<set $tmpGirl.location = 'bathhouse'>>
                         <<set $tmpGirlBack = 'Bathhouse'>>
                         <<set $tmpGirlCapture to false>>
+						<<set $tmpGirlInvite to false>>
                         <<set $tmpGirl.rape to false>>
                         <<run delete $slaveId>>
 						<<run delete $charId>>
                         <<set $guestId = _bathGuestI>>
-                        <<set $tmpGirlViewBack = (!_bathGuest.gender ? 'Girl' : 'Guy') + ' view'>>
-						<<if !_bathGuest.gender && Object.keys(_peopleInBathhouse[_bathGuest.gender]).length >= 2 && setup.percentageChance(10)>>
+                        <<set $tmpGirlViewBack = 'NPC view - guest'>>
+						<<if !_bathGuest.gender && Object.keys(_peopleInBathhouse[_bathGuest.gender] ?? {}).length >= 2 && setup.percentageChance(20)>>
 							<<set $tmpEvent = {
 								bathhouseThreesome: [
 									Object.keys(_peopleInBathhouse[_bathGuest.gender])[0],
@@ -71,6 +40,11 @@
 								]
 							}>>
 							<<goto 'Bathhouse - threesome'>>
+						<<elseif !_bathGuest.gender && setup.percentageChance(20)>>
+							<<set $tmpEvent = {
+									id: _bathGuestI
+								}>>
+								<<goto 'Bathhouse - towel'>>
 						<<else>>
 							<<goto `$tmpGirlViewBack`>>
 						<</if>>
@@ -107,12 +81,13 @@
                         <<set $tmpGirl to $slaves[_bathSlaveI]>>
                         <<set $tmpGirl.location = 'bathhouse'>>
                         <<set $tmpGirlBack = 'Bathhouse'>>
-                        <<set $tmpGirlCapture to false>>
                         <<set $tmpGirl.rape to false>>
+                        <<set $tmpGirlCapture to false>>
+						<<set $tmpGirlInvite to false>>
                         <<run delete $guestId>>
 						<<run delete $charId>>
                         <<set $slaveId = _bathSlaveI>>
-                        <<set $tmpGirlViewBack = (!_bathSlave.gender ? 'Girl' : 'Guy') + ' view'>>
+						<<set $tmpGirlViewBack = 'NPC view'>>
                         <<goto `$tmpGirlViewBack`>>
                       <</link>>
                   </span>
@@ -136,6 +111,31 @@
 </table>
 
 <br /><br />
+<<if !($locationEvents.bathhouse ?? false) && !($game.location.hottub ?? false) && Object.keys(_peopleInBathhouse[0] ?? {}).length >= 2 && setup.percentageChance(100)>>
+	<<set $locationEvents.bathhouse = true>>
+	<<set $tmpEvent = {
+		ids: [Object.keys(_peopleInBathhouse[0])[0], Object.keys(_peopleInBathhouse[0])[1]]
+	}>>
+	<<goto 'Bathhouse - hot tub talk'>>
+	<<pickup $backpack 'blueprint_hot_tub' 1>>
+<</if>>
+<<if !$player.showered>>
+	<<link 'Take a shower'>>
+		<<set $isBathhouse = true>>
+		<<goto 'Shower-action'>>
+	<</link>>
+<</if>>
+<<if !($locationEvents.bathhouse ?? false)>>
+	<<set _hornyNpcsBlackHair = setup.filterNPCs($guests, { hair: 'black', horny: 50, 'virgin': false, race_in: ['white', 'latina']})>>
+	<<if  (_hornyNpcsBlackHair[0] ?? []).length && setup.percentageChance(10)>>
+		<<set $locationEvents.bathhouse = true>>
+		<<set _hornyNpcsBlackHair = _hornyNpcsBlackHair[0].shuffle()>>
+		<<set $tmpEvent = {
+			id: _hornyNpcsBlackHair[0],
+		}>>	
+		<<goto 'Bathhouse - steamy surprise'>>
+	<</if>>
+<</if>>
 <<if hasTime(1)>>
 	<<link 'Wait 30 minutes'>>
 		<<addmins 30>>

@@ -9,15 +9,18 @@
 <<else>>
 	<<set _age = _ageReal>>
 <</if>>
+
+<<set _isLegalAge = _ageReal >= 18>>
+
 <div id="girl_info_stats">
 <div id="girl_info_left" style="float: left; width: 60%">
 	<div id="girl_description">
 		<<if !_unknown>>
 			<<happyIcon $tmpGirl>>
 		<</if>>
-		<strong class="iitem"><<= $tmpGirl.race>> <<=setup.getNpcAgeDescription($tmpGirl)>></strong> with <strong class="iitem"><<=$tmpGirl.hair>></strong> hair
+		<strong class="iitem"><<= $tmpGirl.race>> <<=setup.getNpcAgeDescription($tmpGirl)>></strong> with <strong class="iitem"><<=$tmpGirl.hair>></strong> 
 		<<if [0,2].includes($tmpGirl.gender) && setup.getAge($tmpGirl) >= 18>>
-			and <strong class="iitem"><<=$tmpGirl.breasts>></strong> 
+			<<=$tmpGirl.hair === 'bald' ? 'head' : 'hair'>> and <strong class="iitem"><<=$tmpGirl.breasts>></strong> 
 			<<if $tmpGirl.piercedBoobs>>
 				pierced 
 			<</if>>
@@ -25,115 +28,246 @@
 			<<if [0,3].includes($tmpGirl.gender) && $tmpGirl.virgin && !_unknown>>
 			 	<strong class="iitem" style="font-weight: normal;">She's a virgin.</strong>
 			<</if>>
-			<<if $tmpGirl.buttplug>>
-				<strong class="iitem" style="font-weight: normal;">With buttplug.</strong>
-			<</if>>
-		 <</if>>
-	</div>
-
-<div id="npc-inventory">
-		<<link "[img[setup.ImagePath+'game/misc/inventory.png']]">><<script>>Dialog.setup("NPC inventory", "NPC inventory"); Dialog.wiki(Story.get("NPC inventory").processText()); Dialog.open();<</script>><</link>>
-		<<if ($tmpGirl.inventory ?? {})>>
-			<<for _npcInventoryItem, _npcInventoryCount range ($tmpGirl.inventory ?? {})>>
-				<div class='npc-inventory-item'>
-					<div class='npc-inventory-img'>
-						[img[setup.ImagePath+'game/inventory/' + _npcInventoryItem + '.png']]
-					</div>
-				</div>
-			<</for>>
+		<<else>>
+			<<=$tmpGirl.hair === 'bald' ? 'head' : 'hair'>>.
+		<</if>>
+		 <<if $tmpGirl.buttplug>>
+			<strong class="iitem" style="font-weight: normal;">With buttplug.</strong>
+		<</if>>
+		<<if $tmpGirl.piercedBoobs && $tmpGirl.gender == 1>>
+			<strong class="iitem" style="font-weight: normal;">With pierced nipples.</strong>
+		<</if>>
+		<<if $tmpGirl.chastityBelt>>
+			<strong class="iitem" style="font-weight: normal;">With chastity belt.</strong>
+		<</if>>
+		<<if !_unknown>>
+			<<= setup.npcListInfo($tmpGirl)>>
+		<</if>>
+		<<if ($tmpGirl.drunk ?? 0) > 0>>
+			 <strong><<=setup.pronounceWhat($tmpGirl, true)>> is <<=setup.drunkDescription($tmpGirl)>>.</strong>
 		<</if>>
 	</div>
-
+	<<if !_unknown>>
+		<div id="npc-inventory">
+				<<link "[img[setup.ImagePath+'game/misc/inventory.png']]">><<script>>Dialog.setup("NPC inventory", "NPC inventory"); Dialog.wiki(Story.get("NPC inventory").processText()); Dialog.open();<</script>><</link>>
+				<<if ($tmpGirl.inventory ?? {})>>
+					<<for _npcInventoryItem, _npcInventoryCount range ($tmpGirl.inventory ?? {})>>
+						<<if typeof setup.gifts[_npcInventoryItem] !== 'undefined'>>
+							<<continue>>
+						<</if>>
+						<<set _icon = _npcInventoryItem.indexOf("blueprint") !== -1 ? 'blueprint' :
+							_npcInventoryItem.indexOf("note")     !== -1 ? 'note' :  
+							_npcInventoryItem.indexOf("dumb")     !== -1 ? 'dumbbell' : _npcInventoryItem>>
+						<div class='npc-inventory-item'>
+							<div class='npc-inventory-img'>
+								[img[setup.ImagePath+'game/inventory/' + _icon + '.png']]
+							</div>
+						</div>
+					<</for>>
+				<</if>>
+		</div>
+	<</if>>
 		<div id="npc_stats">
-		<span>Name: <<=$tmpGirl.name>></span>
-		<span>Age: <<=_age>></span>
-		<span>Beauty score: <<=$tmpGirl.beauty>></span>
-		<span>Eyes: <<=$tmpGirl.eyes>></span>
-				
-		<<if !_unknown && !$charId>>
-			<<if $tmpGirl.relationship >= 50>>
-				<span>Likes: <<=$tmpGirl.likes>></span>
-				<span>Dislikes: <<=$tmpGirl.dislikes>></span>
-				<span>Personality: <<=$tmpGirl.personality>></span>
+			<span>Name: <<=setup.displayName($tmpGirl)>></span>
+			<span>Age: <<=_age>></span>
+			<<if _isLegalAge>>
+				<span>Beauty score: <<=$tmpGirl.beauty>></span>
 			<</if>>
-			<span>Gender: <<=setup.genderDescription($tmpGirl)>></span>
-			<span>Orientation: <<=$tmpGirl.orientation>></span>
-		<</if>>
-		
-		<<if !$tmpGirlCapture>>
-			<span>Relationship: <<print $tmpGirl.relationship>></span>
-		<</if>>
-		
-		<<if typeof $slaveId !== 'undefined' || typeof $guestId !== 'undefined' || typeof $charId !== 'undefined'>>
-			<span>Strength: <<=$tmpGirl.strength>></span>
-			<span>Submission: <<= $tmpGirl.sub ?? 0>></span>
-
-			<<if !$tmpGirl.gender>>
-				<span>Orgasms: <<=$tmpGirl.orgasms>></span>
+			<<if !$tmpGirlCapture>>
+				<span>Relationship: <<print $tmpGirl.relationship ?? 0>></span>
 			<</if>>
-
-			<<if !$tmpGirl.gender || $tmpGirl.anal > 0>>
-				<span>Anal: <<=$tmpGirl.anal>></span>
+			
+			<<if typeof $slaveId !== 'undefined' || typeof $guestId !== 'undefined' || typeof $charId !== 'undefined' || _isSlaveMarket>>
+				<span>Strength: <<=$tmpGirl.strength ?? 0>></span>
 			<</if>>
-				
-		<</if>>
-	</div>
+			<<if _isLegalAge>>
+				<div>Submission: <<= $tmpGirl.sub ?? 0>></div>
+			<</if>>
+		</div>
 
 	<<if !_unknown || $player.int > 30 || _isSlaveMarket>>
-		<<if !_unknown>>
-			<div id="npc-birthday">
-				Birthday: <<=$tmpGirl.birthDate.getDate()>> <<=window.GameMonths[$tmpGirl.birthDate.getMonth()]>>
+		<<if _isLegalAge>>
+			<div id="npc-traits">
+					Traits: 
+			<<if Object.keys($tmpGirl.traits ?? {}).length > 0>>
+			<<for _trait range ($tmpGirl.traits ?? [])>>
+				<div class="trait tooltip">
+					<<=setup.traits[_trait].title>>
+					<span class="tooltiptext"><<=setup.traits[_trait].description>></span>
+				</div>
+			<</for>>
+			<<else>>
+				none
+			<</if>>
 			</div>
 		<</if>>
-		<div id="npc-traits">
-				Traits: 
-		<<if Object.keys($tmpGirl.traits ?? {}).length > 0>>
-		  <<for _trait range ($tmpGirl.traits ?? [])>>
-			  <div class="trait tooltip">
-				  <<=setup.traits[_trait].title>>
-				  <span class="tooltiptext"><<=setup.traits[_trait].description>></span>
-			  </div>
-		  <</for>>
-		<<else>>
-			none
-		<</if>>
-		</div>
 		<div id="npc-skills">
 		Skills: 
-		<<if Object.keys($tmpGirl.skills ?? {}).length > 0>>
+		<<if ($tmpGirl.skills ?? []).length > 0>>
 		  <<for _skill range ($tmpGirl.skills ?? [])>>
-			  <div class="trait tooltip">
-				  <<=setup.skills[_skill].title>>
-				  <span class="tooltiptext"><<=setup.skills[_skill].description>></span>
-			  </div>
+				<<if typeof setup.skills[_skill] !== 'undefined'>>
+					<div class="trait tooltip">
+						<<=setup.skills[_skill].title>>
+						<span class="tooltiptext"><<=setup.skills[_skill].description>></span>
+					</div>
+			  	<</if>>
 		  <</for>>
 		<<else>>
 			none
 		<</if>>
 	  </div>
   <</if>>
-</div>
-</div>
-<<if typeof $tmpGirl.clothes === 'undefined'>>
-	<<set $tmpGirl.clothes = {
-		top: either(1,2,3),
-		bottom: either(1,2,3)
-	}>>
-<</if>>
-<div class="girl_info_picture" style="float: right;">
-	<<if typeof $tmpGirl.family !== 'undefined'>>
-		<div id="family-tree">
-			<span class="glyph">&#19940;</span>
-			<div id="family-tree-expanded">
-				<<showFamilyTree $tmpGirl.family>>
+
+  <<if _isLegalAge && !_unknown>>
+  	<<linkreplace 'More info'>>
+		<div id="additional-npc-info">
+			<div id="additional-npc-info-single">
+				<<if _isLegalAge>>
+					<div>Corruption: <<= $tmpGirl.corruption ?? 0>></div>
+					<div>Drunkenness: <<=setup.drunkDescription($tmpGirl)>></div>
+					<div>Horny: <<= $tmpGirl.horny ?? 0>></div>
+				<</if>>
+
+				<<if !$tmpGirl.gender>>
+					<div>
+						Orgasms: <<=$tmpGirl.orgasms>>
+					</div>
+				<</if>>
+				<<if !$tmpGirl.gender>>
+					<div>
+						Creampies: <<=$tmpGirl?.sexStats?.creampies ?? 0;>>
+					</div>
+				<</if>>
+				<div>
+					Gender: <<=setup.genderDescription($tmpGirl)>>
+				</div>
+				<div>
+					Orientation: <<=setup.displayOrientation($tmpGirl)>>
+				</div>
+				<<if !$tmpGirl.gender || $tmpGirl.anal > 0>>
+					<div>Anal: <<=$tmpGirl.anal>></div>
+				<</if>>
+
+				<<if !_unknown && !$charId && $tmpGirl.relationship >= 50>>
+					<div>
+						Likes: <<=$tmpGirl.likes>>
+					</div>
+					<div>
+						Dislikes: <<=$tmpGirl.dislikes>>
+					</div>
+					<div>
+						Personality: <<=$tmpGirl.personality>>
+					</div>
+				<</if>>
+				<div>
+					Eyes: <<=$tmpGirl.eyes>>
+				</div>
+				<div>
+					Birthday: <<=$tmpGirl.birthDate.getDate()>> <<=window.GameMonths[$tmpGirl.birthDate.getMonth()]>>
+				</div>
+				<<if !$tmpGirl.gender && $tmpGirl.pregnancy >= 8>>
+					<div>
+						Pregnancy: <<=$tmpGirl.pregnancy>> days
+					</div>
+				<</if>>
+				<<if !_unknown && $player.int >= 50>>
+					<div>
+					Unavailable traits: 
+					<<for _trait range ($tmpGirl.traitsLocked ?? [])>>
+						<div class="trait tooltip">
+							<<=setup.traits[_trait].title>>
+							<span class="tooltiptext"><<=setup.traits[_trait].description>></span>
+						</div>
+					<</for>>
+					</div>
+				<</if>>
+			</div>
+			<<if ($tmpGirl.notes ?? '') !== ''>>
+				<div id="npc-notes">
+					<h4 style="display:block; margin-bottom: 0px;">Notes</h4>
+					<<=$tmpGirl.notes>>
+				</div>
+			<</if>>
+			<div id="npc_stats">
+				<<if ($tmpGirl.stats ?? false)>>
+					<div id="npc-work-stats">
+						<h4 style="display:block; margin-bottom: 0px;">Work stats</h4>
+						<table style="margin-top: 0px;">
+						<<for _npcWorkStatsLocation, _npcWorkStatsDays range $tmpGirl.stats>>
+							<tr>
+								<td>
+									<<=_npcWorkStatsLocation>>:
+								</td>
+								<td>
+									<<=_npcWorkStatsDays>>
+								</td>
+							</tr>
+						<</for>>
+						</table>
+					</div>
+				<</if>>
+				<<if ($tmpGirl.statsSex ?? false)>>
+					<div id="npc-sex-stats">
+						<h4 style="display:block; margin-bottom: 0px;">Sex stats</h4>
+						<table style="margin-top: 0px;">
+						<tr>
+							<td>
+								Gave blowjobs:
+							</td>
+							<td>
+								<<=$tmpGirl.statsSex.bj ?? 0>>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								Deepthroated:
+							</td>
+							<td>
+								<<=$tmpGirl.statsSex.dp ?? 0>>
+							</td>
+						</tr>
+						<<if !$tmpGirl.gender>>
+							<tr>
+								<td>
+									Fucked in pussy:
+								</td>
+								<td>
+									<<=$tmpGirl.statsSex.pussy ?? 0>>
+								</td>
+							</tr>
+						<</if>>
+						<tr>
+							<td>
+								Fucked in ass:
+							</td>
+							<td>
+								<<=$tmpGirl.statsSex.anal ?? 0>>
+							</td>
+						</tr>
+						</table>
+					</div>
+				<</if>>
 			</div>
 		</div>
-	<</if>>
-  <<set _girlVisual = $tmpGirl>>
- 	<<if setup.getAge($tmpGirl) >= 18>>
-  		<<include 'Girl visual'>>
-  	<</if>>
+	
+	<</linkreplace>>
+<</if>>
 
+</div>
+	<div id="npc_info_right" @data-id="$tmpGirl.id" @class="'girl_info_picture gender-' + $tmpGirl.gender" style="float: right;">
+		<<if typeof $tmpGirl.family !== 'undefined'>>
+			<div id="family-tree">
+				<span class="glyph">&#19940;</span>
+				<div id="family-tree-expanded">
+					<<showFamilyTree $tmpGirl.family>>
+				</div>
+			</div>
+		<</if>>
+	<<set _girlVisual = $tmpGirl>>
+		<<if setup.getAge($tmpGirl) >= 18>>
+			<<include 'NPC visual'>>
+		<</if>>
+	</div>
 </div>
 <div style="clear: both; margin-bottom: 5px;"></div> 
 <<if false>>

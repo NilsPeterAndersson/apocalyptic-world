@@ -1,0 +1,353 @@
+:: Help [Help] {"position":"1009,12","size":"100,100"}
+
+<h1>Help or hinder?</h1>
+<h2>(<span style="color:red">Warning: spoilers ahead</span>)</h2>
+
+<h2>
+<<button "[0|1]">>
+    <<set _showGuide = !(_showGuide ?? false)>>
+    <<if _showGuide>>
+        <<run $('#guide').show()>>
+    <<else>>
+        <<run $('#guide').hide()>>
+    <</if>>
+<</button>>Guide/Hints to playing - or at least a start!</h2>
+<div id="guide" style="display:none;">
+
+<<include 'Help - Guide'>>
+<br /><hr /><br />
+</div>
+
+<h2>
+<<button "[0|1]">>
+    <<set _showItems = !(_showItems ?? false)>>
+    <<if _showItems>>
+        <<run $('#items').show()>>
+    <<else>>
+        <<run $('#items').hide()>>
+    <</if>>
+<</button>>Items</h2>
+<div id="items" style="display:none;">
+
+Note! Many items can be found by going exploring. Not mentioned in table!<br /><br />
+Another note! Since the game is a work-in-progress with new versions all the time this help might be a little off.<br /><br />
+
+<<set _catOrder = [
+    'food','crafting','fabric', 'potion','tool','gift','quest','no_use','que'
+]>>
+<<set _catTitle = {
+    food:     'Food for eating',
+    crafting: 'Materials for building & crafting in workbench, garage & base building tab',
+    fabric:   'Fabric',
+    potion:   'Pharmacy; materials & finished products',
+    tool:     'Tools, weapons & equipment',
+    gift:     'Gifts or stuff for slaves & guests',
+    quest:    'Quest items',
+    no_use:   'No use for now', 
+    que:      'Unsorted or new items (If you find stuff here the writer forgot to update the help....)',
+}>>
+
+/* dynamic help for all items */
+<<if typeof setup.helpitemsByCategory === 'undefined'>>
+    <<include 'Help - items include'>>
+<</if>>
+<<set _catHelpItems = setup.helpitemsByCategory>>
+
+/* Finally, we are ready to make a (almost dynamic) table of items */
+<table border="1">
+    <tr>
+        <th>Item</th>
+        <th>Source</th>
+        <th>Used for</th>
+    </tr>
+
+<<for _cat range _catOrder>>
+    <<if !_catHelpItems[_cat].size>>
+        <<continue>>
+    <</if>>
+    <tr><td colspan="3"><h3>_catTitle[_cat]</h3></td></tr>
+    <<for _itemID range setup.mapKeys2list(_catHelpItems[_cat]) >>
+        <<set _helpItem = _catHelpItems[_cat].get(_itemID)>>
+     <tr>    
+        <td>_helpItem.name</td>
+        <td>
+        <<if _helpItem.sources.length>>
+            /*<ul>*/
+                /*<li><<=_helpItem.sources.join('</li><li>')>></li> */
+                <<=_helpItem.sources.join('<br/>')>>
+            /*</ul>*/
+        <</if>>
+        </td>
+        <td>_helpItem.desc</td>
+    </tr>   
+    <</for>>
+<</for>>
+
+</table>
+
+<br /><hr /><br />
+</div>
+
+<h2>
+<<button "[0|1]">>
+    <<set _showSkill = !(_showSkill ?? false)>>
+    <<if _showSkill>>
+        <<run $('#skills').show()>>
+    <<else>>
+        <<run $('#skills').hide()>>
+    <</if>>
+<</button>>Important skills and traits</h2>
+<div id="skills" style="display:none;">
+<dl>
+<<set _skills = setup.help.skills()>>
+<<for _skillID range Object.keys(_skills).sort()>>
+    <<set _skill = _skills[_skillID]>>
+    <<set _name = _skill.name, _desc = _skill.desc>>
+    <<set _learn = 
+            typeof _skill.learnable === 'undefined' ? '<span style="color: yellow">(Learnable ?)</span>.' : 
+            _skill.learnable ? '<span style="color: green">Learnable</span>.' : 
+            '<span style="color: red">Not learnable</span>.'>>
+    <<set _xtra = _skill.xtra ?? ''>>
+    <dt><<=_name>></dt><dd><<=_desc>> <<=_learn>> <<=_xtra>></dd>
+<</for>>
+</dl>
+<br /><hr /><br />
+</div>
+
+<h2>
+<<button "[0|1]">>
+    <<set _showJob = !(_showJob ?? false)>>
+    <<if _showJob>>
+        <<run $('#jobs').show()>>
+    <<else>>
+        <<run $('#jobs').hide()>>
+    <</if>>
+<</button>>Assigned to & jobs of all kinds</h2>
+<div id="jobs" style="display:none;">
+You can assign your slaves and guests to different jobs.<br/>
+Slaves can only work in the garden/greenhouse, streets and as companions. <br/>
+Guests can work in any job.
+
+<dl>
+    <dt>Companion</dt><dd>A companion travels with the mc. Help him with fights.<br/>Both guests and slaves can be companions but slave companions will not help you in a fight.</dd>
+    <dt>Doctor</dt><dd>Outside the hospital the doctor don't need a special assignment. Can work anywhere. Any guest with doctor skill will step in as doctor when needed. A hospital will improve the chances for success.</dd>
+    <dt>Forest</dt><dd>Works in the forest, producing wood and sometimes a few berries to eat.</dd>
+    <dt>Garden/Greenhouse</dt><dd>Works in garden/greenhouse producing food.</dd>
+    <dt>Guard</dt><dd>A guest with good strength might work as a guard, watching over your place. Might sometimes capture cute young women who tries to sneak in.</dd>
+    <dt>Hospital</dt><dd>A doctor heals people here</dd>
+    <dt>Hunter</dt><dd>Provides you with food or wolf pelts</dd>
+    <dt>Kitchen</dt><dd>Any guest can work in the kitchen but with no effect. Only if the guest has the cook skill it will ha an effect.</dd>
+    <dt>Maid</dt><dd>Any guest can work as a maid. Will give extra energy for the hero taking a nap.</dd>
+    <dt>Mistress</dt><dd>Any guest with the sadistic trait might work as mistress. Will whip the slaves into shape.</dd>
+    <dt>Nightclub</dt><dd>After a deal with the glory-hole manager you can put your sex workers to work here</dd>
+    <dt>Quarry</dt><dd>An old quarry can be found by exploring. </dd>
+    <dt>Scavenging</dt><dd>A guest assigned to scavenging is sent out to find and collect nice-to-have things. There is a chance of a scavenger not coming home. When that happens the mc have a chance to go out and try to find her.</dd>
+    <dt>Shop</dt><dd>If you build a shop you will need a guest with shopkeeper skill to handle it. With a shopkeeper you can sell surplus and buy needed materials.<br/>
+    The shop also contains storage space to keep materials in the house.</dd>
+    <dt>Streets</dt><dd>Whatever you call the sexworkers, working the streets means coming in contact with the dark underbelly of human society. People don't respect others property. o_O Assaults, abuse and even killing of the workers isn't unheard of. High risk of miscarriage and loosing unborn children.<br/>
+    Dom, that more or less owns the streets, let your girls work there but you have to pay high taxes and get little or no protection in return.
+    After getting a better deal with Dom you will get lesser tax and some protection.</dd>
+</dl>
+
+<table border=1>
+    <tr>
+        <th>Job</th>
+        <th>Requirements</th>
+        <th>Bonus/Survival</th>
+    </tr>
+
+    <tr>
+        <td>Companion</td>
+        <td>None</td>
+        <td>A good strength & a knife helps in fight</td>
+   </tr>
+    <tr>
+        <td>Doctor</td>
+        <td>Doctor skill</td>
+        <td>Hospital</td>
+   </tr>
+    <tr>
+        <td>Forest</td>
+        <td>None</td>
+        <td>Good strength, axe & skill woodcraft</td>
+   </tr>
+    <tr>
+        <td>Garden/Greenhouse</td>
+        <td>(Relationship >= 30)</td>
+        <td>Upgrade the garden with a greenhouse to produce more food
+        <br/>Skill gardener</td>
+   </tr>
+    <tr>
+        <td>Guard</td>
+        <td>A good strength (Strength >= 30)</td>
+        <td>A good strength & knife, for the rare base attack</td>
+   </tr>
+    <tr>
+        <td>Hunter</td>
+        <td>Woodcraft skill & bow</td>
+        <td>A good strength</td>
+   </tr>
+    <tr>
+        <td>Kitchen</td>
+        <td>None</td>
+        <td>Cook skill</td>
+   </tr>
+    <tr>
+        <td>Maid</td>
+        <td>Being female</td>
+        <td>None</td>
+   </tr>
+    <tr>
+        <td>Mistress</td>
+        <td>Female|Male with sadistic trait</td>
+        <td>A paddle?</td>
+   </tr>
+        <td>Nightclub</td>
+        <td>Having a deal with the management<br/>(Relationship >= 70)</td>
+        <td>
+          <ul>
+            <li>Being female</li>
+            <li>Being a nymphomaniac and having a high submission</li>
+          </ul>
+        </td>
+   <tr>
+        <td>Quarry</td>
+        <td>Explore and find the quarry</td>
+        <td>A good strength gives a little more coal and stone.</td>
+   </tr>
+   <tr>
+   </tr>
+    <tr>
+        <td>Scavenging</td>
+        <td>None</td>
+        <td>A good strength, a knife & the scavenger skills increases chance of survival
+        <br/>Scavenging skills also gives bonus items</td>
+   </tr>
+    <tr>
+        <td>Shop</td>
+        <td>Shopkeeper skill for shop part, none for storage part</td>
+        <td>None</td>
+   </tr>
+    <tr>
+        <td>Streets</td>
+        <td>(Relationship >= 50)</td>
+        <td>
+          <ul>
+            <li>Being female</li>
+            <li>Deal with Dom for protection & lower taxes</li>
+            <li>High strength or a deal with Dom for protection and a knife for survival</li>
+            <li>Being a nymphomaniac, having a high submission, being beautiful and/or being trained in using body orifices for pleasure pays more.</li> 
+            /*<li>Beauty, submission and other sexual traits pays more</li>*/
+          </ul>
+        </td>
+   </tr>
+</table>
+<br /><hr /><br />
+</div>
+
+<h2>
+<<button "[0|1]">>
+    <<set _showFarm = !(_showFarm ?? false)>>
+    <<if _showFarm>>
+        <<run $('#farm').show()>>
+    <<else>>
+        <<run $('#farm').hide()>>
+    <</if>>
+<</button>>Improving the farm</h2>
+<div id="farm" style="display:none;">
+
+The hero takes possession of a farm with little luxury. There is water but only cold water, a basement with only a few slave cells, a barren garden.
+
+<dl>
+    <dt>Basement</dt>
+        <dd>You start with only a few slave cells in the basement but with room for more. Obedient slaves, that is high relationship, can be released and upgraded to guests in the guesthouse.</dd>
+    <dt>Bathhouse</dt>
+        <dd>A little luxury for the persons living in the farm. Improves beauty, at least temporary. </dd>
+    <dt>Bedroom</dt>
+        <dd>A place to rest and sleep and more. Taking a nap will restore energy. Having a house-maid will restore more energy when napping.</dd>
+    <dt>Cold shower</dt>
+        <dd>Can be upgraded to hot shower</dd>
+    <dt>Fire place</dt>
+        <dd>For training, partying and relaxing.</dd>
+    <dt>Garden</dt>
+        <dd>Produces food, upgradable to greenhouse, produces more food/worker</dd>
+    <dt>Gate</dt>
+        <dd>You can upgrade your farm to a settlement. For this you need a gate.</dd>
+    <dt>Garage</dt>
+        <dd>Guess...</dd>
+    <dt>Greenhouse</dt>
+        <dd>An upgraden garden, produces more food per worker</dd>
+    <dt>Guest beds</dt>
+        <dd>Expands the guesthouse.</dd>
+    <dt>Guest house</dt>
+        <dd>You can build a guest house. It starts with only a few beds but with room for more. Released slaves and invited persons live in the guest-house.</dd>
+    <dt>Hospital</dt>
+        <dd>To heal people</dd>
+    <dt>Hot tub</dt>
+        <dd>An expansion to bathhouse. A place to relax and recover energy.</dd>
+    <dt>Kitchen</dt>
+        <dd>For eating and some social talks.</dd>
+    <dt>Lab</dt>
+        <dd>An expansion to the guest house. A scientific laboratory.</dd>
+    <dt>Library</dt>
+        <dd>For keeping and reading books. Located in the youth district.</dd>
+    <dt>Nursery</dt>
+        <dd>A place to store children. Otherwise they will take up valuable space in basement and guesthouse. Located in the youth district.</dd>
+    <dt>Shower</dt>
+        <dd>Starts with cold water only. Taking a cold shower will restore a little energy. Can be upgraded to hot shower that restore a little more energy.</dd>
+    <dt>Shop</dt>
+        <dd>A shopkeeper can sell surplus and buy needed items from passers-by. Also storage space for the farm.</dd>
+    <dt>Slave cells</dt>
+        <dd>Expands the basement</dd>
+    <dt>Workbench</dt>
+        <dd>For building and crafting "stuff".</dd>
+    <dt>Youth district</dt>
+        <dd>A separate part of your home for the young ones. Library and Nursery are located here.</dd>
+</dl>
+<br /><hr /><br />
+</div>
+
+/*
+<h2>
+<<button "[0|1]">>
+    <<set _showAuto = !(_showAuto ?? false)>>
+    <<if _showAuto>>
+        <<run $('#auto').show()>>
+    <<else>>
+        <<run $('#auto').hide()>>
+    <</if>>
+<</button>>Automation help</h2>
+<div id="auto" style="display:none;">
+-- WORK --
+<br /><hr /><br />
+</div>
+*/
+
+<h2>
+<<button "[0|1]">>
+    <<set _showCast = !(_showCast ?? false)>>
+    <<if _showCast>>
+        <<run $('#cast').show()>>
+    <<else>>
+        <<run $('#cast').hide()>>
+    <</if>>
+<</button>>Cast of characters</h2>
+<div id="cast" style="display:none;">
+
+<<include 'Help - characters'>>
+<br /><hr /><br />
+</div>
+
+<h2>
+<<button "[0|1]">>
+    <<set _showSchedule = !(_showSchedule ?? false)>>
+    <<if _showSchedule>>
+        <<run $('#schedule').show()>>
+    <<else>>
+        <<run $('#caschedulest').hide()>>
+    <</if>>
+<</button>>Work schedules</h2>
+<div id="schedule" style="display:none;">
+<<include 'Help - Schedule'>>
+<br /><hr /><br />
+</div>

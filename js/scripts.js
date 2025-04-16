@@ -1,22 +1,3 @@
-setup.items = {
-
-};
-setup.randomEvents = {
-    travel: {
-        Settlement: [{
-            enabled: true,
-            passage: 'Travel event: tree ambush',
-            percentage: 5
-        }],
-        "Underground city": [{
-            enabled: true,
-            passage: 'Travel event: city ambush',
-            percentage: 5
-        }]
-    }
-};
-
-
 $(document).on(':passagedisplay', function () {
     checkVideos();
 
@@ -76,31 +57,6 @@ window.hasTime = function (hours, minutes, max = '23:59') {
     }
 
     return current >= minTime && current <= maxTime;
-};
-
-window.timeBetween = function (from, to) {
-    var current = new Date(variables().gameDate);
-
-    var minTime = new Date(current);
-    var minTimeSplit = from.split(':');
-    minTime.setHours(minTimeSplit[0]);
-    minTime.setMinutes(minTimeSplit[1]);
-    if (current.getHours() < 8) {
-        minTime.setDate(minTime.getDate() - 1);
-    }
-
-    var maxTime = new Date(current);
-    var maxTimeSplit = to.split(':');
-    if (from > to) {
-        maxTime.setDate(maxTime.getDate() + 1);
-    }
-    maxTime.setHours(maxTimeSplit[0]);
-    maxTime.setMinutes(maxTimeSplit[1]);
-    if (current.getHours() < 8) {
-        maxTime.setDate(maxTime.getDate() - 1);
-    }
-
-    return current >= minTime && current < maxTime;
 };
 
 window.isMetChar = function(name) {
@@ -180,8 +136,13 @@ setup.perkList = {
     },
     fertility: {
         title: "Your sperm is overpowered",
-        desc: "100% change to impregnate",
+        desc: "Doubles chance to impregnate",
         days: 0
+    },
+    temp_impotence: {
+        title: "Flaccid dick",
+        desc: "You can't get your dick hard",
+        days: 5
     }
 };
 
@@ -239,13 +200,21 @@ setup.getRandomGifts = function (count = 1, exclude) {
 setup.inventoryNpc = [
     'knife',
     'bow',
-    'gas_mask'
+    'gas_mask',
+    'axe',
+    'dumbbell', 
+    'kettlebell', 'dumbestbell',
+    'condom',
+    'body_armor',
+    'pickaxe',
+    'crossbow',
+    'arrow'
 ];
 
 setup.inventoryManageable = {
     food: {
         price: 1,
-        range: [1, 5],
+        range: [1, 10],
         chance: 90
     },
     hay: {
@@ -255,7 +224,7 @@ setup.inventoryManageable = {
     },
     wood: {
         price: 1,
-        range: [1, 1],
+        range: [1, 10],
         chance: 20
     },
     champagne: {
@@ -270,7 +239,7 @@ setup.inventoryManageable = {
     },
     rope: {
         price: 1,
-        range: [1,1],
+        range: [1,5],
         chance: 5
     },
     solar_panel: {
@@ -280,7 +249,7 @@ setup.inventoryManageable = {
     },
     bandage: {
         price: 5,
-        range: [1, 2],
+        range: [1, 5],
         chance: 5
     },
     knife: {
@@ -295,14 +264,34 @@ setup.inventoryManageable = {
     },
     plastic: {
         price: 4,
-        range: [2, 4],
+        range: [2, 6],
         chance: 5
     },
     milk: {
         price: 1,
         range: [1, 10],
         chance: 90
-    }
+    },
+    towel: {
+        price: 10,
+        range: [1, 5],
+        chance: 60
+    },
+    cloth: {
+        price: 6,
+        range: [1, 5],
+        chance: 50
+    },
+    metal: {
+        price: 10,
+        range: [1, 3],
+        chance: 10
+    },
+    necklace_cheap: {
+        price: 7,
+        range: [1, 3],
+        chance: 30
+    },
 };
 
 setup.getPersonsForLocation = function (persons, location) {
@@ -313,6 +302,27 @@ setup.getPersonsForLocation = function (persons, location) {
         }
     }
     return tmpPersons;
+};
+/**
+ * returns a list of actual NPCs, not just index in the list
+ */
+setup.getNpcsForLocation = function (persons, location) {
+    const npcs = [];
+    for (const npc of persons) {
+        if (npc.assignedTo === location) {
+            npcs.push(npc);
+        }
+    }
+    return npcs;
+};
+setup.getNpcsForLocations = function (persons, locations) {
+    const npcs = [];
+    for (const npc of persons) {
+        if (locations.includes(npc.assignedTo)) {
+            npcs.push(npc);
+        }
+    }
+    return npcs;
 };
 
 setup.getBirthDate = function(yearsAgo) {
@@ -383,13 +393,7 @@ setup.calculateDaysBetween = function (start, end) {
 };
 
 setup.getRandomPersons = function(persons, limit = 2) {
-    var randomIds = setup.getRandomPersonIds(persons, limit);
-    var randomPersons = [];
-    for (var i = 0; i < randomIds.length; i++) {
-        randomPersons.push(persons[i]);
-    }
-
-    return randomPersons;
+    return shuffle(persons).slice(0, limit);
 };
 
 setup.getRandomPersonIds = function(persons, limit = 2) {
@@ -458,35 +462,47 @@ setup.objectSortReverse = function(unordered) {
         .reduce((obj, [key,value]) => Object.assign(obj, {[key]: value}), {});
 };
 
-setup.pronounceWho = function(npc) {
+setup.pronounceWho = function(npc, capitalize = false) {
     if (npc.gender == 1 || npc.gender == 3 ) {
+        if (capitalize) {
+            return 'Him';
+        }
         return 'him';
     }
-
+    if (capitalize) {
+        return 'Her';
+    }
     return 'her';
 };
 
-setup.pronounceWhos = function(npc) {
+setup.pronounceWhos = function(npc, capitalize = false) {
     if (npc.gender == 1 || npc.gender == 3 ) {
+        if (capitalize) {
+            return 'His';
+        }
         return 'his';
     }
-
+    if (capitalize) {
+        return 'Her';
+    }
     return 'her';
 };
 
-setup.pronounceWhat = function (npc) {
+setup.pronounceWhat = function (npc, capitalize = false) {
     if (npc.gender == 1 || npc.gender == 3 ) {
+        if (capitalize) {
+            return 'He';
+        }
         return 'he';
     }
-
+    if (capitalize) {
+        return 'She';
+    }
     return 'she';
 };
 
 setup.getNpcById = function(id) {
     var npcList = variables().slaves.concat(variables().guests, (variables().nursery ?? []));
-
-    console.log(npcList);
-
     for (var i = 0; i < npcList.length; i++) {
         if (npcList[i].id === id) {
             return npcList[i];
@@ -496,10 +512,17 @@ setup.getNpcById = function(id) {
     for (var i in variables().characters) {
         if(variables().characters[i].id && variables().characters[i].id === id) {
             return variables().characters[i];
+        } else if (id === i) {
+            // old save sometimes blair.id != 'blair'
+            return variables().characters[id];
+        } else if (variables().characters[i].id === id) {
+            return variables().characters[i];
         }
     }
-
-
+    
+    if (id === 'mc') {
+        return variables().player;
+    }
 
     return null;
 };
@@ -512,6 +535,21 @@ setup.getAvailablePersons18yo = function (persons) {
     var output = {};
     for (var i = 0; i < persons.length; i++) {
         if (setup.getAge(persons[i]) < 18) {
+            continue;
+        }
+        if (typeof output[persons[i].gender] === 'undefined') {
+            output[persons[i].gender] = [];
+        }
+        output[persons[i].gender].push(i);
+    }
+
+    return output;
+};
+
+setup.getAvailablePersons18yoVirgins = function (persons) {
+    var output = {};
+    for (var i = 0; i < persons.length; i++) {
+        if (setup.getAge(persons[i]) < 18 || !persons[i].virgin) {
             continue;
         }
         if (typeof output[persons[i].gender] === 'undefined') {
@@ -544,7 +582,11 @@ setup.blinkScreen = function()
 };
 
 setup.displayName = function (npc) {
-    return '<span class="gender-' + setup.genderClass(npc) + '"><span class="glyph" data-balloon-length="medium" aria-label="Age: ' + setup.getAge(npc) + ', Beauty: ' + npc.beauty + ', Relationship: '+ npc.relationship+'" data-balloon-pos="up-left"><strong>' + npc.name + '</strong></span></span>';
+    var _style = '';
+    if (npc.color) {
+        _style += 'color: ' + npc.color;
+    }
+    return '<span class="gender-' + setup.genderClass(npc) + '" style="' + _style  + '"><span class="glyph" data-balloon-length="medium" aria-label="Age: ' + setup.getAge(npc) + ', Beauty: ' + npc.beauty + ', Relationship: '+ npc.relationship+' ' + ((npc.virgin && !npc.gender) ? ', (Virgin)' : '') + '" data-balloon-pos="up-left"><strong>' + npc.name + '</strong></span></span>';
 };
 
 setup.getNpcByKey = function (key) {
@@ -628,7 +670,66 @@ setup.getRandomElement = function(items) {
     return items[Math.floor(Math.random()*items.length)];
 };
 
+setup.commonValues = function(allArrays) {
+	var array = allArrays[0] ?? [];
+	var length = allArrays.length;
+	for (var i = 1; i < length; i++) {
+		array = array.filter(value => allArrays[i].includes(value));
+	}
+    return array;
+};
+
+setup.distinctValues = function(allArrays) {
+	var array = [];
+	var length = allArrays.length;
+
+	for (var i = 0; i < length; i++) {
+        var arrayLength = allArrays[i].length;
+
+        for (var j = 0; j < arrayLength; j++) {
+            var value = allArrays[i][j];
+
+            if (!array.includes(value)){
+                array.push(value);
+            }
+        }   
+    }
+    return array;
+};
+
+setup.propertyMatchIndexes = function(array, property, value = true, operator = '==') {
+	if (operator == '==') {
+		array = array.map((item, i) => (item[property] ?? false) == value ? i : -1);
+	} else if (operator == '!=') {
+		array = array.map((item, i) => (item[property] ?? false) != value ? i : -1);
+	} else if (operator == '>') {
+		array = array.map((item, i) => (item[property] ?? false) > value ? i : -1);
+	} else if (operator == '<') {
+		array = array.map((item, i) => (item[property] ?? false) < value ? i : -1);
+	} else if (operator == '>=') {
+		array = array.map((item, i) => (item[property] ?? false) >= value ? i : -1);
+	} else if (operator == '<=') {
+		array = array.map((item, i) => (item[property] ?? false) <= value ? i : -1);
+	} else if (operator == 'includes') {
+		array = array.map((item, i) => (item[property] ?? []).includes(value) ? i : -1);
+	} else if (operator == '!includes') {
+		array = array.map((item, i) => !(item[property] ?? []).includes(value) ? i : -1);
+	} else {
+		array = [];
+	}
+    return array.filter(index => index !== -1);
+};
+
 function shuffle(array) {
+	for (let i = array.length - 1; i > 0; i--) {
+		const j = Math.floor(Math.random() * (i + 1));
+		[array[i], array[j]] = [array[j], array[i]];
+	}
+
+	return array;
+};
+
+setup.shuffling = function(array) {
 	for (let i = array.length - 1; i > 0; i--) {
 		const j = Math.floor(Math.random() * (i + 1));
 		[array[i], array[j]] = [array[j], array[i]];
@@ -653,6 +754,9 @@ setup.mapKeys2list = function(map) {
     - _item.hasAllTag(tag) <=> setup.includesAll(_item.tags, tags)
 
     Of course these utility functions will work for any arrrays
+
+    My mistake? - manual says function exists...
+    No, old version of simple inventory code
 */
 
 setup.includesAny = function(have, want) {
@@ -661,3 +765,220 @@ setup.includesAny = function(have, want) {
 setup.includesAll = function(have, want) {
     return want.every(i => have.includes(i));
 }; 
+
+setup.sexChance = function (person, gender = 1, beauty) {
+    var likesList = ['likesGirls','likesGuys','likesTGirls','likesTGuys'];
+    var appeal = (beauty ?? person.relationship);
+
+    if (person.married && (!person.family || person.family.husband !== 'mc') && setup.percentageChance(50)) {
+        Math.floor(Math.max(person.sub, person.drunk ?? 0)/2)
+    } else if ((person.traits ?? []).includes('nymphomaniac')) {
+		return 100;
+	} else if (!person[likesList[gender]]) {
+		return Math.floor(Math.max(person.sub, person.drunk ?? 0)/2);
+	} else {
+		return Math.max(appeal, person.horny, person.sub, person.drunk ?? 0);
+	}
+};
+
+setup.suicideChance = function (person) {
+    var happy = Math.max(-100, Math.min(100, person.happy));
+    var sub = Math.max(0, Math.min(100, person.sub));
+
+    if (happy >= 0) {
+        return 0;
+    }
+
+    let baseChance = -happy;
+    let subMultiplier = 1 - sub / 100;
+    let finalChance = Math.max(2, Math.min(100, baseChance * subMultiplier));
+
+    return finalChance;
+  }
+
+  setup.pregnancyChance = function (person, fertility = false) {
+    var chance = 0;
+    var infertile = (person.traits ?? []).includes('infertile');
+    if (infertile) {
+        return chance;
+    }
+    var age = setup.getAge(person);
+    var breeder = (person.traits ?? []).includes('breeder');
+
+    if(typeof person.pregnancy !== 'undefined' || person.gender) {
+        return 0;
+    }
+
+    if(age < 18) {
+        return 0;
+    } else if(age < 25) {
+        chance = 24;
+    } else if(age < 40) {
+        chance = 16;
+    } else if(age < 60) {
+        chance = 8;
+    }
+
+    if(breeder) {
+        chance = Math.min(100, chance*2);
+    }
+
+    if(fertility) {
+        chance = Math.min(100, chance*2);
+    }
+
+    return chance;
+};
+
+setup.drink = function (person, glass = 1, alcohol = 25) {
+    alcohol = Math.max(alcohol + window.randomInteger(0, 5) - window.randomInteger(0, 5), 0);
+    var resistance = 1 + (person.endurance ?? 0) / 200;
+    person.drunk = (person.drunk ?? 0) + Math.round(glass * alcohol / resistance);
+
+	return person;
+};
+
+setup.drunkDescription = function (person) {
+    const desc = ['buzzed', 'euphoric', 'tipsy', 'drunk'];
+    var drunk = person.drunk ?? 0;
+    var state = Math.floor((drunk - 1) / 25);
+
+    if (drunk == 0) {
+        return 'sober';
+    } else if (drunk > 100) {
+        return 'wasted';
+    } else {
+        return desc[state];
+    }
+};
+
+window.openTab = function(evt, name) {
+    var i, tabcontent, tablinks;
+  
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+  
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+  
+    document.getElementById(name).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+
+  /**
+   * pretty prints a fractional number
+   * @param   {Number} n         fractional number to pretty print
+   * @param   {Number} divisor   
+   * @returns {String}           pretty print version of n
+   */
+setup.ppFraction = function(n, divisor = 3) {
+    const intPart  = Math.trunc(n);
+    const quotient = Math.abs(n - intPart);
+    const dividend = Math.round(quotient*divisor);
+    const fractext = dividend ? '&nbsp;<span class="frac"><sup>' + dividend  + '</sup><span>&frasl;</span><sub>' + divisor + '</sub></span>': '';
+    const inttext =  intPart  ? intPart : dividend ? '' : 0;
+    return inttext + fractext;
+}
+
+setup.getKeyByValue = function(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+  }
+
+
+setup.extendPack = function(obj1, obj2) {
+    let merged = {};
+
+    for (let key in obj1) {
+        if (obj1.hasOwnProperty(key)) {
+            if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])) {
+                merged[key] = Array.from(new Set([...obj1[key], ...obj2[key]]));
+            } else if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object') {
+                merged[key] = setup.extendPack(obj1[key], obj2[key]);
+            } else {
+                merged[key] = obj2.hasOwnProperty(key) ? obj2[key] : obj1[key];
+            }
+        }
+    }
+
+    for (let key in obj2) {
+        if (obj2.hasOwnProperty(key) && !merged.hasOwnProperty(key)) {
+            merged[key] = obj2[key];
+        }
+    }
+
+    return merged;
+}
+
+setup.mergeObjects = function(obj1, obj2, parentPath = '', packName = '') {
+    const merged = {};
+
+    for (const key in obj1) {
+        if (obj1.hasOwnProperty(key)) {
+            if (typeof obj1[key] === 'object' && !Array.isArray(obj1[key])) {
+                merged[key] = setup.mergeObjects(obj1[key], obj2[key] || {}, `${parentPath}/${key}`, packName);
+            } else {
+                merged[key] = obj1[key];
+            }
+        }
+    }
+
+    for (const key in obj2) {
+        if (obj2.hasOwnProperty(key)) {
+            if (typeof obj2[key] === 'object' && !Array.isArray(obj2[key])) {
+                if (!merged.hasOwnProperty(key)) {
+                    merged[key] = setup.mergeObjects({}, obj2[key], `${parentPath}/${key}`, packName);
+                }
+            } else if (Array.isArray(obj2[key])) {
+                merged[key] = merged[key] || [];
+                obj2[key].forEach(value => {
+                    merged[key].push(`${packName}${parentPath}/${key}/${value}`);
+                });
+            } else {
+                merged[key] = obj2[key];
+            }
+        }
+    }
+
+    return merged;
+}
+
+
+window.blackoutScreen = function(duration) {
+    let blackoutDiv = document.getElementById('blackout');
+
+    // Create the blackout div if it doesn't exist
+    if (!blackoutDiv) {
+        blackoutDiv = document.createElement('div');
+        blackoutDiv.id = 'blackout';
+        document.body.appendChild(blackoutDiv);
+    }
+
+    // Show the blackout screen
+    blackoutDiv.classList.add('active');
+
+    // Remove the active class after the duration (includes the fade-out time)
+    setTimeout(() => {
+        blackoutDiv.classList.remove('active');
+    }, duration);
+};
+
+
+setup.getDayTimeName = function() {
+    let gameDate = variables().gameDate;
+
+    if (gameDate.getHours() > 6 && gameDate.getHours() < 12) {
+        return 'morning';
+    }
+    if (gameDate.getHours() > 6 && gameDate.getHours() < 18) {
+        return 'afternoon';
+    }
+    if (gameDate.getHours() > 6 && gameDate.getHours() < 22) {
+        return 'evening';
+    }
+
+    return 'night';
+};

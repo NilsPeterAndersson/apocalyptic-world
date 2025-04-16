@@ -17,49 +17,55 @@ Champagne is such a rare thing in this world that only a few have ever tasted it
 	[img[setup.ImagePath+'places/cabin/house_party_champagne_mouth.webp']]
 </center>
 <br /><br />
-The e is almost empty and the girls are so drunk that they decide to pour the last bit left in the bottle into one of the girl's mouth from a distance. The girl falls to her knees and while the champagne is pouring into her mouth, another girl pulls down her shirt and sucks on her nipple.
+The bottle is almost empty and the girls are so drunk that they decide to pour the last bit left in the bottle into one of the girl's mouth from a distance. The girl falls to her knees and while the champagne is pouring into her mouth, another girl pulls down her shirt and sucks on her nipple.
 <<addhours 4>>
 <br /><br />
 
 <<for _guestI, _guest range $guests>>
-	<<if _guest.gender || setup.getAge(_guest) < 17>>
+	<<if setup.getAge(_guest) < 18>>
 		<<continue>>
 	<</if>>
 	<<setNpcStats 'guest' _guestI 'relationship' +10>>
 	<<=$guests[_guestI].name>> relationship increased by 10<br />
+	<<if typeof $guests[_guestI].quests === 'undefined'>>
+		<<set $guests[_guestI].quests = {}>>
+	<</if>>
+	<<set $guests[_guestI].quests.lastInteractionDay = $game.day>>
 <</for>>
 <br /><br />
 
-<<perkAdd 'drunk'>>
-<<drop $backpack 'champagne' 1>>
-<<drop $backpack 'food' 20>>
+<<set $player = setup.drink($player, 4)>>
+<<if $player.drunk > 75>>
+	<<perkAdd 'drunk'>>
+<</if>>
+<<run setup.cabinInventory.drop('champagne', 1)>>
+<<run setup.cabinInventory.drop('food', 20)>>
 
 <div id="girls_top_table">
 	<h4>Guests attending the party</h4>
 	<table id="slaves">
 		<<for _guestI, _guest range $guests>>
-			<<if _guest.gender || setup.getAge(_guest) < 17>>
+			<<if setup.getAge(_guest) < 18>>
 				<<continue>>
 			<</if>>
 			<<capture _guestI, _guest>>
 				<tr>
 				  <td style="width: 300px">
-					 	  <<=_guest.name>> 
+					 	  <<=setup.displayName(_guest)>> 
 						  <<if _guest.pregnancy >= 7>>
 							(pregnant <<=_guest.pregnancy>> days)
 						  <</if>>
 				  </td>
 				  <td>
-				  	<<if [0,2].includes(_guest.gender) && setup.getAge(_guest) >= 17>>
 						Beauty score: <<print _guest.beauty>>
-					<</if>>						
 				  </td>
 				  <td>
 						Age: <<=setup.getAge(_guest)>>
 				  </td>
 				  <td>
+						<<set _guest = setup.drink(_guest, 1)>>
 				  		<<link 'Invite to the bedroom'>>
-							<<if setup.percentageChance(30) || !$characters.blair.quests.house_party_finished>>
+							<<if !_guest.gender && (setup.percentageChance(setup.sexChance(_guest)) || !$characters.blair.quests.house_party_finished)>>
 								<<set $tmpGirl to _guest>>
 								<<set $guestId = _guestI>>
 								<<set $characters.blair.quests.house_party_finished = true>>
@@ -69,10 +75,11 @@ The e is almost empty and the girls are so drunk that they decide to pour the la
 								<<set $tmpGirl.location = 'bedroom'>>
 								<<set $tmpGirlViewBack = 'Sleep eval'>>
 								<<set $tmpGirlCapture to false>>
+								<<set $tmpGirlInvite to false>>
 								<<set $tmpGirl.rape to false>>
 								<<set $guestId = _guestI>>
 								<<run delete $slaveId>>
-								<<goto 'Girl fuck'>>
+								<<fuck $tmpGirl>>
 							<</if>>
 						<</link>>
 				  </td>
@@ -96,10 +103,10 @@ The e is almost empty and the girls are so drunk that they decide to pour the la
 		+5 submission
 	<</linkdesc>>
 </div>
-<<if $backpack.has('champagne')>>
+<<if setup.cabinInventory.has('champagne')>>
 	<div id="option2">
 		<<linkreplace 'Offer another bottle of champagne'>>
-			<<drop $backpack 'champagne' 1>>
+			<<run setup.cabinInventory.drop('champagne', 1)>>
 			<<run $('#option1, #girls_top_table, #option2_desc').hide()>>
 			<<run $('#girls_bottom_table').show()>>
 			You bring another bottle and pour a glass for each of the guests, they thank you with a smile and flirtatiously look at you until one sits down in front of you and spreads her legs with the text "Thank you!"
@@ -121,13 +128,58 @@ The e is almost empty and the girls are so drunk that they decide to pour the la
 			</center>
 			<br /><br />
 			<<for _guestI, _guest range $guests>>
-				<<if _guest.gender || setup.getAge(_guest) < 17>>
+				<<if ![0,2].includes(_guest.gender) || setup.getAge(_guest) < 18>>
 					<<continue>>
 				<</if>>
 				<<setNpcStats 'guest' _guestI 'relationship' +10>>
+				<<setNpcStats 'guest' _guestI 'happy' 10>>
 				<<=$guests[_guestI].name>> relationship increased by 10<br />
 			<</for>>
 			<br /><br />
+			<<set  _randomPersons = setup.getAvailablePersons18yo($guests)>>
+			<<if recall($suppCode) && setup.percentageChance(50) && (_randomPersons[0] ?? []).length >= 3>>
+				<<set _randomGirls = setup.getRandomPersons(_randomPersons[0], 3)>>
+				<<set _npc1 = $guests[_randomGirls[0]]>>
+				<<set _npc2 = $guests[_randomGirls[1]]>>
+				<<set _npc3 = $guests[_randomGirls[2]]>>
+				Laughter echoed through the air, momentarily drowning out the distant sounds of the desolate world outside. 
+				In this moment of shared joy and camaraderie, <<=setup.displayName(_npc1)>>, <<=setup.displayName(_npc2)>> and <<=setup.displayName(_npc3)>> clearly in high spirits from the bubbly, approached you.
+				<br /><br />
+				<center>
+					[img[setup.ImagePath+'places/cabin/house_party_foursome.jpg']]
+				</center>
+				<br /><br />
+				<<sayNpc _npc1>>
+					This party is a blast! Having fun?
+				<</sayNpc>>
+				<br />
+				With mischievous smiles and playful glances, they suggested another bottle of champagne, hinting at the possibility of an adventure beyond the walls of the gathering. 
+				The suggestion hung in the air like a tantalizing secret, a promise of fleeting joy in a world where joy was a rare commodity.
+				<br /><br />
+				<<sayNpc _npc2>>
+					You got one more bottle just for us? How about we move party so somewhere else.
+				<</sayNpc>>
+				<br />
+				<<if setup.cabinInventory.has('champagne')>>
+					<<link 'Bring another bottle'>>
+						<<set $tmpEvent = {
+							girls: [
+								_npc1,
+								_npc2,
+								_npc3
+							],
+							girlIds: [
+								_randomGirls[0],
+								_randomGirls[1],
+								_randomGirls[2]
+							]
+						}>>
+						<<addmins 30>>
+						<<run setup.cabinInventory.drop('champagne', 1)>>
+						<<goto 'Event - House party foursome'>>
+					<</link>>
+				<</if>>
+			<</if>>
 			
 		<</linkreplace>>
 		<div id="option2_desc">
@@ -135,35 +187,34 @@ The e is almost empty and the girls are so drunk that they decide to pour the la
 			  -1 champagne; +10 relationship
 		  <</linkdesc>>
 		</div>
-	</div>		
+	</div>
 <</if>>
 
 <div id="girls_bottom_table" style="display:none">
 	<h4>Guests attending the party</h4>
 	<table id="slaves">
 		<<for _guestI, _guest range $guests>>
-			<<if _guest.gender || setup.getAge(_guest) < 17>>
+			<<if ![0,2].includes(_guest.gender) || setup.getAge(_guest) < 18>>
 				<<continue>>
 			<</if>>
 			<<capture _guestI, _guest>>
 				<tr>
 				  <td style="width: 300px">
-					 	  <<=_guest.name>> 
+					 	  <<=setup.displayName(_guest)>> 
 						  <<if _guest.pregnancy >= 7>>
 							(pregnant <<=_guest.pregnancy>> days)
 						  <</if>>
 				  </td>
 				  <td>
-					<<if [0,2].includes(_guest.gender) && setup.getAge(_guest) >= 17>>
 						Beauty score: <<print _guest.beauty>>
-					<</if>>				
 				  </td>
 				  <td>
 						Age: <<=setup.getAge(_guest)>>
 				  </td>
 				  <td>
+  						<<set _guest = setup.drink(_guest, 1)>>
 				  		<<link 'Invite to the bedroom'>>
-							<<if setup.percentageChance(30) || !$characters.blair.quests.house_party_finished>>
+							<<if !_guest.gender && (setup.percentageChance(setup.sexChance(_guest)) || !$characters.blair.quests.house_party_finished)>>
 								<<set $tmpGirl to _guest>>
 								<<set $guestId = _guestI>>
 								<<set $characters.blair.quests.house_party_finished = true>>
@@ -173,10 +224,11 @@ The e is almost empty and the girls are so drunk that they decide to pour the la
 								<<set $tmpGirl.location = 'bedroom'>>
 								<<set $tmpGirlViewBack = 'Sleep eval'>>
 								<<set $tmpGirlCapture to false>>
+								<<set $tmpGirlInvite to false>>
 								<<set $tmpGirl.rape to false>>
 								<<set $guestId = _guestI>>
-								<<run delete $slaveId>>
-								<<goto 'Girl fuck'>>
+								<<unset $slaveId, $charId>>
+								<<fuck $tmpGirl>>
 							<</if>>
 						<</link>>
 				  </td>

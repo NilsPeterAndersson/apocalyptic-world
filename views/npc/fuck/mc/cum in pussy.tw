@@ -1,0 +1,11 @@
+:: Mc fuck cum in pussy
+
+<<if setup.percentageChance(setup.pregnancyChance($tmpGirl, setup.perkHas('fertility')))>>
+		<<set $tmpGirl.pregnancy_father = 'mc'>>
+		<<set $tmpGirl.pregnancy = 0>>
+		<<statsAdd 'girls_impregnated'>>
+<</if>>
+
+<<set $tmpGirl.sexStats ??= {}>>
+<<set $tmpGirl.sexStats.creampies ??= 0>>
+<<set $tmpGirl.sexStats.creampies++>>

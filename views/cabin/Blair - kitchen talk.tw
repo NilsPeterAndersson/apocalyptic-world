@@ -1,4 +1,4 @@
-:: Blair - kitchen talk {"position":"336,2061","size":"100,100"}
+:: Blair - kitchen talk [girlview]
 <<if $characters.blair.relationship >= 20 && !$characters.blair.quests.missing_friend>>
 	<<set $characters.blair.quests.missing_friend = true>>
 	<<goto 'Blair - quest missing friend'>>
@@ -20,15 +20,15 @@
 
 <<video '/kitchen/blair_talk'>>
 <br /><br />
-<<set $talkedAbout = either('her dad', 'her wanting to go into adventures', 'her accident in underground city')>>
-You talked about <<=$talkedAbout>>.
+<<set _talkedAbout = either('her dad', 'her wanting to go into adventures', 'her accident in underground city')>>
+You talked about <<=_talkedAbout>>.
 <br /><br />
 
 <<if $characters.blair.relationship < 20>>
   <<set $characters.blair.relationship +=1>>
   <strong>Blair relationship increased by 1</strong>
 <<else>>
-	<strong>You can't increase relationship with Blair with this action anymore</strong>
+	<strong>You can't increase your relationship with Blair with this action anymore.</strong>
 <</if>>
 
 <br /><br />
@@ -48,12 +48,31 @@ You talked about <<=$talkedAbout>>.
 	<<link 'Kiss her'>>
 		<<goto 'Blair - kitchen kiss'>>
 	<</link>>
+	<<link 'Approach her'>>
+		<<set $charId = 'blair'>>
+		<<unset $slaveId, $guestId, $childId>>
+		<<set $tmpGirl = $characters.blair>>
+		<<set $tmpGirl.location = 'kitchen'>>
+		<<set $tmpGirlBack = 'Kitchen-room'>>
+		<<set $tmpGirlViewBack = 'NPC view - character'>>
+		<<goto 'NPC view - character'>>
+	<</link>>
 	
 	<<if $game.canMarry && !$characters.blair.quests.married && $backpack.has('wedding_ring')>>
 		<<link 'Marry her'>>
 			<<goto 'Blair - marry #1'>>
 		<</link>>
 	<</if>>
+	<<if $characters.blair.pregnancy >= 8 && $backpack.has('pregnancy_speed_potion')>>
+		<<link 'Give pregnancy speed potion'>>
+			<<set $tmpGirl = $characters.blair>>
+			<<set $characters.blair.pregnancy += 100>>
+			<<addmins 30>>
+			<<set $pregnancyPotionBackLink = 'Blair - kitchen talk'>>
+			<<goto 'Girl - pregnancy speed potion'>>
+		<</link>>
+	<</if>>
+
 <<else>>
 	<<addmins 30>>
 <</if>>

@@ -32,14 +32,14 @@ They look to you for guidance, their trust in you evident.
         </div>
     <<else>>
         <<linkreplace 'Fuck them'>>
-            <<set $player.godwill -= 5>>
+            <<set $player.goodwill -= 5>>
             <<set _fucked = true>>
-            <<=setup.displayName(_npc1)>> is more quietier and looks more obidient while <<=setup.displayName(_npc2)>> tries to resist and curses you. You decide that it would be safer with <<=setup.displayName(_npc1)>>.
+            <<=setup.displayName(_npc1)>> is more quieter and looks more obedient while <<=setup.displayName(_npc2)>> tries to resist and curses you. You decide that it would be safer with <<=setup.displayName(_npc1)>>.
             <br /><br />
             <<video 'explore/beak_human_fuck1'>>
             <br /><br />
-            You unzip your pants and slowly slide your hard dick inside <<=setup.displayName(_npc1)>> mouth. She looks at you with tears in her eyes but doesn't resist as you predicted. 
-            Few more gentle slides before she accidentally touches your dick with her teeths and you decide to punish her by slap. 
+            You unzip your pants and slowly slide your hard dick inside <<=setup.displayName(_npc1)>>'s mouth. She looks at you with tears in her eyes but doesn't resist as you predicted. 
+            Few more gentle slides before she accidentally touches your dick with her teeth and you decide to punish her with a slap. 
             <br /><br />
             <<video 'explore/beak_human_fuck2'>>
             <br /><br />
@@ -104,7 +104,7 @@ They look to you for guidance, their trust in you evident.
         <</link>>
     <</linkreplace>>
 </div>
-<<if (($game.location.basement ?? false) && ($slaves.length + 2) < $basementLimit)>>
+<<if (($game.location.basement ?? false) && ($slaves.length + 2) <= $basementLimit)>>
     <div id="option_enslave">
         <<linkreplace 'Enslave them'>>
             <<set $player.goodwill -= 5>>

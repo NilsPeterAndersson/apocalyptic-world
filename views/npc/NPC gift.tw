@@ -1,0 +1,61 @@
+:: NPC gift {"position":"1719,36","size":"100,100"}
+<div id="inventory">
+    <<for _item, _amount range $backpack.table>>
+		<<if typeof setup.gifts[_item] === 'undefined'>>
+			<<continue>>
+		<</if>>
+		<<capture _item>>
+		  <<set _icon = _item>>
+		  <div class='inventory-item tooltip'>
+			  <div class='inventory-img'>
+				  [img[setup.ImagePath+'game/inventory/' + _icon + '.png']]
+			  </div>
+			  <div class='inventory-title'>
+				  <<= Item.get(_item).name>> 
+				  <<if !Item.get(_item).unique>>
+					  <span class='inventory-amount'>x_amount</span>
+				  <</if>>
+			  </div>
+			  <<if Item.get(_item).description>>
+				<span class="tooltiptext"><<=Item.get(_item).description>></span>
+			  <</if>>
+
+			 	<<link 'Gift'>>
+					<<set _giftMultiplier = 1>>
+					<<if ($tmpGirl.likes ?? []).includes(_item)>>
+						<<set _giftMultiplier = 2>>
+						<<set $tmpGirl.happy += 2>>
+					<<elseif ($tmpGirl.dislikes ?? []).includes(_item)>>
+						<<set _giftMultiplier = -1>>
+						<<set $tmpGirl.happy -= 1>>
+					<</if>>				
+
+					<<if _giftMultiplier >= 1 >>				
+						<<drop $backpack _item 1>>
+						<<run setup.npcInventoryAdd($tmpGirl, _item)>>
+						<<set $tmpGirl.gift = true>>
+					<</if>>
+
+					<<set $tmpGirl.relationship = Math.min(100, $tmpGirl.relationship + _giftMultiplier*setup.gifts[_item].rel)>>
+					<<set $tmpGirl.quests.lastInteractionDay = $game.day>>
+
+					<<script>>Dialog.close();<</script>>
+					<<script>>state.display(state.active.title, null, "back")<</script>>
+				<</link>>
+		  </div>
+		<</capture>>
+    <</for>>
+</div>
+
+<style>
+#inventory {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	grid-column-gap: 10px;
+	grid-row-gap: 10px;
+}
+
+.inventory-item {
+	 flex: 0 0 33.3333%;
+}
+</style>

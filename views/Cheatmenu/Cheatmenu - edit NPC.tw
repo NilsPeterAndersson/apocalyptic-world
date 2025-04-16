@@ -1,0 +1,259 @@
+:: Cheatmenu - edit NPC
+<<set _traits = {}>>
+<<set _traitsLocked = {}>>
+<<set _skills = {}>>
+<<set _likes = {}>>
+<<set $editTraits = $editTraitsLocked = $editSkills>>
+<<set $tmpGirl.strength = $tmpGirl.strength ?? 0>>
+<<set $tmpGirl.anal = $tmpGirl.anal ?? 0>>
+
+<table id="edit_npc">
+<tr>
+        <td>
+            Name:
+        </td>
+        <td>
+            <<textbox "_name" $tmpGirl.name>>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Age:
+        </td>
+        <td>
+            <<numberbox "_age" setup.getAge($tmpGirl)>>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Beauty:
+        </td>
+        <td>
+            <<numberbox "_beauty" $tmpGirl.beauty>>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Strength:
+        </td>
+        <td>
+            <<numberbox "_strength" $tmpGirl.strength>>
+        </td>
+    </tr>
+    <<if setup.getAge($tmpGirl) >= 18>>
+        <tr>
+            <td>
+                Submission:
+            </td>
+            <td>
+                <<numberbox "_sub" $tmpGirl.sub>>
+            </td>
+        </tr>
+    <</if>>
+    <tr>
+        <td>
+            Relationship:
+        </td>
+        <td>
+            <<numberbox "_relationship" $tmpGirl.relationship>>
+        </td>
+    </tr>
+    <<if setup.getAge($tmpGirl) >= 18>>
+        <tr>
+            <td>
+                Anal:
+            </td>
+            <td>
+                <<numberbox "_anal" $tmpGirl.anal>>
+            </td>
+        </tr>
+    <</if>>
+    <tr>
+        <td>
+            Gender:
+        </td>
+        <td>
+            <<set _gender = $tmpGirl.gender>>
+            <label><<radiobutton "_gender" 0 autocheck>> Female</label>
+            <label><<radiobutton "_gender" 1 autocheck>> Male</label>
+            <label><<radiobutton "_gender" 2 autocheck>> Transfemale</label>
+        </td>
+    </tr>
+    <<if [0,2].includes($tmpGirl.gender) && setup.getAge($tmpGirl) >= 18>>
+        <tr>
+            <td>
+                Breasts:
+            </td>
+            <td>
+                <<set _breasts = $tmpGirl.breasts>>
+                <label><<radiobutton "_breasts" "small" autocheck>> Small</label>
+                <label><<radiobutton "_breasts" "medium" autocheck>> Medium</label>
+                <label><<radiobutton "_breasts" "big" autocheck>> Big</label>
+            </td>
+        </tr>
+    <</if>>
+    <tr>
+        <td>
+            Race:
+        </td>
+        <td>
+            <<set _race = $tmpGirl.race>>
+            <label><<radiobutton "_race" "white" autocheck>> White</label>
+            <label><<radiobutton "_race" "black" autocheck>> Black</label>
+            <label><<radiobutton "_race" "asian" autocheck>> Asian</label>
+            <label><<radiobutton "_race" "latina" autocheck>> Latina</label>
+            <label><<radiobutton "_race" "indian" autocheck>> Indian</label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Eye color:
+        </td>
+        <td>
+            <<set _eyes = $tmpGirl.eyes>>
+            <label><<radiobutton "_eyes" "blue" autocheck>> Blue</label>
+            <label><<radiobutton "_eyes" "brown" autocheck>> Brown</label>
+            <label><<radiobutton "_eyes" "gray" autocheck>> Gray</label>
+            <label><<radiobutton "_eyes" "green" autocheck>> Green</label>
+            <label><<radiobutton "_eyes" "hazel" autocheck>> Hazel</label>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            Hair:
+        </td>
+        <td>
+            <<set _hair = $tmpGirl.hair>>
+            <label><<radiobutton "_hair" "bald" autocheck>> Bald</label>
+            <label><<radiobutton "_hair" "gray" autocheck>> Gray</label>
+            <label><<radiobutton "_hair" "brown" autocheck>> Brown</label>
+            <label><<radiobutton "_hair" "black" autocheck>> Black</label>
+            <label><<radiobutton "_hair" "blonde" autocheck>> Blonde</label>
+            <label><<radiobutton "_hair" "ginger" autocheck>> Ginger</label>
+        </td>
+    </tr>
+    <<if setup.getAge($tmpGirl) >= 18>>
+        <tr>
+            <td>
+                Traits:
+            </td>
+            <td>
+                <<for _traitKey, _trait range setup.traits>>
+                    <<capture _traits, _traitKey>>
+                        <div>
+                            <<set _checked = $tmpGirl.traits.includes(_traitKey) ? 'checked' : null>>
+                            <<checkbox "_traits[_traitKey]" false true _checked>> <<=setup.traits[_traitKey].title>>
+                        </div>
+                    <</capture>>
+                <</for>>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Unavailable traits:
+            </td>
+            <td>
+                <<for _traitKey, _trait range setup.traits>>
+                    <<capture _traitsLocked, _traitKey>>
+                        <div>
+                            <<set _checked = ($tmpGirl.traitsLocked ?? []).includes(_traitKey) ? 'checked' : null>>
+                            <<checkbox "_traitsLocked[_traitKey]" false true _checked>> <<=setup.traits[_traitKey].title>>
+                        </div>
+                    <</capture>>
+                <</for>>
+            </td>
+        </tr>
+    <</if>>
+     <tr>
+        <td>
+            Skills:
+        </td>
+        <td>
+            <<for _skillKey, _skill range setup.skills>>
+                <<capture _skills, _skillKey>>
+                    <div>
+                        <<set _checked = $tmpGirl.skills.includes(_skillKey) ? 'checked' : null>>
+                        <<checkbox "_skills[_skillKey]" false true _checked>> <<=setup.skills[_skillKey].title>>
+                    </div>
+                <</capture>>
+            <</for>>
+        </td>
+    </tr>
+    <<if setup.getAge($tmpGirl) >= 18>>
+        <tr>
+            <td>
+                Sexualities:
+            </td>
+            <td>
+                <<for _sexuallityKey, _sexuallity range ['likesGirls', 'likesGuys', 'likesTGirls', 'likesTGuys']>>
+                    <<capture _sexuallity, _sexuallityKey>>
+                        <div>
+                            <<set _checked = $tmpGirl[_sexuallity] ? 'checked' : null>>
+                            <<checkbox "_likes[_sexuallity]" false true _checked>> <<=_sexuallity>>
+                        </div>
+                    <</capture>>
+                <</for>>
+            </td>
+        </tr>
+    <</if>>
+</table>
+
+<style>
+    table#edit_npc {   
+        width: 100%;
+    }
+
+    table#edit_npc tr {
+        border-top: 1px solid white;
+    }
+</style>
+<<link 'Save'>>
+    <<if setup.getAge($tmpGirl) >= 18>>
+        <<set $tmpGirl.anal = _anal>>
+        <<set $tmpGirl.sub = _sub>>
+         <<set $tmpGirl.traits = []>>
+        <<for _traitKey, _enabled range _traits>>
+            <<if _enabled>>
+                <<run $tmpGirl.traits.push(_traitKey)>>
+            <</if>>
+        <</for>>
+        <<set $tmpGirl.traitsLocked = []>>
+        <<for _traitKey, _enabled range _traitsLocked>>
+            <<if _enabled>>
+                <<run $tmpGirl.traitsLocked.push(_traitKey)>>
+            <</if>>
+        <</for>>
+    <</if>>
+    <<set $tmpGirl.name = _name>>
+    <<set $tmpGirl.beauty = _beauty>>
+    <<set $tmpGirl.strength = _strength>>
+    <<set $tmpGirl.eyes = _eyes>>
+    <<set $tmpGirl.hair = _hair>>
+    <<set $tmpGirl.gender = _gender>>
+    <<set $tmpGirl.relationship = _relationship>>
+   
+    <<set $tmpGirl.skills = []>>
+    <<for _skillKey, _enabled range _skills>>
+        <<if _enabled>>
+            <<run $tmpGirl.skills.push(_skillKey)>>
+        <</if>>
+    <</for>>
+    <<if setup.getAge($tmpGirl) !== _age>>
+        <<set $tmpGirl.birthDate = setup.getBirthDate(_age)>>
+        <<if setup.getAge($tmpGirl) < 18>>
+	        <<run $tmpGirl.birthDate.setFullYear($tmpGirl.birthDate.getFullYear() - 1)>>
+        <</if>>
+    <</if>>
+    <<if [0,2].includes($tmpGirl.gender) && setup.getAge($tmpGirl) >= 18>>
+        <<set $tmpGirl.breasts = _breasts>>
+    <</if>>
+    <<set $tmpGirl.race = _race>>
+    <<if setup.getAge($tmpGirl) >= 18>>
+        <<set $tmpGirl.likesGirls = _likes.likesGirls>>
+        <<set $tmpGirl.likesGuys = _likes.likesGuys>>
+        <<set $tmpGirl.likesTGirls = _likes.likesTGirls>>
+        <<set $tmpGirl.likesTGuys = _likes.likesTGuys>>
+    <</if>>
+    <<goto `passage()`>>
+    <<dialogclose>>
+<</link>>

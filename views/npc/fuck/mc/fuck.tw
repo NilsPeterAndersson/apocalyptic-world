@@ -1,0 +1,125 @@
+:: Mc fuck [sex]
+
+<<include 'Mc fuck actions'>>
+
+<div id="action-scene">
+<<if typeof $sexAction !== 'undefined'>>
+    <<set $tmpGirl.quests ??= {}>>
+    <<set $tmpGirl.quests.lastInteractionDay = $game.day>>
+    <<addmins 5>>
+    <<energy -5>>
+    <<if setup.perkHas('drunk')>>
+        <<energy -5>>
+    <</if>>
+
+    <<set _hornyGained = (_sexActions[$sexAction]?.horny ?? 0)>>
+    <<if !_canFuck>>
+        <<set _hornyGained = 0>>
+    <</if>>
+    <<set _maxMcHorny = (_sexActions[$sexAction]?.maxMcHorny ?? null)>>
+    <<if (_maxMcHorny === null || $player.horny < _maxMcHorny)>>
+        <<set _hornyIncrease = setup.sex.calcHornyIncrease(($tmpGirl.beauty ?? 100), _hornyGained)>>
+        <<horny _hornyIncrease>>
+    <</if>>
+	<<set _showSex = true>>
+
+    <<if $sexAction === 'anal'>>
+        <<include 'Mc fuck anal'>>
+    <</if>>
+    <<if $sexAction === 'pussy'>>
+        <<include 'Mc fuck pussy'>>
+    <</if>>
+    <<if !_canFuck && ['bj','handjob'].includes($sexAction)>>
+        <<include 'MC fuck flaccid'>>
+    <</if>>
+    <<if $sexAction === 'cum_in_pussy' && $tmpGirl.traits.includes('breeder')>>
+        <<set $tmpGirl.horny = Math.min(($tmpGirl.horny += 30), 100)>>
+    <</if>>
+    <<if _showSex>>
+	    <<actionImage $tmpGirl $sexAction>>
+        <br />
+        <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
+            <<set _npcHornyGained = (_sexActions[$sexAction].hornyGive ?? 20)>>
+            <<set $tmpGirl.horny = Math.min($tmpGirl.horny + _npcHornyGained, 100)>>
+        <</if>>
+        <<set _npcHorny = clone($tmpGirl.horny)>>
+        <<showmeter '$npcHornyBar' '_npcHorny / 100'>>
+        <<updatemeter '$npcHornyBar' `_npcHorny / 100`>>
+        <br />
+        <<if $sexForced && !$tmpGirl.traits.includes('masochist')>>
+            <<set
+                $tmpGirl.sub = Math.min($tmpGirl.sub + 2, 100),
+                $tmpGirl.relationship = Math.max($tmpGirl.relationship - 5, -100),
+                $tmpGirl.happy = Math.max($tmpGirl.happy - 5, -100)
+            >>
+            <<=setup.pronounceWhat($tmpGirl, true)>> asks you to leave <<=setup.pronounceWho($tmpGirl)>> alone!<strong> (Submission + 2, Happy / Relationship - 5)</strong>
+        <<else>>
+            <<set
+                $tmpGirl.relationship = Math.min($tmpGirl.relationship + 1, 100),
+                $tmpGirl.happy = Math.min($tmpGirl.happy + 1, 100)
+            >>
+            <<=setup.pronounceWhat($tmpGirl, true)>> welcomes the attention.<strong> (Happy / Relationship + 1)</strong>
+        <</if>>
+         <br />
+    <</if>>
+
+    <<if (_sexActions[$sexAction] ?? false) && $tmpGirl.corruption < _sexActions[$sexAction].maxCorruption>>
+        <<set $tmpGirl.corruption = Math.min($tmpGirl.corruption + 1, 100)>>
+		<<=setup.pronounceWhat($tmpGirl, true)>> is getting more corrupted.<strong> (Corruption + 1)</strong>
+        <br />
+    <</if>>
+
+    <<if (_sexActions[$sexAction] ?? false) && _sexActions[$sexAction].positive>>
+		<<=setup.pronounceWhos($tmpGirl, true)>> body reacts positively to you. <strong>(Horny + <<=_npcHornyGained>>)</strong>
+		<br />
+    <</if>>
+    <<if $tmpGirl.horny >= 100>>
+		<<include 'Mc fuck orgasm'>>
+		<<=setup.displayName($tmpGirl, true)>> has an orgasm!<strong> (Happy / Relationship + 5)</strong>
+		<br />
+		<<set
+			$tmpGirl.relationship = Math.min($tmpGirl.relationship + 5, 100),
+			$tmpGirl.happy = Math.min($tmpGirl.happy + 5, 100)>>
+        <<set $tmpGirl.orgasms ??= 0>>
+        <<set $tmpGirl.orgasms++>>
+	<</if>>	
+
+    <<if _sexActions[$sexAction]?.stats>>
+        <<if setup.percentageChance(70)>>
+            <<set $tmpGirl[_sexActions[$sexAction].stats]++>>
+        <</if>>
+        <<if typeof $sexStats[$sexAction] === 'undefined'>>
+            <<set 
+                $tmpGirl.statsSex ??= {},
+                $tmpGirl.statsSex[$sexAction] ??= 0,
+                $tmpGirl.statsSex[$sexAction]++,
+                $sexStats[$sexAction] = true
+            >>
+        <</if>>
+    <</if>>
+    <<if $sexAction === 'pussy' || $sexAction === 'pussy_fisting'>>
+        <<set $tmpGirl.virgin = false>>
+    <</if>>
+
+    <<include 'Mc fuck traits'>>
+
+	<<if $sexAction == 'cum_in_pussy'>>
+        <<include 'Mc fuck cum in pussy'>>
+	<</if>>
+    <<if $sexAction == 'cum_on_face' && setup.percentageChance(30) && !$sexForced>>
+        <<include 'Mc fuck cum on face'>>
+	<</if>>
+
+    <<include 'Mc fuck - use lube'>>
+
+    <<if $tmpGirl.horny >= 100>>
+        <<script>>
+        setTimeout(function () {
+            variables().tmpGirl.horny = 0;
+        }, 400);
+        <</script>>
+    <</if>>
+<</if>>
+<br />
+<<include 'Mc fuck buttons'>>
+</div>

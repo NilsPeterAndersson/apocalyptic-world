@@ -1,13 +1,18 @@
 :: Sanctuary shop
 <h1 class="ptitle">SHOP</h1>
 <br /><br />
-  <<set $shopItems = [
+/*
+  <<set _shopItems = [
 	  {name:'metal',price:10,sell:false},
 	  {name:'bullet_revolver',price:10,sell:false},
 	  {name:'piercing',price:10},
-    {name:'wedding_ring', price:10}
+    {name:'wedding_ring', price:10},
+    {name:'gas_mask', price: 50, buy:false},
+    {name:'fuel', price: 40, sell:false}
   ]>>
-<<shop $shopItems 'Sanctuary shop'>>
+*/
+<<set _shopItems = clone(setup.items.shop.sanctuary)>>
+<<shop 'sanctuary' _shopItems 'Sanctuary shop'>>
 
 <<link 'Leave'>>
     <<goto 'Sanctuary'>>

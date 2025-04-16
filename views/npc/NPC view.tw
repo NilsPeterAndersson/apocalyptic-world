@@ -1,0 +1,267 @@
+:: NPC view [sex no-redirect girlview] {"position":"5012,30","size":"100,100"}
+<<set _heOrShe = setup.pronounceWhat($tmpGirl)>>
+<<set _hisOrHer = setup.pronounceWhos($tmpGirl)>>
+<<set _himOrHer = setup.pronounceWho($tmpGirl)>>
+
+<<if !$tmpGirl.talked>>
+	<<link 'Talk'>>
+		<<set $tmpGirl.relationship = Math.min($tmpGirl.relationship + 3, 100)>>
+		<<set $tmpGirl.talked = true>>
+		<<addmins 15>>
+		<<set $tmpGirlViewBack = 'NPC view'>>
+		<<goto 'NPC talk'>>
+	<</link>>
+<</if>>
+
+<<if $player.energy >= 30 && $tmpGirl.location !== 'garden'>>
+  <<if !$tmpGirl.gender && $tmpGirl.rape>>
+	  <<link 'Try to rape her'>>
+		  <<if $player.strength < $tmpGirl.strength>>
+			  <<goto 'NPC found escape'>>
+		  <<else>>
+  				<<set $tmpGirlViewBack = 'NPC view'>>
+				<<set $sexForced = true>> 
+				<<fuck $tmpGirl>>
+				<<set $wasRaped = true>> 
+		  <</if>>
+	  <</link>>
+  <<elseif !$tmpGirl.rape>>
+		<<set _linkName = 'Fuck ' + _himOrHer>>
+		<<link `_linkName`>>
+			<<fuck $tmpGirl>>
+		<</link>>
+  <</if>>
+  <<include 'Girl invite - include'>>
+<</if>>
+
+<<if $game.location.basement && $tmpGirlCapture && $slaves.length < $basementLimit && $player.energy >= 30>>
+	<<set _linkName = 'Try to capture ' + setup.pronounceWho($tmpGirl)>>
+	<<link _linkName>>
+		<<if $player.strength > $tmpGirl.strength>>
+			<<set $tmpGirl.capture = false>>
+			<<set $slaves.push($tmpGirl)>>
+			<<addhours 2>>
+			<<energy -30>>
+			<<statsAdd 'people_captured'>>
+			<<goto 'Basement'>>
+		<<else>>
+			<<goto 'NPC found escape'>>
+		<</if>>
+	<</link>>
+<</if>>
+
+<<if !$tmpGirl.gender && $tmpGirl.location === 'garden'>>
+	<<if $player.energy >= 20>>
+		<<set $tmpGirlViewBack = 'NPC view'>>
+		[[Grope|Grope]]
+	<</if>>
+<</if>>
+
+<<if $slaveId !== undefined && !($player.companions['slave:' + $slaveId] ?? false) && Object.keys($player.companions ?? {}).length < $companionsLimit>>
+	<<link 'Add as companion'>>
+		<<companionAdd 'slave' $slaveId>>
+		<<assignedTo $tmpGirl 'companion_slave'>>
+		<<goto `passage()`>>
+	<</link>>
+<</if>>
+
+<<if $tmpGirl.relationship >= 30 && $slaveId !== undefined && !$tmpGirl.assignedTo && setup.assignedToCount('garden') < $workersLimitGarden>>
+	<<link 'Assign to garden'>>
+		<<assignedTo $tmpGirl 'garden'>>
+		<<set $tmpGirl.gardenDay = 0>>
+		<<if $tmpGirlBack>>
+			<<set $slaves[$slaveId] = $tmpGirl>>
+			<<set $slaveId to null>>
+			<<goto $tmpGirlBack>>
+		<<else>>
+			<<goto 'NPC view'>>
+		<</if>>
+	<</link>>
+<</if>>
+
+<<if [0,2].includes($tmpGirl.gender) && $tmpGirl.relationship >= 50 && $slaveId !== undefined && !$tmpGirl.assignedTo>>
+	<<link 'Assign to streets'>>
+		<<assignedTo $tmpGirl 'streets'>>
+		<<if $tmpGirlBack>>
+			<<set $slaves[$slaveId] = $tmpGirl>>
+			<<set $slaveId to null>>
+			<<goto $tmpGirlBack>>
+		<<else>>
+			<<goto 'NPC view'>>
+		<</if>>
+	<</link>>
+<</if>>
+
+<<if [0].includes($tmpGirl.gender) && $slaveId !== undefined && !$tmpGirl.assignedTo && $game?.location?.milk_barn && ($tmpGirl.pregnancy >= 7 || ($tmpGirl.traits ?? []).includes('milker'))>>
+	<<link 'Assign to milk barn'>>
+		<<assignedTo $tmpGirl 'milk_barn'>>
+		<<if $tmpGirlBack>>
+			<<set $slaves[$slaveId] = $tmpGirl>>
+			<<set $slaveId to null>>
+			<<goto $tmpGirlBack>>
+		<<else>>
+			<<goto 'NPC view'>>
+		<</if>>
+	<</link>>
+<</if>>
+
+<<set _availableGirlSlaves = setup.getAvailablePersons18yo($slaves)>>
+<<if $slaveId !== undefined  && $tmpGirl.gender == 1 && (_availableGirlSlaves[0] ?? []).length && !$tmpGirl.offerSlave>>
+	<<link 'Offer him one of your slave girls'>>
+		<<script>>
+			Dialog.setup("Basement - Offer slave", "Basement - Offer slave");
+			Dialog.wiki(Story.get("Basement - Offer slave girl to slave guy: choose").processText());
+			Dialog.open();
+	  	<</script>>
+	<</link>>
+<</if>>
+
+<<set _availableGuySlaves = setup.getAvailablePersons18yo($slaves)>>
+<<if $slaveId !== undefined  && settings.gaysEnabled && $tmpGirl.gender == 1 && (_availableGuySlaves[1] ?? []).length > 1 && !$tmpGirl.offerSlave>>
+	<<link 'Offer him one of your slave guys'>>
+		<<script>>
+			Dialog.setup("Basement - Offer slave", "Basement - Offer slave");
+			Dialog.wiki(Story.get("Basement - Offer slave guy to slave guy: choose").processText());
+			Dialog.open();
+	  	<</script>>
+	<</link>>
+<</if>>
+
+<<set _availableTGirlsSlaves = setup.getAvailablePersons18yo($slaves)>>
+<<if $slaveId !== undefined && settings.transEnabled && $tmpGirl.gender == 1 && (_availableTGirlsSlaves[2] ?? []).length && !$tmpGirl.offerSlave>>
+	<<link 'Offer him one of your slave trans girls'>>
+		<<script>>
+			Dialog.setup("Basement - Offer slave", "Basement - Offer slave");
+			Dialog.wiki(Story.get("Basement - Offer slave trans girls to slave guy: choose").processText());
+			Dialog.open();
+	  	<</script>>
+	<</link>>
+<</if>>
+
+<<set _availableGuySlaves = setup.getAvailablePersons18yo($slaves)>>
+<<if $slaveId !== undefined && settings.gaysEnabled && $tmpGirl.gender == 2 && (_availableGuySlaves[1] ?? []).length > 0 && !$tmpGirl.offerSlave>>
+	<<link 'Offer her one of your slave guys'>>
+		<<script>>
+			Dialog.setup("Basement - Offer slave", "Basement - Offer slave");
+			Dialog.wiki(Story.get("Basement - Offer slave guy to slave trans girl: choose").processText());
+			Dialog.open();
+	  	<</script>>
+	<</link>>
+<</if>>
+
+<<if $tmpGirl.location === 'basement'>>
+	<<set _girlGuest = setup.getPersonsForLocation($guests, 'mistress')>>
+	<<if !$tmpGirl.gender && !$tmpGirl.milked && $player.energy >= 10 && $backpack.has('breast_pump') && ($tmpGirl.pregnancy >= 60 || ($tmpGirl.traits ?? []).includes('milker'))>>
+	  <<link 'Milk her'>>
+			<<set $tmpGirlViewBack = 'NPC view'>>
+		 	<<goto 'Girl milk'>> 
+	  <</link>>
+	<</if>>	
+	<<if $player.energy >= 10 && hasTime(1)>>
+		<<set _linkName = 'Punish ' + _himOrHer>>
+		<<link `_linkName`>>
+			<<goto 'NPC punish'>>
+		<</link>>
+	<</if>>
+	<<if _girlGuest.length > 0 && timeBetween('12:00', '22:00') && typeof _girlGuest.sick === 'undefined'>>
+		<<if $player.energy >= 5 && hasTime(1)>>
+			<<set _linkName = 'Mistress punishes ' + _himOrHer>>
+			<<link `_linkName`>>
+				<<if $backpack.has('paddle')>>
+					<<set $punishType = 'paddle'>>
+				<</if>>
+				<<goto 'Mistress - Npc punish'>>
+			<</link>>
+		<</if>>		
+		<<if $player.energy >= 15 && hasTime(1)>>
+			<<set _linkName = 'Mistress fucks ' + _himOrHer>>
+			<<link `_linkName`>>
+		  		<<mistress $tmpGirl>>
+			<</link>>
+		<</if>>
+	<</if>>
+<</if>>
+
+<<if typeof $slaveId !== 'undefined'>>
+	<<if $tmpGirl.assignedTo>>
+		<<link "Remove assigned job ($tmpGirl.assignedTo)">>
+			<<assignedTo $tmpGirl 'none'>>
+			<<goto 'NPC view'>>
+		<</link>>
+	<</if>>
+
+	<<include 'Button - rest or work'>>
+	
+	<<if ($game.hotShower ?? false) && !$tmpGirl.washed && $player.energy >= 10>>
+		<<set _linkName = 'Wash ' + _himOrHer>>
+		<<link `_linkName`>>
+			<<energy -10>>
+			<<goto 'Slave - wash'>>
+		<</link>>
+	<</if>>
+	<<if !$tmpGirl.workout && $player.energy >= 10>>
+		<<link 'Workout together'>>
+			<<set $tmpGirl.workout = true>>
+			<<set $tmpGirl.quests.lastInteractionDay = $game.day>>
+			<<energy -10>>
+			<<goto 'NPC - workout together'>>
+		<</link>>
+	<</if>>
+
+	<<include 'NPC view - massage table invite'>>
+
+	<<if !$tmpGirl.gender && $tmpGirl.pregnancy && $tmpGirl.pregnancy >= 7>>
+		<<if $backpack.has('pregnancy_potion')>>
+			<<link 'Give pregnancy termination potion'>>
+				<<goto 'Girl - pregnancy potion'>>
+			<</link>>
+		<</if>>
+		<<if $backpack.has('pregnancy_speed_potion')>>
+			<<link 'Give pregnancy speed potion'>>
+				<<goto 'Girl - pregnancy speed potion'>>
+			<</link>>
+		<</if>>
+	<</if>>
+
+	<<if !$tmpGirl.gift>>
+		<<link 'Give gift'>>
+			<<script>>
+				Dialog.setup("NPC gift", "NPC gift");
+				Dialog.wiki(Story.get("NPC gift").processText());
+				Dialog.open();
+	  		<</script>>
+		<</link>>
+	<</if>>
+	<<link 'Customize'>>
+		<<goto 'NPC customize'>>
+	<</link>>
+	<<if ($game.location.guesthouse ?? false) && $guests.length < $guesthouseLimit>>
+		<<set _linkName = 'Move ' + _himOrHer + ' to the guest house'>>
+		<<link `_linkName`>>
+			<<moveSlaveToGuest $tmpGirl $slaveId>>
+			<<goto 'Guest house'>>
+		<</link>>
+	<</if>>
+
+	<<link 'Release'>>
+		<<goto 'Basement - release slave'>>
+	<</link>>
+<</if>>
+
+<<link 'Go back'>>
+	<<if typeof $slaveId !== 'undefined'>>
+		<<set $slaves[$slaveId] = $tmpGirl>>
+	<<elseif typeof $guestId !== 'undefined'>>
+		<<set $guests[$guestId] = $tmpGirl>>
+	<<elseif typeof $charId !== 'undefined'>>
+		<<set $characters[$charId] = $tmpGirl>>
+	<</if>>
+	<<unset $slaveId, $guestId, $charId>>
+	<<if $tmpGirlBack>>
+		<<goto $tmpGirlBack>>
+	<<else>>
+		<<goto 'Outside'>>
+	<</if>>
+<</link>>
+
+
