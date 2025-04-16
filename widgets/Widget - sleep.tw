@@ -6,6 +6,7 @@
 	<<if _outputAutoList>>
 		<<run setup.sleepMessages.messages.rules = [_outputAutoList]>>
 	<</if>>
+	<<unset $slaveId, $charId, $guestId>>
 	<<set $game.sickPeople = []>>
 	<<run delete $tmpGirlViewBack>>
 	<<run delete $tmpGirlBack>>
@@ -67,6 +68,7 @@
 <<set _doctorCount = setup.getDoctors()>>
 <<set _miscarrieageChanceBase = 12>>
 <<set _miscarrieageChance = _miscarrieageChanceBase - (_doctorCount * 2)>>
+<<set _isLowFood = ($slaves.length + $guests.length) < setup.cabinInventory.count('food')>>
 
 <<set _hasElectricity = setup.baseManagement.electricity.hasElectricity()>>
 // Horse
@@ -277,6 +279,9 @@
 		// Starvation
 		<<if _isHeatWave>>
 			<<set $slaves[_i].food = -10>>
+		<</if>>
+		<<if _isLowFood>>
+			<<set $slaves[_i].happy -=2>>
 		<</if>>
 		<<if $slaves[_i].food <= 10>>
 			<<set _totals.food -= setup.cabinInventory.has('food') ? 1 : 0>>
@@ -565,7 +570,7 @@
 				<<set _giveWood++>>
 			<</if>>
 			<<if setup.npcInventoryHas($guests[_guestI], 'axe')>>
-				<<set _giveWood++>>
+				<<set _giveWood = _giveWood * 2>>
 			<</if>>
 			<<set _totals.wood += _giveWood>>
 			<<if _isStorageAvailable>>
@@ -661,6 +666,10 @@
 				<<if setup.percentageChance(30) && _mistressSlave.sub < 100>>
 					<<run setup.sleepMessages.addJob(_npc.name + ' increased ' + setup.displayName(_mistressSlave) + '\'s submission')>>
 					<<set $slaves[_mistressSlaveI].sub = Math.min(100, ($slaves[_mistressSlaveI].sub + 1))>>
+				<</if>>
+				<<if setup.percentageChance(20) && _mistressSlave.corruption < 50>>
+					<<run setup.sleepMessages.addJob(_npc.name + ' increased ' + setup.displayName(_mistressSlave) + '\'s corruption')>>
+					<<set $slaves[_mistressSlaveI].corruption = Math.min(100, ($slaves[_mistressSlaveI].corruption + 1))>>
 				<</if>>
 			<</for>>
 		<</if>>
@@ -772,6 +781,9 @@
 		<<if _isHeatWave>>
 			<<set $guests[_guestI].food = -10>>
 		<</if>>
+		<<if _isLowFood>>
+			<<set $guests[_guestI].happy -=2>>
+		<</if>>
 		<<if $guests[_guestI].food <= 10>>
   			<<set _totals.food -= setup.cabinInventory.has('food') ? 1 : 0>>
 			<<if $storage.has('food')>>
@@ -855,6 +867,12 @@
 		
 		<<if setup.getAge($nursery[_nurseryI]) >= 18>>
 			<<run setup.sleepMessages.add('Kid ' + $nursery[_nurseryI].name + ' has grown up and moved to the guest house.', 'nursery')>>
+			<<if (setup.percentageChance(75))>>
+				<<set _orientation = 'straight'>>
+			<<else>>	
+				<<set _orientation = 'bisexual'>>
+			<</if>>
+			<<run $nursery[_nurseryI] = setup.setSexuality($nursery[_nurseryI], _orientation)>>
 			<<run $guests.push($nursery[_nurseryI])>>
 			<<set $nursery.splice(_nurseryI, 1)>>
 			<<set _nurseryI-->>
@@ -862,7 +880,11 @@
 
 		// Birthday
 		<<if _npc.birthDate.getDate() == $gameDate.getDate() && _npc.birthDate.getMonth() == $gameDate.getMonth()>>
-			<<run setup.sleepMessages.add('Kid <strong>' + _npc.name + '</strong> has a birthday today (turning <strong>' + setup.getAge(_npc) + '</strong>)! Favorite gift(s): <strong>' + (_npc.likes ?? 'no preference') + '</strong>', 'birthdays')>>
+			<<set _genderClass = 'gender-' + setup.genderClass(_npc)>>
+			<<if (_npc.family ?? false) &amp;&amp; (_npc.family.mother ?? false)>>
+				<<set _motherNpc = setup.getNpcById(_npc.family.mother)>>
+			<</if>>
+			<<run setup.sleepMessages.add('Kid <strong><span class="'+_genderClass+'">' + _npc.name + '</span></strong>, child of  ' + (_motherNpc ? _motherNpc.name : "????") + ', has a birthday today (turning <strong>' + setup.getAge(_npc) + '</strong>)! ', 'birthdays')>>
 		<</if>>
 	<</capture>>
 <</for>>
